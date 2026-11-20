@@ -1,0 +1,31 @@
+_site
+.bundle
+.DS_store
+.idea
+.jekyll-cache
+.jekyll-metadata
+.ruby-version
+.sass-cache
+.tweet-cache
+.venv
+.playwright-cli/
+assets/libs/
+assets/rendercv/rendercv_output/*.typ
+Gemfile.lock
+node_modules/
+vendor
+
+# LaTeX build artifacts
+assets/pdf/resume.aux
+assets/pdf/resume.log
+assets/pdf/resume.out
+.vercel
+.env*
+
+# homepage data, generated from _cool/ by scripts/build_cool.py (CI runs it before Jekyll)
+assets/cool/data/work.json
+_data/cool.json
+__pycache__/
+
+# Ruby-free homepage preview, written by scripts/preview_home.py
+.preview/

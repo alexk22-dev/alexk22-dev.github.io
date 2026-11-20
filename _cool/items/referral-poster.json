@@ -1,0 +1,52 @@
+{
+  "id": "referral-poster",
+  "group": "publication",
+  "name": "ACRO 2026",
+  "context": "Poster presentation",
+  "summary": "Referral patterns in lung cancer imaging with local CPU-only LLMs",
+  "start": "2026-02",
+  "end": "2026-02",
+  "title": "From Text to Treatment: Automated Identification of Referral Patterns in Lung Cancer Imaging Using Locally Deployed CPU-Only LLMs",
+  "org": "American College of Radiation Oncology Summit, Orlando, Florida, Feb 2026",
+  "description": "Kwadwo Amoako-Boadu, Alexander Kim, Ryan Kim, David Gibbes Miller, Abraham Book, Robert Lee, Rami Naaman, Narek Shaverdian, Daniel Gomez, Tafadzwa Lawrence Chaunzwa.",
+  "bullets": [],
+  "logo": "/assets/cool/logos/venues/acro.png",
+  "links": [],
+  "topics": [
+    {
+      "entry": "Oncology",
+      "weight": 0.8,
+      "source": "CV: Lung Cancer Imaging; American College of Radiation Oncology Summit"
+    },
+    {
+      "entry": "NLP & LLMs",
+      "weight": 1.0,
+      "source": "CV: Using Locally Deployed CPU-Only LLMs"
+    },
+    {
+      "entry": "Clinical data",
+      "weight": 0.8,
+      "source": "CV: Lung Cancer Imaging (MSK entry: automate referral decision-making from radiology reports)"
+    },
+    {
+      "entry": "Clinical workflow",
+      "weight": 0.7,
+      "source": "CV: From Text to Treatment: Automated Identification of Referral Patterns"
+    }
+  ],
+  "methods": [
+    {
+      "entry": "Local LLM pipelines",
+      "weight": 1.0,
+      "source": "CV: Using Locally Deployed CPU-Only LLMs"
+    }
+  ],
+  "tools": [],
+  "output": [
+    {
+      "entry": "Poster",
+      "weight": 1.0,
+      "source": "CV: Poster presentation, American College of Radiation Oncology Summit, Orlando, Florida"
+    }
+  ]
+}

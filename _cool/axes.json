@@ -1,0 +1,214 @@
+{
+  "topics": {
+    "label": "Topics",
+    "entries": [
+      {
+        "label": "Protein engineering"
+      },
+      {
+        "label": "Protein degradation"
+      },
+      {
+        "label": "Drug delivery"
+      },
+      {
+        "label": "Math modeling"
+      },
+      {
+        "label": "Oncology"
+      },
+      {
+        "label": "NLP & LLMs"
+      },
+      {
+        "label": "Computer vision"
+      },
+      {
+        "label": "Clinical data"
+      },
+      {
+        "label": "Statistics"
+      },
+      {
+        "label": "Clinical workflow"
+      },
+      {
+        "label": "Software"
+      },
+      {
+        "label": "Leadership"
+      }
+    ]
+  },
+  "methods": {
+    "label": "Methods",
+    "entries": [
+      {
+        "label": "Computational structure analysis",
+        "head": "Structure analysis"
+      },
+      {
+        "label": "Solubility analysis"
+      },
+      {
+        "label": "Recombinant expression"
+      },
+      {
+        "label": "Nickel affinity chromatography",
+        "head": "Ni affinity"
+      },
+      {
+        "label": "Ion exchange chromatography",
+        "head": "Ion exchange"
+      },
+      {
+        "label": "Western blot"
+      },
+      {
+        "label": "Sanger sequencing"
+      },
+      {
+        "label": "Chemical reaction network theory",
+        "head": "CRNT"
+      },
+      {
+        "label": "Structural sensitivity analysis",
+        "head": "Sensitivity analysis"
+      },
+      {
+        "label": "Symbolic and numerical simulation",
+        "head": "Simulation"
+      },
+      {
+        "label": "Local LLM pipelines",
+        "head": "Local LLMs"
+      },
+      {
+        "label": "Statistical analysis"
+      },
+      {
+        "label": "Mixed-effects models",
+        "head": "Mixed effects"
+      },
+      {
+        "label": "Joint longitudinal-survival models",
+        "head": "Joint models"
+      },
+      {
+        "label": "Natural language processing",
+        "head": "NLP"
+      },
+      {
+        "label": "Clinical knowledge graph",
+        "head": "Knowledge graph"
+      },
+      {
+        "label": "Clinician interviews"
+      },
+      {
+        "label": "Mixed-integer programming",
+        "head": "MILP"
+      },
+      {
+        "label": "Pose estimation"
+      },
+      {
+        "label": "Foundation model fine-tuning",
+        "head": "Fine-tuning"
+      },
+      {
+        "label": "Role-based access"
+      },
+      {
+        "label": "Protocol versioning",
+        "head": "Versioning"
+      }
+    ]
+  },
+  "tools": {
+    "label": "Tools",
+    "entries": [
+      {
+        "label": "AlphaFold3"
+      },
+      {
+        "label": "ColabFold"
+      },
+      {
+        "label": "CamSol"
+      },
+      {
+        "label": "GROMACS"
+      },
+      {
+        "label": "PyMOL"
+      },
+      {
+        "label": "Mathematica"
+      },
+      {
+        "label": "Python"
+      },
+      {
+        "label": "Tellurium"
+      },
+      {
+        "label": "SymPy"
+      },
+      {
+        "label": "SciPy"
+      },
+      {
+        "label": "PyTorch"
+      },
+      {
+        "label": "DINOv2"
+      },
+      {
+        "label": "DeepLabCut"
+      }
+    ]
+  },
+  "output": {
+    "label": "Output",
+    "entries": [
+      {
+        "label": "Research lab role",
+        "head": "Lab role"
+      },
+      {
+        "label": "Manuscript in preparation",
+        "head": "Manuscript"
+      },
+      {
+        "label": "First author"
+      },
+      {
+        "label": "Presenting author"
+      },
+      {
+        "label": "Published abstract"
+      },
+      {
+        "label": "Poster"
+      },
+      {
+        "label": "Working system"
+      },
+      {
+        "label": "In development"
+      },
+      {
+        "label": "Startup role",
+        "head": "Startup"
+      },
+      {
+        "label": "Clinical pilot"
+      },
+      {
+        "label": "Non-dilutive funding",
+        "head": "Funding"
+      }
+    ]
+  }
+}

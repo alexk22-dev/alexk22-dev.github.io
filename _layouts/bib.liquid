@@ -1,0 +1,116 @@
+---
+---
+{% comment %}
+  One publication card, rendered by jekyll-scholar for every {% bibliography %} call
+  (home page selected papers, /publications/, and the CV card).
+
+  Bib fields read:
+    title, author, year, html, pdf, website, code, arxiv, doi, abstract, bibtex_show
+    venue    short venue for the chip, e.g. "NeurIPS 2026 Workshop"
+             (fallback: abbr + year, then the full venue + year, then year;
+             no chip when an entry has only a status, e.g. a paper under review)
+    status   e.g. "Accepted"; shown as a second chip next to the venue
+    booktitle / journal / howpublished   full venue, shown as a muted line
+{% endcomment %}
+
+{%- assign full_venue = entry.booktitle | default: entry.journal | default: entry.howpublished -%}
+{%- if entry.venue -%}
+  {%- assign short_venue = entry.venue -%}
+{%- elsif entry.abbr -%}
+  {%- assign short_venue = entry.abbr | append: ' ' | append: entry.year -%}
+{%- elsif full_venue -%}
+  {%- assign short_venue = full_venue | append: ' ' | append: entry.year -%}
+  {%- assign full_venue = nil -%}
+{%- elsif entry.status == nil -%}
+  {%- assign short_venue = entry.year -%}
+{%- endif -%}
+
+{%- assign html_url = entry.html -%}
+{%- if html_url and html_url contains '://' -%}
+{%- elsif html_url -%}
+  {%- assign html_url = entry.html | prepend: '/assets/html/' | relative_url -%}
+{%- endif -%}
+{%- assign pdf_url = entry.pdf -%}
+{%- if pdf_url and pdf_url contains '://' -%}
+{%- elsif pdf_url -%}
+  {%- assign pdf_url = entry.pdf | prepend: '/assets/pdf/' | relative_url -%}
+{%- endif -%}
+{%- assign paper_url = html_url | default: pdf_url | default: entry.website -%}
+
+<article class="pub-card" id="{{ entry.key }}">
+  <h3 class="pub-title">
+    {%- if paper_url -%}
+      <a href="{{ paper_url }}" target="_blank" rel="noopener">{{ entry.title }}</a>
+    {%- else -%}
+      {{ entry.title }}
+    {%- endif -%}
+  </h3>
+
+  <p class="pub-authors">
+    {%- for author in entry.author_array -%}
+      {%- assign author_last = author.last | regex_replace: '[*∗†‡§¶‖&^]', '' -%}
+      {%- if site.scholar.last_name contains author_last and site.scholar.first_name contains author.first -%}
+        <strong>{{ author.first }} {{ author.last }}</strong>
+      {%- else -%}
+        {{ author.first }} {{ author.last }}
+      {%- endif -%}
+      {%- unless forloop.last %}, {% endunless -%}
+    {%- endfor -%}
+  </p>
+
+  <div class="pub-venue">
+    {%- if short_venue %}
+      <span class="pub-chip"{% if full_venue %} title="{{ full_venue | strip_html | escape }}"{% endif %}>{{ short_venue }}</span>
+    {%- endif %}
+    {%- if entry.status %}
+      <span class="pub-chip pub-chip-status">{{ entry.status }}</span>
+    {%- endif %}
+  </div>
+  {%- if full_venue %}
+    <p class="pub-venue-full">{{ full_venue }}</p>
+  {%- endif %}
+
+  {%- if pdf_url or html_url or entry.website or entry.code or entry.arxiv or entry.doi or entry.abstract or entry.bibtex_show %}
+    <div class="pub-links">
+      {%- if pdf_url %}
+        <a class="pub-pill" href="{{ pdf_url }}" target="_blank" rel="noopener">PDF</a>
+      {%- endif -%}
+      {%- if html_url %}
+        <a class="pub-pill" href="{{ html_url }}" target="_blank" rel="noopener">
+          {%- if html_url contains 'openreview.net' %}OpenReview{% else %}Paper{% endif -%}
+        </a>
+      {%- endif -%}
+      {%- if entry.arxiv %}
+        <a class="pub-pill" href="https://arxiv.org/abs/{{ entry.arxiv }}" target="_blank" rel="noopener">arXiv</a>
+      {%- endif -%}
+      {%- if entry.doi %}
+        <a class="pub-pill" href="https://doi.org/{{ entry.doi }}" target="_blank" rel="noopener">DOI</a>
+      {%- endif -%}
+      {%- if entry.code %}
+        <a class="pub-pill" href="{{ entry.code }}" target="_blank" rel="noopener">Code</a>
+      {%- endif -%}
+      {%- if entry.website %}
+        <a class="pub-pill" href="{{ entry.website }}" target="_blank" rel="noopener">Website</a>
+      {%- endif -%}
+      {%- if entry.abstract %}
+        <button type="button" class="pub-pill pub-toggle" aria-expanded="false" aria-controls="{{ entry.key }}-abstract">Abstract</button>
+      {%- endif -%}
+      {%- if entry.bibtex_show %}
+        <button type="button" class="pub-pill pub-toggle" aria-expanded="false" aria-controls="{{ entry.key }}-bibtex">BibTeX</button>
+      {%- endif %}
+    </div>
+  {%- endif %}
+
+  {%- if entry.abstract %}
+    <div class="pub-panel" id="{{ entry.key }}-abstract" hidden>
+      <p>{{ entry.abstract }}</p>
+    </div>
+  {%- endif -%}
+  {%- if entry.bibtex_show %}
+    <div class="pub-panel pub-panel-bibtex" id="{{ entry.key }}-bibtex" hidden>
+      {% highlight bibtex %}
+      {{- entry.bibtex | hideCustomBibtex -}}
+      {% endhighlight %}
+    </div>
+  {%- endif %}
+</article>

@@ -1,0 +1,76 @@
+{
+  "id": "invogenix",
+  "group": "venture",
+  "name": "InvoGenix",
+  "context": "Clinical documentation and billing, automated",
+  "summary": "Automating clinical documentation and billing for small practices",
+  "start": "2024-09",
+  "end": "present",
+  "title": "Co-Founder and Chief Executive Officer",
+  "org": "InvoGenix, Inc., Champaign, Illinois",
+  "bullets": [
+    "Leads a four-person team building an end-to-end system that automates clinical documentation and billing for small and independent practices using natural language processing and a clinical knowledge graph.",
+    "Secured approximately $45,000 in non-dilutive funding; selected for iVenture Accelerator in a cohort of fewer than fifteen ventures.",
+    "Placed fourth at the Global Consortium of Innovation and Engineering in Medicine international competition.",
+    "Designed and launched a live clinical pilot; directed product discovery across forty-plus clinician interviews."
+  ],
+  "logo": "/assets/cool/logos/orgs/invogenix.svg",
+  "links": [],
+  "topics": [
+    {
+      "entry": "NLP & LLMs",
+      "weight": 0.7,
+      "source": "CV: using natural language processing and a clinical knowledge graph"
+    },
+    {
+      "entry": "Clinical data",
+      "weight": 0.6,
+      "source": "CV: automates clinical documentation and billing"
+    },
+    {
+      "entry": "Clinical workflow",
+      "weight": 1.0,
+      "source": "CV: Leads a four-person team building an end-to-end system that automates clinical documentation and billing for small and independent practices using natural language processing and a clinical knowledge graph."
+    },
+    {
+      "entry": "Leadership",
+      "weight": 1.0,
+      "source": "CV: Co-Founder and Chief Executive Officer; Leads a four-person team"
+    }
+  ],
+  "methods": [
+    {
+      "entry": "Natural language processing",
+      "weight": 1.0,
+      "source": "CV: Leads a four-person team building an end-to-end system that automates clinical documentation and billing for small and independent practices using natural language processing and a clinical knowledge graph."
+    },
+    {
+      "entry": "Clinical knowledge graph",
+      "weight": 1.0,
+      "source": "CV: Leads a four-person team building an end-to-end system that automates clinical documentation and billing for small and independent practices using natural language processing and a clinical knowledge graph."
+    },
+    {
+      "entry": "Clinician interviews",
+      "weight": 1.0,
+      "source": "CV: Designed and launched a live clinical pilot; directed product discovery across forty-plus clinician interviews."
+    }
+  ],
+  "tools": [],
+  "output": [
+    {
+      "entry": "Startup role",
+      "weight": 1.0,
+      "source": "CV: InvoGenix, Inc., Co-Founder and Chief Executive Officer"
+    },
+    {
+      "entry": "Clinical pilot",
+      "weight": 1.0,
+      "source": "CV: Designed and launched a live clinical pilot"
+    },
+    {
+      "entry": "Non-dilutive funding",
+      "weight": 1.0,
+      "source": "CV: Secured approximately $45,000 in non-dilutive funding; selected for iVenture Accelerator in a cohort of fewer than fifteen ventures."
+    }
+  ]
+}

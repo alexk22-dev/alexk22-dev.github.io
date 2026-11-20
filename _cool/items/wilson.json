@@ -1,0 +1,119 @@
+{
+  "id": "wilson",
+  "group": "research",
+  "name": "Wilson Lab",
+  "context": "Modular protein therapeutics",
+  "summary": "Engineering modular protein therapeutics against oncogenic proteins",
+  "start": "2024-09",
+  "end": "present",
+  "title": "Undergraduate Researcher",
+  "org": "Wilson Laboratory, Department of Microbiology, University of Illinois Urbana-Champaign",
+  "bullets": [
+    "Engineering a class of novel modular protein therapeutics to efficiently translocate and selectively degrade oncogenic intracellular proteins.",
+    "Performed computational structure and solubility analysis using AlphaFold3, ColabFold, CamSol, GROMACS, and PyMOL to diagnose and resolve protein insolubility in chimeric constructs.",
+    "Carried out recombinant expression and purification by nickel affinity and ion exchange chromatography, with construct verification by Sanger sequencing and Western blot.",
+    "Functionally characterizing multiple homologs of a bacterial AB-type toxin to determine dimerization.",
+    "Developing modular immunotoxins to treat canine B cell lymphoma.",
+    "Mentoring seven undergraduate researchers; managing laboratory supplies and reagents and coordinating day-to-day laboratory operations."
+  ],
+  "logo": "/assets/cool/logos/orgs/uiuc.png",
+  "links": [],
+  "topics": [
+    {
+      "entry": "Protein engineering",
+      "weight": 1.0,
+      "source": "CV: Engineering a class of novel modular protein therapeutics to efficiently translocate and selectively degrade oncogenic intracellular proteins."
+    },
+    {
+      "entry": "Drug delivery",
+      "weight": 1.0,
+      "source": "Owner, 2026-11-18: add a “Drug Delivery” band, “Highest for Wilson Lab, no other involvement from the others”."
+    },
+    {
+      "entry": "Protein degradation",
+      "weight": 0.8,
+      "source": "CV: selectively degrade oncogenic intracellular proteins"
+    },
+    {
+      "entry": "Oncology",
+      "weight": 0.6,
+      "source": "CV: oncogenic intracellular proteins; Developing modular immunotoxins to treat canine B cell lymphoma"
+    },
+    {
+      "entry": "Leadership",
+      "weight": 0.6,
+      "source": "CV: Mentoring seven undergraduate researchers; managing laboratory supplies and reagents and coordinating day-to-day laboratory operations."
+    }
+  ],
+  "methods": [
+    {
+      "entry": "Computational structure analysis",
+      "weight": 1.0,
+      "source": "CV: Performed computational structure and solubility analysis using AlphaFold3, ColabFold, CamSol, GROMACS, and PyMOL to diagnose and resolve protein insolubility in chimeric constructs."
+    },
+    {
+      "entry": "Solubility analysis",
+      "weight": 1.0,
+      "source": "CV: Performed computational structure and solubility analysis using AlphaFold3, ColabFold, CamSol, GROMACS, and PyMOL to diagnose and resolve protein insolubility in chimeric constructs."
+    },
+    {
+      "entry": "Recombinant expression",
+      "weight": 1.0,
+      "source": "CV: Carried out recombinant expression and purification by nickel affinity and ion exchange chromatography, with construct verification by Sanger sequencing and Western blot."
+    },
+    {
+      "entry": "Nickel affinity chromatography",
+      "weight": 1.0,
+      "source": "CV: Carried out recombinant expression and purification by nickel affinity and ion exchange chromatography, with construct verification by Sanger sequencing and Western blot."
+    },
+    {
+      "entry": "Ion exchange chromatography",
+      "weight": 1.0,
+      "source": "CV: Carried out recombinant expression and purification by nickel affinity and ion exchange chromatography, with construct verification by Sanger sequencing and Western blot."
+    },
+    {
+      "entry": "Western blot",
+      "weight": 1.0,
+      "source": "CV: Carried out recombinant expression and purification by nickel affinity and ion exchange chromatography, with construct verification by Sanger sequencing and Western blot."
+    },
+    {
+      "entry": "Sanger sequencing",
+      "weight": 1.0,
+      "source": "CV: Carried out recombinant expression and purification by nickel affinity and ion exchange chromatography, with construct verification by Sanger sequencing and Western blot."
+    }
+  ],
+  "tools": [
+    {
+      "entry": "AlphaFold3",
+      "weight": 1.0,
+      "source": "CV: Performed computational structure and solubility analysis using AlphaFold3, ColabFold, CamSol, GROMACS, and PyMOL to diagnose and resolve protein insolubility in chimeric constructs."
+    },
+    {
+      "entry": "ColabFold",
+      "weight": 1.0,
+      "source": "CV: Performed computational structure and solubility analysis using AlphaFold3, ColabFold, CamSol, GROMACS, and PyMOL to diagnose and resolve protein insolubility in chimeric constructs."
+    },
+    {
+      "entry": "CamSol",
+      "weight": 1.0,
+      "source": "CV: Performed computational structure and solubility analysis using AlphaFold3, ColabFold, CamSol, GROMACS, and PyMOL to diagnose and resolve protein insolubility in chimeric constructs."
+    },
+    {
+      "entry": "GROMACS",
+      "weight": 1.0,
+      "source": "CV: Performed computational structure and solubility analysis using AlphaFold3, ColabFold, CamSol, GROMACS, and PyMOL to diagnose and resolve protein insolubility in chimeric constructs."
+    },
+    {
+      "entry": "PyMOL",
+      "weight": 1.0,
+      "source": "CV: Performed computational structure and solubility analysis using AlphaFold3, ColabFold, CamSol, GROMACS, and PyMOL to diagnose and resolve protein insolubility in chimeric constructs."
+    }
+  ],
+  "output": [
+    {
+      "entry": "Research lab role",
+      "weight": 1.0,
+      "source": "CV: Undergraduate Researcher, Wilson Laboratory, Department of Microbiology"
+    }
+  ]
+}

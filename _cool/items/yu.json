@@ -1,0 +1,87 @@
+{
+  "id": "yu",
+  "group": "research",
+  "name": "Yu Group",
+  "context": "Reaction network theory for dose response",
+  "summary": "Reaction network theory applied to targeted protein degradation",
+  "start": "2026-01",
+  "end": "present",
+  "title": "Undergraduate Researcher",
+  "org": "Yu Group, Department of Mathematics, University of Illinois Urbana-Champaign",
+  "bullets": [
+    "Originated and leads a project applying chemical reaction network theory and structural sensitivity analysis to steady-state dose response in targeted protein degradation systems.",
+    "Derived sensitivity equations and monostationarity conditions for open and closed kinetic models using the Feliu–Wiuf augmented Jacobian framework and Cramér’s rule.",
+    "Built symbolic and numerical tooling in Mathematica and Python (Tellurium) to validate analytical results against simulation.",
+    "First author on the resulting manuscript, in preparation."
+  ],
+  "logo": "/assets/cool/logos/orgs/uiuc.png",
+  "links": [],
+  "topics": [
+    {
+      "entry": "Protein degradation",
+      "weight": 0.8,
+      "source": "CV: steady-state dose response in targeted protein degradation systems"
+    },
+    {
+      "entry": "Math modeling",
+      "weight": 1.0,
+      "source": "CV: Originated and leads a project applying chemical reaction network theory and structural sensitivity analysis to steady-state dose response in targeted protein degradation systems."
+    },
+    {
+      "entry": "Leadership",
+      "weight": 0.5,
+      "source": "CV: Originated and leads a project"
+    }
+  ],
+  "methods": [
+    {
+      "entry": "Chemical reaction network theory",
+      "weight": 1.0,
+      "source": "CV: Originated and leads a project applying chemical reaction network theory and structural sensitivity analysis to steady-state dose response in targeted protein degradation systems."
+    },
+    {
+      "entry": "Structural sensitivity analysis",
+      "weight": 1.0,
+      "source": "CV: Originated and leads a project applying chemical reaction network theory and structural sensitivity analysis to steady-state dose response in targeted protein degradation systems. Derived sensitivity equations and monostationarity conditions for open and closed kinetic models using the Feliu–Wiuf augmented Jacobian framework and Cramér’s rule."
+    },
+    {
+      "entry": "Symbolic and numerical simulation",
+      "weight": 1.0,
+      "source": "CV: Built symbolic and numerical tooling in Mathematica and Python (Tellurium) to validate analytical results against simulation."
+    }
+  ],
+  "tools": [
+    {
+      "entry": "Mathematica",
+      "weight": 1.0,
+      "source": "CV: Built symbolic and numerical tooling in Mathematica and Python (Tellurium) to validate analytical results against simulation."
+    },
+    {
+      "entry": "Python",
+      "weight": 1.0,
+      "source": "CV: Built symbolic and numerical tooling in Mathematica and Python (Tellurium) to validate analytical results against simulation."
+    },
+    {
+      "entry": "Tellurium",
+      "weight": 1.0,
+      "source": "CV: Built symbolic and numerical tooling in Mathematica and Python (Tellurium) to validate analytical results against simulation."
+    }
+  ],
+  "output": [
+    {
+      "entry": "Research lab role",
+      "weight": 1.0,
+      "source": "CV: Undergraduate Researcher, Yu Group, Department of Mathematics"
+    },
+    {
+      "entry": "Manuscript in preparation",
+      "weight": 1.0,
+      "source": "CV: First author on the resulting manuscript, in preparation."
+    },
+    {
+      "entry": "First author",
+      "weight": 1.0,
+      "source": "CV: First author on the resulting manuscript, in preparation."
+    }
+  ]
+}

@@ -1,0 +1,190 @@
+cv:
+  name: Ryan Kim
+  label: CS Undergrad, UIUC
+  email: ryankim17920@gmail.com
+  url: https://ryankim.me
+  location: Palatine, IL
+  image: ""
+  summary: "First-author paper at a NeurIPS 2026 workshop | Sole-author paper under review | Founding team, a16z AI startup"
+
+  social_networks:
+    - network: GitHub
+      username: RyanKim17920
+    - network: LinkedIn
+      username: ryankim17920
+
+  sections:
+    Education:
+      - institution: University of Illinois Urbana-Champaign
+        location: Urbana, IL
+        area: Computer Science
+        studyType: B.S.
+        start_date: 2026-08-01
+        end_date: 2029-05-01
+        score: "4.0/4.0"
+        highlights:
+          - "Expected May 2029"
+          - "Junior Standing"
+          - "GPA: 4.0/4.0"
+          - "Chancellor's Scholar"
+          - "AIME Qualifier (4x)"
+
+    Experience:
+      - company: Delightful AI (a16z speedrun-backed)
+        position: RL Intern (Founding Team)
+        url: https://delightfullabs.ai
+        company_url: https://delightfullabs.ai
+        location: Remote
+        start_date: 2026-08-01
+        end_date: Present
+        highlights:
+          - "Built bioinformatics agent RL environments (Chimera) end to end that hold GPT-6 Astra, Claude Opus 5.5, and Fable 5.1 to <0.5/1.0 reward: a synthetic generator of verified-solvable tasks, Docker/Harbor execution, and reward grading."
+          - "Sped up task generation 6x by adding caching and parallelism to the generator pipeline."
+          - "Analyzed agent trajectories with an LLM-as-a-judge that checks each run against expected milestones."
+
+      - company: BLENDER Lab, UIUC (with Alexi Gladstone)
+        position: Undergraduate Researcher
+        location: Urbana, IL
+        start_date: 2026-08-01
+        end_date: Present
+        highlights:
+          - "Led research extending Energy-Based Transformers to multi-token prediction through Explorative Modeling (XM)."
+          - "Implemented the full training stack and compared candidate energy formulations against block-diffusion LLMs."
+          - "Now running scaling-law studies for Energy-Based Transformers."
+
+      - company: Sophont
+        position: Research Intern (prev. ML Research Contributor, MedARC)
+        url: https://sophont.med
+        company_url: https://sophont.med
+        location: Remote
+        start_date: 2026-04-01
+        end_date: Present
+        highlights:
+          - "Drove 37% of the gain over baseline on NanoPath v1 (3rd-author paper, accepted at a NeurIPS 2026 workshop) and over 50% on NanoBrain by building an LLM autoresearch agent with dual-branch search and anti-overfitting cycles."
+          - "Cut config errors 80% and token use 15x by designing agent infrastructure (knowledge graphs, SLURM, worktree isolation)."
+          - "Raised mean PathoROB robustness 0.726 to 0.891 and improved downstream AUC across 7 pathology foundation models by introducing SPECTRA, label-free contrastive LoRA fine-tuning (first-author paper, accepted at a NeurIPS 2026 workshop)."
+
+      - company: AI in Medicine & Computational Biology Lab, Weill Cornell Medicine
+        position: Pathology AI Research Intern
+        company_url: https://ihlab.med.cornell.edu/
+        location: New York, NY
+        start_date: 2024-10-01
+        end_date: 2026-07-01
+        highlights:
+          - "Found that error doubles out of distribution (MAE ~0.10 to ~0.20) by benchmarking 12 vision foundation models for tumor-purity regression on TCGA and internal cohorts in PyTorch."
+
+      - company: Advanced Computing & Oncology Lab, Memorial Sloan Kettering
+        position: Computational Oncology Research Intern
+        company_url: https://www.mskcc.org/research-areas/research-teams/advanced-computing-and-oncology-lab
+        location: New York, NY
+        start_date: 2024-12-01
+        end_date: 2026-01-01
+        highlights:
+          - "Engineered a CPU-only LLM pipeline that classified 370 clinically annotated lung-cancer CT reports, optimizing prompts for Llama 3.1-8B and Qwen3-4B with DSPy MIPROv2 (3rd-author abstract, accepted at ACRO 2026)."
+
+      - company: Yurovsky Lab, Stony Brook University (Simons Foundation)
+        position: Simons Summer Research Fellow (Computational Genomics)
+        url: https://www.simonsfoundation.org/
+        company_url: https://ayurovsky.github.io/
+        location: Stony Brook, NY
+        start_date: 2025-06-01
+        end_date: 2026-08-01
+        highlights:
+          - "Predicted survival of 185 glioblastoma patients with a DNABERT-based Cox model on non-coding DNA mutations."
+
+    Projects:
+      - name: Which State Should Prediction Read?
+        url: https://github.com/RyanKim17920/mechanistic-sps
+        summary: "August 2026 - September 2026 | Sole-author paper, under review"
+        highlights:
+          - "Trained State–Prediction Separation (SPS) LMs, which split a Transformer into separate state and prediction streams; ablations showed the two divide the work: state tracks context, prediction retrieves from it."
+          - "Reached a FLOP-matched Transformer's loss on 2.1x fewer tokens and ended 0.064 nats/token lower after 20B tokens by designing Sequential, a final-state-read architecture, from these ablations (92M non-embedding params)."
+
+      - name: Qwen3.6-27B ExpThink
+        url: https://huggingface.co/ryankim17920/qwen3p6-27b-expthink-step60
+        summary: "July 2026 - August 2026 | LLM Post-Training, GRPO"
+        highlights:
+          - "Cut thinking tokens 52% in-domain / 34% OOD and truncation 6.0% to 2.6% while mean OOD accuracy rose 84% to 86% by post-training Qwen3.6-27B with a length-adjusted GRPO reward."
+          - "Trained with PyTorch FSDP on 8xH100 in verl, with rollouts from tensor-parallel SGLang."
+
+      - name: speedLM
+        url: https://github.com/RyanKim17920/speedlm
+        summary: "July 2026 - August 2026 | OpenAI-Compatible LLM Serving, Speculative Decoding"
+        highlights:
+          - "Built a custom vLLM server that fine-tunes EAGLE-3 draft models on captured local traffic during idle GPU time."
+          - "Raised tokens accepted per verification step 13.4% over the stock draft on held-out Qwen3-8B data."
+
+      - name: microDINOv3
+        url: https://github.com/RyanKim17920/microDINOv3
+        summary: "February 2026 - April 2026 | Pure Python, Computer Vision"
+        highlights:
+          - "Implemented DINOv3 in dependency-free Python with hand-written reverse-mode autograd and a ViT, EMA teacher-student distillation, DINO + iBOT objectives, KoLeo regularization, axial RoPE with register tokens, and Gram anchoring."
+
+      - name: DeepMoE Reproduction
+        url: https://github.com/RyanKim17920/Deep-Mixture-of-Experts-via-Shallow-Embedding
+        summary: "July 2024 - November 2024 | PyTorch, Computer Vision"
+        highlights:
+          - 'Recreated the main CIFAR-10 results of "Deep Mixture of Experts via Shallow Embedding" (100+ citations) in PyTorch, recovering its accuracy-vs-compute tradeoff.'
+          - "Identified a gate-scaling failure that destabilizes training at the paper's learning rate."
+
+    Skills:
+      - name: LLM Stack
+        icon: fa-solid fa-brain
+        keywords:
+          - PyTorch
+          - FSDP
+          - verl
+          - SGLang
+          - vLLM
+          - Hugging Face
+          - DSPy
+          - EAGLE-3
+
+      - name: Machine Learning
+        icon: fa-solid fa-diagram-project
+        keywords:
+          - Large Language Models (LLMs)
+          - Deep Learning
+          - Transformers
+          - Reinforcement Learning
+          - Distributed Training
+
+      - name: Methods
+        icon: fa-solid fa-microscope
+        keywords:
+          - LLM Architecture & Interpretability
+          - Post-Training (GRPO)
+          - Speculative Decoding
+          - RL Environments
+          - LLM Agents
+
+      - name: Languages
+        icon: fa-solid fa-code
+        keywords:
+          - Python
+          - C/C++
+          - Java
+          - SQL (PostgreSQL)
+          - JavaScript (React, Node.js)
+
+      - name: Tools
+        icon: fa-solid fa-gears
+        keywords:
+          - SLURM
+          - Docker
+          - Harbor
+          - Linux
+          - Git
+          - FastAPI
+          - Scikit-learn
+          - Polars
+          - Pandas
+          - NumPy
+
+# Publications are rendered on the CV page from _bibliography/papers.bib (see _layouts/cv.liquid).
+
+# TODO: Ryan, add interests here if you want (e.g., hobbies, topics).
+# interests: []
+
+# TODO: Ryan, add references here if desired.
+# references: []

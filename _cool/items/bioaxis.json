@@ -1,0 +1,72 @@
+{
+  "id": "bioaxis",
+  "group": "project",
+  "name": "BioAxis",
+  "context": "In progress",
+  "summary": "Mouse pose estimation on a foundation-model backbone, with DeepLabCut-format output",
+  "start": "2026-11",
+  "end": "present",
+  "title": "BioAxis",
+  "org": "Foundation-backbone pose estimation for top-view mouse video",
+  "bullets": [
+    "Standalone Python package for keypoint tracking in top-view mouse video: a label-free locator crops the animal, a pose model predicts the keypoints, and predictions are written in DeepLabCut's file format for use with existing downstream tools.",
+    "The pose model puts a heatmap head on a pluggable foundation backbone (DINOv2 by default, chosen in a backbone comparison), pretrained on the public TopViewMouse-5K dataset and fine-tuned on a small set of user-labeled frames.",
+    "Includes a desktop app and installer for collaborators, with tools to extract and label frames for further training.",
+    "Still in progress: temporal filtering beyond a median filter, model ensembles, and evaluation on datasets outside the pretraining set."
+  ],
+  "links": [],
+  "notes": "DRAFT for the owner's approval. Work in progress. Named BioAxis (full title) and start Nov 2026 on the owner's word (2026-11-17), consistent with the plan (“Drafted 2026-11-09”); end present because the plan's latest entries (2026-11-17) are still running. No accuracy, speed or behavioural numbers are quoted, and nothing about the lab's rig, animals, recordings or scoring is included. Fact-check 2026-11-17: Statistics / Statistical analysis bands removed (the only basis was bootstrap intervals in the evaluation, which no bullet mentions).",
+  "topics": [
+    {
+      "entry": "Computer vision",
+      "weight": 1.0,
+      "source": "PLAN.md: BioAxis Pose: a foundation-backbone DeepLabCut successor ... BioAxis trains a model and then: analyzes videos and writes DLC-format .h5/.csv files"
+    },
+    {
+      "entry": "Software",
+      "weight": 0.8,
+      "source": "PLAN.md: Decided: standalone package with DLC-format I/O ... App (bioaxis gui, tkinter) ... Installer (scripts/make_bundle.sh)"
+    }
+  ],
+  "methods": [
+    {
+      "entry": "Pose estimation",
+      "weight": 1.0,
+      "source": "PLAN.md: Pluggable top-down pose model plus the backbone bake-off (§3a)"
+    },
+    {
+      "entry": "Foundation model fine-tuning",
+      "weight": 1.0,
+      "source": "PLAN.md: Fine-tune the backbone, not just a frozen one ... default = DINOv2-B + TopViewMouse pretraining"
+    }
+  ],
+  "tools": [
+    {
+      "entry": "Python",
+      "weight": 1.0,
+      "source": "PLAN.md: venv/ (Python 3.12, torch 2.15 on MPS, transformers 5.22)"
+    },
+    {
+      "entry": "PyTorch",
+      "weight": 1.0,
+      "source": "PLAN.md: pyproject.toml # torch (MPS), transformers>=4.56 (DINOv2/v3), timm, peft, opencv, pandas+tables, statsmodels"
+    },
+    {
+      "entry": "DINOv2",
+      "weight": 1.0,
+      "source": "PLAN.md: Decision: DINOv2-B is the default backbone; DINOv3-S+ is the fast alternative."
+    },
+    {
+      "entry": "DeepLabCut",
+      "weight": 0.6,
+      "source": "PLAN.md: standalone package with DLC-format I/O. DLC 3 is used only as the baseline in the eval harness."
+    }
+  ],
+  "output": [
+    {
+      "entry": "In development",
+      "weight": 1.0,
+      "source": "Owner, 2026-11-17: “These are still works-in-progress”. PLAN.md: Not yet: ARIMA/Savitzky–Golay filters, EKS/ensembles, trajectory plots, outlier extraction, LoRA, COCO export."
+    }
+  ]
+}

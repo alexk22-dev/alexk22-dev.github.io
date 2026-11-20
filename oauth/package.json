@@ -1,0 +1,10 @@
+{
+  "name": "decap-cms-github-oauth",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Minimal, self-contained GitHub OAuth provider for Decap CMS. Deploy as its own Vercel project (separate from the main site). Zero runtime dependencies.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}

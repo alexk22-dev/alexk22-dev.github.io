@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="RYK monogram">
+  <rect x="4" y="4" width="56" height="56" rx="14" fill="#f8fafc" />
+  <rect x="5" y="5" width="54" height="54" rx="13" fill="none" stroke="#cbd5e1" stroke-width="1.2" />
+
+  <defs>
+    <clipPath id="ryk-clip-v2">
+      <rect x="8" y="8" width="48" height="48" rx="10" />
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#ryk-clip-v2)">
+    <text
+      x="32"
+      y="43"
+      text-anchor="middle"
+      font-family="Cormorant Garamond, Garamond, Georgia, Times New Roman, serif"
+      font-size="33.5"
+      font-style="italic"
+      font-weight="600"
+      letter-spacing="0.08"
+      textLength="42.5"
+      lengthAdjust="spacingAndGlyphs"
+      fill="#1e3a8a"
+    >
+      RYK
+    </text>
+  </g>
+</svg>

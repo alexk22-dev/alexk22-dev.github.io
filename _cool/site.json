@@ -1,0 +1,37 @@
+{
+  "name": "Alexander Kim",
+  "tagline": "Protein engineering, mathematical modeling, and oncology",
+  "standard_view": "/standard/",
+  "group_order": [
+    "research",
+    "publication",
+    "venture",
+    "project"
+  ],
+  "never_mention": [
+    "GPA"
+  ],
+  "links": [
+    {
+      "label": "Email",
+      "url": "mailto:ak98@illinois.edu",
+      "icon": "email"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/alexander-k-/",
+      "icon": "linkedin"
+    },
+    {
+      "label": "Scholar",
+      "url": "https://scholar.google.com/citations?user=ucjXuecAAAAJ",
+      "icon": "scholar"
+    },
+    {
+      "label": "CV",
+      "url": "/assets/pdf/cv.pdf",
+      "icon": "cv"
+    }
+  ],
+  "notes": "Tagline alternatives are listed in the scaffold report."
+}

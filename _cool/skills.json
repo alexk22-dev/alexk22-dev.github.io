@@ -1,0 +1,409 @@
+{
+  "stages": [
+    {
+      "label": "Data & ML"
+    },
+    {
+      "label": "Modeling"
+    },
+    {
+      "label": "Structure"
+    },
+    {
+      "label": "Bench"
+    },
+    {
+      "label": "Programming",
+      "base": true
+    }
+  ],
+  "skills": [
+    {
+      "name": "Python",
+      "stage": "Programming"
+    },
+    {
+      "name": "Mathematica",
+      "stage": "Programming"
+    },
+    {
+      "name": "Linux",
+      "stage": "Programming"
+    },
+    {
+      "name": "NumPy",
+      "stage": "Data & ML"
+    },
+    {
+      "name": "SciPy",
+      "stage": "Data & ML"
+    },
+    {
+      "name": "Pandas",
+      "stage": "Data & ML"
+    },
+    {
+      "name": "scikit-learn",
+      "stage": "Data & ML"
+    },
+    {
+      "name": "Biopython",
+      "stage": "Data & ML"
+    },
+    {
+      "name": "PyTorch",
+      "stage": "Data & ML"
+    },
+    {
+      "name": "DSPy",
+      "stage": "Data & ML"
+    },
+    {
+      "name": "Ollama",
+      "stage": "Data & ML"
+    },
+    {
+      "name": "Local LLM deployment",
+      "stage": "Data & ML"
+    },
+    {
+      "name": "Reaction network theory",
+      "stage": "Modeling"
+    },
+    {
+      "name": "Structural sensitivity analysis",
+      "stage": "Modeling"
+    },
+    {
+      "name": "Dynamical systems",
+      "stage": "Modeling"
+    },
+    {
+      "name": "Differential equations",
+      "stage": "Modeling"
+    },
+    {
+      "name": "Tellurium",
+      "stage": "Modeling"
+    },
+    {
+      "name": "SymPy",
+      "stage": "Modeling"
+    },
+    {
+      "name": "AlphaFold3",
+      "stage": "Structure"
+    },
+    {
+      "name": "ColabFold",
+      "stage": "Structure"
+    },
+    {
+      "name": "PyMOL",
+      "stage": "Structure"
+    },
+    {
+      "name": "GROMACS",
+      "stage": "Structure"
+    },
+    {
+      "name": "CamSol",
+      "stage": "Structure"
+    },
+    {
+      "name": "BLAST",
+      "stage": "Structure"
+    },
+    {
+      "name": "Molecular cloning",
+      "stage": "Bench"
+    },
+    {
+      "name": "Ni-NTA purification",
+      "stage": "Bench"
+    },
+    {
+      "name": "Ion exchange chromatography",
+      "stage": "Bench"
+    },
+    {
+      "name": "Western blot",
+      "stage": "Bench"
+    },
+    {
+      "name": "Sanger sequencing",
+      "stage": "Bench"
+    },
+    {
+      "name": "Cell and tissue culture",
+      "stage": "Bench"
+    }
+  ],
+  "used": [
+    {
+      "skill": "AlphaFold3",
+      "items": [
+        "wilson"
+      ],
+      "note": "CV, Wilson Laboratory: Performed computational structure and solubility analysis using AlphaFold3, ColabFold, CamSol, GROMACS, and PyMOL to diagnose and resolve protein insolubility in chimeric constructs."
+    },
+    {
+      "skill": "ColabFold",
+      "items": [
+        "wilson"
+      ],
+      "note": "CV, Wilson Laboratory: Performed computational structure and solubility analysis using AlphaFold3, ColabFold, CamSol, GROMACS, and PyMOL to diagnose and resolve protein insolubility in chimeric constructs."
+    },
+    {
+      "skill": "CamSol",
+      "items": [
+        "wilson"
+      ],
+      "note": "CV, Wilson Laboratory: Performed computational structure and solubility analysis using AlphaFold3, ColabFold, CamSol, GROMACS, and PyMOL to diagnose and resolve protein insolubility in chimeric constructs."
+    },
+    {
+      "skill": "GROMACS",
+      "items": [
+        "wilson"
+      ],
+      "note": "CV, Wilson Laboratory: Performed computational structure and solubility analysis using AlphaFold3, ColabFold, CamSol, GROMACS, and PyMOL to diagnose and resolve protein insolubility in chimeric constructs."
+    },
+    {
+      "skill": "PyMOL",
+      "items": [
+        "wilson"
+      ],
+      "note": "CV, Wilson Laboratory: Performed computational structure and solubility analysis using AlphaFold3, ColabFold, CamSol, GROMACS, and PyMOL to diagnose and resolve protein insolubility in chimeric constructs."
+    },
+    {
+      "skill": "Ni-NTA purification",
+      "items": [
+        "wilson"
+      ],
+      "note": "CV, Wilson Laboratory: Carried out recombinant expression and purification by nickel affinity and ion exchange chromatography, with construct verification by Sanger sequencing and Western blot."
+    },
+    {
+      "skill": "Ion exchange chromatography",
+      "items": [
+        "wilson"
+      ],
+      "note": "CV, Wilson Laboratory: Carried out recombinant expression and purification by nickel affinity and ion exchange chromatography, with construct verification by Sanger sequencing and Western blot."
+    },
+    {
+      "skill": "Western blot",
+      "items": [
+        "wilson"
+      ],
+      "note": "CV, Wilson Laboratory: Carried out recombinant expression and purification by nickel affinity and ion exchange chromatography, with construct verification by Sanger sequencing and Western blot."
+    },
+    {
+      "skill": "Sanger sequencing",
+      "items": [
+        "wilson"
+      ],
+      "note": "CV, Wilson Laboratory: Carried out recombinant expression and purification by nickel affinity and ion exchange chromatography, with construct verification by Sanger sequencing and Western blot."
+    },
+    {
+      "skill": "Reaction network theory",
+      "items": [
+        "yu",
+        "dose-response-manuscript",
+        "crn-dose",
+        "crnt-poster"
+      ],
+      "note": "CV, Yu Group: Originated and leads a project applying chemical reaction network theory and structural sensitivity analysis to steady-state dose response in targeted protein degradation systems. First author on the resulting manuscript, in preparation. | crn_dose_response_implementation.md: Generalizes the analysis ... from the degrader network to an arbitrary mass-action CRN | Owner, 2026-11-18 (answers to skills questions)."
+    },
+    {
+      "skill": "Structural sensitivity analysis",
+      "items": [
+        "yu",
+        "dose-response-manuscript",
+        "crn-dose",
+        "crnt-poster"
+      ],
+      "note": "CV, Yu Group: Originated and leads a project applying chemical reaction network theory and structural sensitivity analysis to steady-state dose response in targeted protein degradation systems. First author on the resulting manuscript, in preparation. | crn_dose_response_implementation.md: Steady state: structural (symbolic) ... Sensitivity of output i | Owner, 2026-11-18 (answers to skills questions)."
+    },
+    {
+      "skill": "Mathematica",
+      "items": [
+        "yu",
+        "crnt-poster",
+        "dose-response-manuscript"
+      ],
+      "note": "CV, Yu Group: Built symbolic and numerical tooling in Mathematica and Python (Tellurium) to validate analytical results against simulation. | Owner, 2026-11-18 (answers to skills questions)."
+    },
+    {
+      "skill": "Python",
+      "items": [
+        "yu",
+        "bioaxis",
+        "wilson",
+        "msk",
+        "crnt-poster",
+        "dose-response-manuscript",
+        "crn-dose"
+      ],
+      "note": "CV, Yu Group: Built symbolic and numerical tooling in Mathematica and Python (Tellurium) to validate analytical results against simulation. | PLAN.md: venv/ (Python 3.12, torch 2.15 on MPS, transformers 5.22) | Owner, 2026-11-18 (answers to skills questions)."
+    },
+    {
+      "skill": "Tellurium",
+      "items": [
+        "yu",
+        "crnt-poster",
+        "dose-response-manuscript",
+        "crn-dose"
+      ],
+      "note": "CV, Yu Group: Built symbolic and numerical tooling in Mathematica and Python (Tellurium) to validate analytical results against simulation. | Owner, 2026-11-18 (answers to skills questions)."
+    },
+    {
+      "skill": "Local LLM deployment",
+      "items": [
+        "msk",
+        "progression-abstract",
+        "referral-poster"
+      ],
+      "note": "CV: runs on a personal computer without GPU acceleration; large language models on personal computers; Locally Deployed CPU-Only LLMs"
+    },
+    {
+      "skill": "PyTorch",
+      "items": [
+        "bioaxis"
+      ],
+      "note": "PLAN.md: pyproject.toml # torch (MPS), transformers>=4.56 (DINOv2/v3), timm, peft, opencv, pandas+tables, statsmodels"
+    },
+    {
+      "skill": "Molecular cloning",
+      "items": [
+        "wilson"
+      ],
+      "note": "Owner, 2026-11-17: “all the wet lab skills should map to Wilson Lab”. CV Technical skills lists it under wet lab."
+    },
+    {
+      "skill": "Cell and tissue culture",
+      "items": [
+        "wilson"
+      ],
+      "note": "Owner, 2026-11-17: “all the wet lab skills should map to Wilson Lab”. CV Technical skills lists it under wet lab."
+    },
+    {
+      "skill": "DSPy",
+      "items": [
+        "progression-abstract",
+        "referral-poster",
+        "msk"
+      ],
+      "note": "Owner, 2026-11-17: “ASCO and ASTRO use DSPy and Ollama”. | Owner, 2026-11-18: “ACRO 2026 also uses DSPy and Ollama”. | Owner, 2026-11-18: research outputs' skills are subsets of the lab they originate from (ASCO, ASTRO and ACRO work is from MSK). | Owner, 2026-11-18: ASTRO 2025 used only scikit-learn, NumPy and pandas (not DSPy/Ollama)."
+    },
+    {
+      "skill": "Ollama",
+      "items": [
+        "progression-abstract",
+        "referral-poster",
+        "msk"
+      ],
+      "note": "Owner, 2026-11-17: “ASCO and ASTRO use DSPy and Ollama”. | Owner, 2026-11-18: “ACRO 2026 also uses DSPy and Ollama”. | Owner, 2026-11-18: research outputs' skills are subsets of the lab they originate from (ASCO, ASTRO and ACRO work is from MSK). | Owner, 2026-11-18: ASTRO 2025 used only scikit-learn, NumPy and pandas (not DSPy/Ollama)."
+    },
+    {
+      "skill": "BLAST",
+      "items": [
+        "wilson"
+      ],
+      "note": "Owner, 2026-11-18: “BLAST + Linux + Biopython go under Wilson Lab”."
+    },
+    {
+      "skill": "Linux",
+      "items": [
+        "wilson"
+      ],
+      "note": "Owner, 2026-11-18: “BLAST + Linux + Biopython go under Wilson Lab”."
+    },
+    {
+      "skill": "Biopython",
+      "items": [
+        "wilson"
+      ],
+      "note": "Owner, 2026-11-18: “BLAST + Linux + Biopython go under Wilson Lab”."
+    },
+    {
+      "skill": "Dynamical systems",
+      "items": [
+        "yu",
+        "crnt-poster",
+        "dose-response-manuscript"
+      ],
+      "note": "Owner, 2026-11-18: “Dynamical systems + differential equations goes with Yu group”. | Owner, 2026-11-18 (answers to skills questions)."
+    },
+    {
+      "skill": "Differential equations",
+      "items": [
+        "yu",
+        "crnt-poster",
+        "dose-response-manuscript"
+      ],
+      "note": "Owner, 2026-11-18: “Dynamical systems + differential equations goes with Yu group”. | Owner, 2026-11-18 (answers to skills questions)."
+    },
+    {
+      "skill": "NumPy",
+      "items": [
+        "msk",
+        "yu",
+        "bioaxis",
+        "crn-dose",
+        "organotropism-abstract"
+      ],
+      "note": "Owner, 2026-11-18: NumPy and Pandas used at MSK; “Just NumPy for Yu group as well”. | Owner, 2026-11-18 (answers to skills questions). | Owner, 2026-11-18: ASTRO 2025 used only scikit-learn, NumPy and pandas (not DSPy/Ollama)."
+    },
+    {
+      "skill": "Pandas",
+      "items": [
+        "msk",
+        "progression-abstract",
+        "organotropism-abstract",
+        "referral-poster",
+        "bioaxis"
+      ],
+      "note": "Owner, 2026-11-18: NumPy and Pandas used at MSK; “Just NumPy for Yu group as well”. | Owner, 2026-11-18 (answers to skills questions)."
+    },
+    {
+      "skill": "scikit-learn",
+      "items": [
+        "msk",
+        "organotropism-abstract"
+      ],
+      "note": "Owner, 2026-11-18 (answers to skills questions). | Owner, 2026-11-18: ASTRO 2025 used only scikit-learn, NumPy and pandas (not DSPy/Ollama)."
+    },
+    {
+      "skill": "SymPy",
+      "items": [
+        "yu",
+        "crn-dose"
+      ],
+      "note": "Owner, 2026-11-18 (answers to skills questions)."
+    },
+    {
+      "skill": "SciPy",
+      "items": [
+        "yu",
+        "crn-dose"
+      ],
+      "note": "Owner, 2026-11-18 (answers to skills questions)."
+    }
+  ],
+  "edges": [
+    {
+      "from": "Python",
+      "to": [
+        "NumPy",
+        "Pandas",
+        "Biopython",
+        "PyTorch",
+        "Tellurium",
+        "SciPy",
+        "scikit-learn",
+        "SymPy",
+        "DSPy"
+      ],
+      "note": "CV Technical skills: Python (NumPy, Pandas, Biopython, PyTorch); Yu Group: Python (Tellurium) | Owner, 2026-11-18: SymPy, SciPy, scikit-learn; DSPy is a Python library"
+    }
+  ]
+}

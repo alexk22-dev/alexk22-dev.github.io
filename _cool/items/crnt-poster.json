@@ -1,0 +1,45 @@
+{
+  "id": "crnt-poster",
+  "group": "publication",
+  "name": "CRNT 2026",
+  "context": "Poster presentation",
+  "summary": "Non-monotonic dose response in targeted protein degradation",
+  "start": "2026-05",
+  "end": "2026-05",
+  "title": "Analysis of Non-Monotonic Dose Response in Targeted Protein Degradation Systems",
+  "org": "Chemical Reaction Network Theory (CRNT2026), Honolulu, Hawaii, May 2026",
+  "description": "Alexander Kim*, Polly Y. Yu. (* denotes presenting author)",
+  "bullets": [],
+  "links": [],
+  "topics": [
+    {
+      "entry": "Protein degradation",
+      "weight": 0.8,
+      "source": "CV: Analysis of Non-Monotonic Dose Response in Targeted Protein Degradation Systems"
+    },
+    {
+      "entry": "Math modeling",
+      "weight": 1.0,
+      "source": "CV: Analysis of Non-Monotonic Dose Response in Targeted Protein Degradation Systems; Poster presentation, Chemical Reaction Network Theory (CRNT2026)"
+    }
+  ],
+  "methods": [],
+  "tools": [],
+  "output": [
+    {
+      "entry": "Poster",
+      "weight": 1.0,
+      "source": "CV: Poster presentation, Chemical Reaction Network Theory (CRNT2026), Honolulu, Hawaii"
+    },
+    {
+      "entry": "First author",
+      "weight": 1.0,
+      "source": "CV: Alexander Kim*, Polly Y. Yu"
+    },
+    {
+      "entry": "Presenting author",
+      "weight": 1.0,
+      "source": "CV: Alexander Kim* (* denotes presenting author)"
+    }
+  ]
+}

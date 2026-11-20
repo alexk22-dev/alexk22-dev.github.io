@@ -1,0 +1,48 @@
+{
+  "id": "labfoundry",
+  "group": "project",
+  "name": "LabFoundry",
+  "context": "Lab protocol management",
+  "summary": "Web-based system for managing, running and tracking lab protocols",
+  "start": "2026-02",
+  "end": "2026-07",
+  "title": "LabFoundry",
+  "org": "Web-based laboratory protocol management",
+  "logo": "/assets/cool/logos/orgs/labfoundry.svg",
+  "bullets": [
+    "Web-based system for managing, executing, and tracking laboratory protocols across a research group.",
+    "Separates version-controlled protocol templates from individual protocol runs; a finalized template is immutable and an edit creates a new version.",
+    "Role-based access: admins create and finalize templates and approve members' requests to run a protocol.",
+    "Protocols are run step by step, recording per-step timestamps, deviation notes and an outcome; experimental data stays elsewhere and is linked by reference."
+  ],
+  "links": [],
+  "order": 1,
+  "notes": "DRAFT for the owner's approval. Named LabFoundry and marked complete on the owner's word (2026-11-17); dates Feb–Jul 2026 (conceptualized to completed) given by the owner (2026-11-18). The source document is a design sketch that calls it by a generic name. Bullets cover only the sketch's core modules; which optional modules are in the finished system is an open question.",
+  "topics": [
+    {
+      "entry": "Software",
+      "weight": 1.0,
+      "source": "lab_protocol_system_sketch.md: A web-based system for managing, executing, and tracking laboratory protocols across a research group."
+    }
+  ],
+  "methods": [
+    {
+      "entry": "Role-based access",
+      "weight": 1.0,
+      "source": "lab_protocol_system_sketch.md: Role-based access with lightweight approval workflows"
+    },
+    {
+      "entry": "Protocol versioning",
+      "weight": 1.0,
+      "source": "lab_protocol_system_sketch.md: Every finalized template is immutable. Edits create a new version. Full history is preserved"
+    }
+  ],
+  "tools": [],
+  "output": [
+    {
+      "entry": "Working system",
+      "weight": 1.0,
+      "source": "Owner, 2026-11-17: “protocol manager is complete”. lab_protocol_system_sketch.md: A web-based system for managing, executing, and tracking laboratory protocols across a research group."
+    }
+  ]
+}

@@ -1,0 +1,2277 @@
+---
+# The homepage ("cool view"). Its content is _cool/ (edited in /admin/ → Homepage); scripts/build_cool.py
+# builds assets/cool/data/work.json from it before Jekyll runs, and site.data.cool.work_json is its versioned URL.
+layout: null
+raw_output: true
+permalink: /
+viewport: width=device-width, initial-scale=1, viewport-fit=cover
+---
+<!doctype html>
+<html lang="{{ site.lang }}">
+<head>
+{% include site-head.liquid %}
+{% include metadata.liquid %}
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c1c1d" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">
+{% include favicon.liquid %}
+{% raw %}
+<script>var d=document.documentElement,g,m;try{var s=localStorage,t=s.getItem("theme"),q=function(m){return matchMedia(m).matches};if(!q("(prefers-reduced-motion: reduce)")&&!q("(pointer: coarse)")&&!q("(hover: none)")&&(location.hash==="#intro"||!s.getItem("ak-intro-seen")||Date.now()-(+s.getItem("ak-last")||0)>18e5))d.classList.add("intro-full");if(t==="dark"||t==="light")d.setAttribute("data-theme",t);g=s.getItem("ak-gel")}catch(e){}m=/[?&](?:gel|stain)=([a-z]+)/.exec(location.search);d.classList.add("gel-"+(m&&{agarose:"agarose",uv:"agarose",sds:"sds",coomassie:"sds",western:"western"}[m[1]]||(/^(sds|western)$/.test(g)?g:"agarose")))</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Roboto:wght@400;500&family=Cormorant+Garamond:ital,wght@0,600;1,600&display=swap">
+<style>
+/* ================================================================ DESIGN KNOBS
+   Colours (both themes), fonts, type scale, the planes' pose and the timings. Edit here only.
+   Content (names, context lines, weights, group order) lives in _cool/*.json. */
+:root {
+  color-scheme: light;
+  --paper: #FFFFFF;
+  --card: #FFFFFF;
+  --ink: #000000;
+  --mute: #5E5E5E;
+  --rule: #D6DDEC;
+  --img-rule: transparent;
+  /* the accent, the heat ramp (weight 0 → 1; the light gels' bands are drawn from it) and the Skills plates (--plate a plate's
+     face, --edge its rim) all take the stain's colour, so every view is one colour */
+  --mark: #A84808;            /* deeper than the bands' orange: as text and as a 1px line it has white paper to stand on */
+  --hover: #B8520B;
+  --h0: #F7EFE8; --h1: #F1CDA8; --h2: #E79F5C; --h3: #D2701F; --h4: #9A4509;
+  --plate: #F7F4F1;
+  --edge: #E3DCD5;
+  --chip-rule: #7B756F;       /* a Skills chip's outline at rest: 3:1 on either plate */
+  --lgp: #F2F5FA;             /* the light plate under a logo that needs one on a dark page */
+  --fade: .45;                /* how far what is not picked steps back (opacity; a chip mixes into its plate by as much): its text stays 3:1 on the paper */
+  --out: .43;                 /* … and what a filter leaves out (inert), further still: its text stays 3:1 on the paper and on a plate */
+  /* the gel (the Gel view and the panel's lane): the slab's face and side, its wells, the lane tracks, the band ramp (weight 0 → 1),
+     the ladder and the hover guide (a lane's smear is the stain at --b3, thinned). The default stain is UV: bands fluoresce orange on a near-black slab, whatever the page's theme.
+     The wells are a shade lighter than the slab, the one way a slot shows on near-black. On a dark page the slab goes a shade blacker and takes a hairline (--gel-line), so it still reads as a slab.
+     The corner's switch picks the gel (html.gel-agarose | gel-sds | gel-western; ?gel=agarose|sds|western, or the older ?stain=uv|coomassie,
+     overrides the choice kept in localStorage "ak-gel"): SDS-PAGE is blue bands on a pale blue slab, Western blot grey to black on film, and each
+     brings its own page with it (paper, ink, rules, accent, plates), further down */
+  --gel: #15171B; --gel-edge: #000000; --gel-line: transparent; --well: #34373D;
+  --b0: var(--gel); --b1: #5A3115; --b2: #91491A; --b3: #E67A28; --b4: #FFB36B;
+  --ladder: #A8561F; --guide: #F59545;
+  --corpus: rgba(0, 0, 0, .45);   /* the intro's field of words: quiet on the paper, under the words that light (--mark) */
+
+  --serif: "Source Serif 4", Georgia, serif;
+  --label: "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
+  --brand: "Cormorant Garamond", Garamond, Georgia, serif;   /* the standard view's navbar brand */
+  --ui: Roboto, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;   /* the standard view's nav and body sans */
+  --fs-title: 60px;      /* Alexander Kim */
+  --fs-body: 17px;       /* tagline, panel text */
+  --fs-item: 15px;       /* item names over the planes */
+  --fs-name: 17px;       /* item names on phones (one row each) */
+  --fs-context: 13.5px;  /* context line under a name on phones */
+  --fs-group: 15px;      /* Experience / Research / Projects */
+  --fs-head: 13px;       /* topic names */
+  --fs-ui: 15px;         /* links and view words */
+
+  --map-tilt: 58;        /* the planes at rest: rotateX, degrees */
+  --map-turn: -13;       /* … and rotateZ */
+  --map-turn-ph: -8;     /* … and rotateZ on phones, where the planes stack */
+  --map-tilt-flat: 0;    /* one group on its own (a filter) is held up straight on: rotateX … */
+  --map-turn-flat: 0;    /* … and rotateZ */
+  --map-slant: 35;       /* item names rise at this angle, degrees; 0 = level, stacked in tiers with leaders */
+  --lane: 40;            /* lane pitch across a slab, in plane units (a row is 32): the tilted slabs … */
+  --lane-flat: 60;       /* … and the one held up straight on, where there is room. Wells and bands are 8 narrower. Both are at most: a narrow window or a phone gets what it has room for */
+  --label-fit: .36;      /* the gels' labels grow with their lanes: an item name is this much of a lane's pitch on screen, never under its size above (--fs-item) … */
+  --label-max: 1.4;      /* … nor over this many times it. Topics, years and group names grow by the same factor (--lk, set by the layout) */
+  --ease: cubic-bezier(.3, 0, .1, 1);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #1C1C1D; --card: #212529; --ink: #E8E8E8; --mute: #9C9C9C; --rule: #424246; --img-rule: #424246; --chip-rule: #7E7B78; --out: .38;
+    --mark: #F0914A; --hover: #FFB36B;
+    --h0: #2E2925; --h1: #55331B; --h2: #91491A; --h3: #E67A28; --h4: #FFB36B; --plate: #282624; --edge: #131211;
+    --gel: #0B0C0E; --gel-line: var(--rule); --well: #303133; --corpus: rgba(232, 232, 232, .38);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #1C1C1D; --card: #212529; --ink: #E8E8E8; --mute: #9C9C9C; --rule: #424246; --img-rule: #424246; --chip-rule: #7E7B78; --out: .38;
+  --mark: #F0914A; --hover: #FFB36B;
+  --h0: #2E2925; --h1: #55331B; --h2: #91491A; --h3: #E67A28; --h4: #FFB36B; --plate: #282624; --edge: #131211;
+  --gel: #0B0C0E; --gel-line: var(--rule); --well: #303133; --corpus: rgba(232, 232, 232, .38);
+}
+/* SDS-PAGE, Coomassie-stained, after a scan of a real one: a pale lavender-blue gel with a deeper blue line at its edge, bands from a
+   periwinkle haze to royal blue, and the page with it: faintly blue paper, indigo ink, blue accent, rules and plates.
+   A gel sets every colour of the page (these blocks come after the themes above, so each lists the full set) */
+:root.gel-sds {
+  --paper: #F5F7FE; --card: #FBFCFF; --ink: #0F1A4F; --mute: #55608F; --rule: #C9D2F0; --img-rule: transparent; --chip-rule: #6373B3; --fade: .56; --out: .48;
+  --mark: #1F4FDB; --hover: #2F5DEA;
+  --h0: #E6EBFA; --h1: #C3CEFA; --h2: #94ABFC; --h3: #5B86FA; --h4: #2A5EEE; --plate: #ECF0FC; --edge: #D3DBF6;
+  --gel: #E6EBFA; --gel-edge: #AAB6E6; --gel-line: #BFC9EF; --well: #CBD4F3;
+  --b0: var(--h0); --b1: var(--h1); --b2: var(--h2); --b3: var(--h3); --b4: var(--h4);
+  --ladder: #B3C2F6; --guide: var(--mark); --corpus: rgba(15, 26, 79, .48);
+}
+/* Western blot, as film off a chemiluminescent membrane: a white film on film-grey paper, bands grey to near-black, the wells and the lane
+   smear barely there (a membrane has neither), graphite ink and accent, nothing tinted */
+:root.gel-western {
+  --paper: #F2F2F0; --card: #FAFAF9; --ink: #141414; --mute: #5A5A58; --rule: #D0D0CC; --img-rule: transparent; --chip-rule: #767674; --fade: .54; --out: .47;
+  --mark: #474747; --hover: #636363;
+  --h0: #FBFBFA; --h1: #D3D2CE; --h2: #9A9894; --h3: #53524F; --h4: #141414; --plate: #EAEAE7; --edge: #DCDCD8;
+  --gel: #FBFBFA; --gel-edge: #C6C5C0; --gel-line: #DCDCD8; --well: #EFEFEC;
+  --b0: var(--h0); --b1: var(--h1); --b2: var(--h2); --b3: var(--h3); --b4: var(--h4);
+  --ladder: #A9A7A2; --guide: var(--mark); --corpus: rgba(20, 20, 20, .46);
+}
+/* on a dark page both stay light, as on a lightbox: the slab and its bands are unchanged and the page around them turns, deep navy
+   for SDS-PAGE and charcoal for the blot */
+@media (prefers-color-scheme: dark) {
+  :root.gel-sds:not([data-theme="light"]) { --paper: #0C1230; --card: #131B45; --ink: #E7ECFF; --mute: #9AA7DA; --rule: #2B3668; --img-rule: #2B3668; --chip-rule: #6474B8; --fade: .45; --out: .38; --lgp: #E6EBFA; --mark: #8FAEFF; --hover: #BACDFF; --plate: #141C46; --edge: #080D25; --gel-edge: #7F8DC8; --gel-line: transparent; --guide: #4C78F2; --corpus: rgba(231, 236, 255, .38); --fly-rim: 0 0 1px var(--paper), 0 0 2px var(--paper); }
+  :root.gel-western:not([data-theme="light"]) { --paper: #1B1B1B; --card: #242424; --ink: #EDEDEB; --mute: #A0A09E; --rule: #3E3E3D; --img-rule: #3E3E3D; --chip-rule: #7C7C7A; --fade: .45; --out: .38; --lgp: #F2F2F0; --mark: #C8C8C6; --hover: #FFFFFF; --plate: #262626; --edge: #121212; --gel-edge: #A3A29D; --gel-line: transparent; --guide: #7A7A7A; --corpus: rgba(237, 237, 235, .38); --fly-rim: 0 0 1px var(--paper), 0 0 2px var(--paper); }
+}
+:root.gel-sds[data-theme="dark"] { --paper: #0C1230; --card: #131B45; --ink: #E7ECFF; --mute: #9AA7DA; --rule: #2B3668; --img-rule: #2B3668; --chip-rule: #6474B8; --fade: .45; --out: .38; --lgp: #E6EBFA; --mark: #8FAEFF; --hover: #BACDFF; --plate: #141C46; --edge: #080D25; --gel-edge: #7F8DC8; --gel-line: transparent; --guide: #4C78F2; --corpus: rgba(231, 236, 255, .38); --fly-rim: 0 0 1px var(--paper), 0 0 2px var(--paper); }
+:root.gel-western[data-theme="dark"] { --paper: #1B1B1B; --card: #242424; --ink: #EDEDEB; --mute: #A0A09E; --rule: #3E3E3D; --img-rule: #3E3E3D; --chip-rule: #7C7C7A; --fade: .45; --out: .38; --lgp: #F2F2F0; --mark: #C8C8C6; --hover: #FFFFFF; --plate: #262626; --edge: #121212; --gel-edge: #A3A29D; --gel-line: transparent; --guide: #7A7A7A; --corpus: rgba(237, 237, 235, .38); --fly-rim: 0 0 1px var(--paper), 0 0 2px var(--paper); }
+/* ================================================================ end of knobs */
+:root { --m: 96px; --g: 24px; --sep: color-mix(in srgb, var(--paper) 35%, transparent); }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scrollbar-gutter: stable; overflow-x: clip; background: var(--paper); }
+html.locked { overflow: hidden; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font: 400 var(--fs-body)/1.5 var(--serif);
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)); overflow-x: clip;
+}
+a { color: inherit; text-decoration: underline 1px var(--rule); text-underline-offset: 4px; }
+@media (hover: hover) and (pointer: fine) { a:hover { color: var(--hover); text-decoration-color: currentColor; } }
+html, a, button { -webkit-tap-highlight-color: transparent; }
+a, button { touch-action: manipulation; }
+button, .links a { user-select: none; -webkit-user-select: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; letter-spacing: inherit; text-align: left; }
+:focus { outline: none; }
+:focus-visible { outline: 1px solid var(--mark); outline-offset: 4px; }
+[hidden] { display: none !important; }
+
+.wrap { padding-inline: max(var(--m), env(safe-area-inset-left, 0px)) max(var(--m), env(safe-area-inset-right, 0px)); position: relative; }
+.head { position: relative; padding-top: calc(48px + env(safe-area-inset-top, 0px)); background: var(--paper); }
+.name { font: 600 var(--fs-title)/1 var(--brand); letter-spacing: .015em; margin: 0; }
+.replay { text-align: left; line-height: inherit; font-weight: inherit; }
+.thesis { margin: 8px 0 0; font-size: var(--fs-body); line-height: 1.5; }
+.controls { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0 var(--g); margin-top: 8px; }
+.links, .seg { display: flex; flex-wrap: wrap; align-items: center; gap: 0 20px; }
+.links a { gap: 7px; }
+.links svg { width: 15px; height: 15px; flex: none; }
+.links a, .seg button { font-family: var(--label); font-size: var(--fs-ui); line-height: 1; min-height: 44px; display: inline-flex; align-items: center; color: var(--mute); text-decoration: underline 1px transparent; text-underline-offset: 6px; }
+/* header nav as on the standard view: Roboto at .95rem, text-coloured, blue on hover, the current one at 500 */
+.links a, .seg button { font-family: var(--ui); font-size: .95rem; color: var(--ink); text-decoration: none; }
+.seg button[aria-pressed="true"] { font-weight: 500; }
+@media (hover: hover) and (pointer: fine) { .links a:hover, .seg button:hover { color: var(--hover); } }
+.seg button, .links a { position: relative; }
+.links a::after { content: ""; position: absolute; top: 0; bottom: 0; left: min(0px, (100% - 44px) / 2); right: min(0px, (100% - 44px) / 2); }
+/* hit areas grow only by what a control lacks of 44px, so they never reach for neighbours */
+.seg button::after { content: ""; position: absolute; top: 0; bottom: 0; left: min(0px, (100% - 44px) / 2); right: min(0px, (100% - 44px) / 2); }
+.seg button[aria-pressed="true"] { color: var(--ink); text-decoration-color: var(--ink); }
+/* the filter: same words as the views, the one on underlined rather than heavier */
+.filt { margin-left: auto; margin-right: 40px; }
+.rp { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 24px; min-height: 44px; color: var(--mark); }
+.rp svg { width: 16px; height: 16px; }
+.rp::after { content: ""; position: absolute; top: 0; bottom: 0; left: -10px; right: -10px; }
+@media (hover: hover) and (pointer: fine) { .rp:hover { color: var(--hover); } }
+.rp:active { color: var(--ink); }
+.filt button[aria-pressed="true"] { font-weight: 400; text-decoration: underline 1px currentColor; text-underline-offset: 6px; }
+/* the corner: which gel the page is run as, then light or dark. Small and quiet; the gel that is on is ink, over a hairline of the accent */
+.corner, .gels { display: flex; gap: 0 16px; }
+.corner { position: absolute; top: calc(16px + env(safe-area-inset-top, 0px)); right: 0; font: 12px/16px var(--ui); color: var(--mute); }
+.corner button { position: relative; white-space: nowrap; }
+.corner button::after { content: ""; position: absolute; inset: -14px -8px; }
+.corner button[aria-pressed="true"] { color: var(--ink); box-shadow: 0 3px 0 -2px var(--mark); }
+@media (hover: hover) and (pointer: fine) { .corner button:hover { color: var(--ink); } }
+/* light or dark: the icon is where a click goes (a moon on the light page, a sun on the dark one), set a little apart from the gels */
+.th { display: flex; align-items: center; margin-left: 8px; }
+.corner .th::after { inset: -14px -15px; }
+.th svg { width: 14px; height: 14px; }
+.th .su { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .th .mo { display: none; }
+  :root:not([data-theme="light"]) .th .su { display: block; }
+}
+:root[data-theme="dark"] .th .mo { display: none; }
+:root[data-theme="dark"] .th .su { display: block; }
+/* a change of gel or of theme cross-fades the page (a view transition, where the browser has them) */
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .24s; animation-timing-function: linear; }
+
+
+/* ---------------------------------------------------------------- gel: tilted slabs, one per group; labels are screen-aligned billboards */
+.stage { position: relative; height: 460px; margin-top: 8px; touch-action: pan-y pinch-zoom; user-select: none; -webkit-user-select: none; cursor: grab; }
+.stage.ph, .stage.flat { cursor: auto; }
+.stage.fadeout { opacity: 0; transition: opacity .18s linear; }
+.plane { position: absolute; left: 0; top: 0; transform-origin: 0 0; transform-style: preserve-3d; }
+.plate, .slab { position: absolute; left: 0; top: 0; }
+.plate { background: var(--gel); box-shadow: inset 0 0 0 1px var(--gel-line); }
+.slab { background: var(--gel-edge); transform: translateZ(-6px); }
+/* a cell is the hit target and sits just above its slab: inside the 3D context it must win the hit test after a turn. Its band is
+   drawn inside it, as wide as its well, as a stained gel photographs: --c the stain's colour and --t the thickness (of the cell) its
+   weight comes to, both from band() in the script. No weight, no band. One drawing for every band (a Gel cell's, the Timeline's .tb,
+   the panel's .zcell, a flying strip's), in units of --u, a 28th of a cell's height; --w: the band's width in them (24 in a square cell,
+   more in a wide lane: the script sets it):
+   - the band is an arc of a circle of radius --R about a point up the lane, so it smiles: its ends trail 1.8u behind its middle, however wide it is;
+   - its core, --T thick (never under --bmin, which the Gel sets where the slab is drawn small), runs from the stain at --c, a shade nearer
+     --b2 at its rim, to a shade hotter (--b4) just ahead of the middle; outside the core it fades out, over --e behind (the diffuse side) and --f ahead, more on a fat band;
+   - its ends are rounded and fade out, over 2.2u: over the band lies a strip of the slab's own colour (--gel) with an elliptical hole in it,
+     no taller than the band, so it takes the corners and nothing else; the arc stops 1u short of the strip's ends, so no rounding
+     leaves a sliver of it uncovered.
+   Two gradients: no filter, and no mask either (a mask on every band cost the turn frames on a slow machine) */
+.cell { position: absolute; left: 0; top: 0; translate: 0 0 .5px; cursor: pointer; transition: opacity .16s linear; }
+.cell, .zcell, .strip i, .tb { --u: 1px; --T: max(calc(var(--t, 0) * 28 * var(--u)), var(--bmin, 0px)); --R: calc(var(--w, 24) * var(--w, 24) / 14.4 * var(--u));
+  --e: calc(1.5 * var(--u) + .2 * var(--T)); --f: calc(1.1 * var(--u) + .1 * var(--T)); --ce: color-mix(in srgb, var(--c) 80%, var(--b2)); }
+.cell::before, .zcell::before, .strip i::before { content: ""; position: absolute; inset: 0 calc(2 * var(--u)); }
+/* no --c, no weight: the gradient is then invalid, and nothing is drawn */
+.cell::before, .zcell::before, .strip i::before, .tb {
+  background: radial-gradient(ellipse 50% calc(.9 * var(--T) + 9 * var(--u)), transparent calc(100% - 2.2 * var(--u)), var(--gel) 100%) 50% / 100% calc(var(--T) + var(--e) + var(--f) + 4 * var(--u)) no-repeat,
+    radial-gradient(circle at 50% calc(50% + .9 * var(--u) - var(--R)), transparent calc(var(--R) - var(--T) / 2 - var(--e)), color-mix(in srgb, var(--c) 30%, transparent) calc(var(--R) - var(--T) / 2 - .5 * var(--e)),
+    var(--ce) calc(var(--R) - var(--T) / 2), color-mix(in srgb, var(--c) 78%, var(--b4)) calc(var(--R) + .12 * var(--T)), var(--ce) calc(var(--R) + var(--T) / 2),
+    color-mix(in srgb, var(--c) 30%, transparent) calc(var(--R) + var(--T) / 2 + .5 * var(--f)), transparent calc(var(--R) + var(--T) / 2 + var(--f))) 50% / calc(100% - 2 * var(--u)) 100% no-repeat; }
+/* wells along the top of every lane; the ladder is one lane of thin, even bands beside the topic names, soft at the edge like the rest.
+   Under a loaded well runs the lane's smear (--lane-h long, to its last band; --sm: how far it has run, in the intro): faint, strongest at the
+   well and gone within 190px, its sides faded into the slab the way a band's ends are (--gel over them), so lanes never read as ruled tracks */
+.well, .lad { position: absolute; left: 0; top: 0; translate: 0 0 .25px; pointer-events: none; transition: opacity .16s linear; }
+.well { background: var(--well); }
+.well:not(.lw)::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: var(--lane-h, 0); transform-origin: 50% 0; transform: scaleY(var(--sm, 1));
+  background: linear-gradient(90deg, var(--gel), transparent 30%, transparent 70%, var(--gel)),
+    linear-gradient(color-mix(in srgb, var(--b3) 10%, transparent), color-mix(in srgb, var(--b3) 6.5%, transparent) min(14px, 8%), color-mix(in srgb, var(--b3) 4%, transparent) min(40px, 22%), color-mix(in srgb, var(--b3) 2.2%, transparent) min(80px, 42%), color-mix(in srgb, var(--b3) 1%, transparent) min(130px, 66%), transparent min(190px, 100%)); }
+.lad { background: var(--ladder); border-radius: 1px; box-shadow: 0 0 1.2px color-mix(in srgb, var(--ladder) 70%, transparent); }
+.labs { position: absolute; inset: 0; pointer-events: none; }
+.labs .lbl { pointer-events: auto; z-index: 1; }
+.labs .lead, .labs .clbl { pointer-events: none; }
+.labs .lead { z-index: 0; }
+.labs .ilbl { z-index: 2; }   /* a name wins any tap its heading's widened hit band overlaps */
+.lbl { position: absolute; left: 0; top: 0; white-space: nowrap; transform-origin: 0 0; color: var(--ink); transition: opacity .16s linear; }
+/* names: level over their columns (lv) or rising at --map-slant (sl) */
+.ilbl .nm { display: block; }
+.ilbl .cx { display: none; }
+.ilbl.lv { padding: 1px 4px; text-align: center; white-space: normal; width: max-content; max-width: 136px; background: var(--paper); }
+.ilbl.lv .nm, .ilbl.sl .nm { font: 400 calc(var(--fs-item) * var(--nmk, 1) * var(--lk, 1))/1.2 var(--serif); }   /* --nmk: set by the Map's layout where the names must shrink to stay apart; --lk: where wide lanes let every label grow (--label-fit) */
+.ilbl.sl { padding: 1px 2px; }
+/* stacked on phones a slanted name is a band as thick as the gap to the next name (--nb each side), so every tap finds one, and at least 44px long */
+.stage.ph .ilbl.sl::after { content: ""; position: absolute; left: 0; right: min(0px, 100% - 44px); top: calc(-1 * var(--nb, 0px)); bottom: calc(-1 * var(--nb, 0px)); }
+.ilbl.hl .nm { color: var(--mark); }
+@media (hover: hover) and (pointer: fine) { .ilbl:hover .nm { color: var(--mark); } }
+.ilbl:focus-visible { outline: none; }
+.ilbl:focus-visible .nm { color: var(--mark); }
+/* group headings: a 44px band around the 20px line */
+.glbl { font: 500 calc(var(--fs-group) * var(--lk, 1))/calc(20px * var(--lk, 1)) var(--label); color: var(--ink); text-decoration: underline 1px transparent; text-underline-offset: 5px; }
+.glbl::after { content: ""; position: absolute; left: -4px; right: -4px; top: -12px; bottom: -12px; }
+.glbl[aria-pressed="true"] { text-decoration-color: currentColor; }
+.glbl:focus-visible { outline: none; color: var(--mark); }
+@media (hover: hover) and (pointer: fine) { .glbl:hover { color: var(--hover); } }
+/* topics: beside the rows of the first plane (of every plane on phones) */
+.clbl { font: 400 calc(var(--fs-head) * var(--lk, 1))/1.2 var(--label); color: var(--ink); background: var(--paper); padding: 0 3px; }
+.clbl.hl { color: var(--mark); }
+.lead { position: absolute; left: 0; top: 0; width: 1px; height: 0; background: var(--rule); transform-origin: 0 0; }
+.stage.focus .cell:not(.hl), .stage.focus .well:not(.hl):not(.lw), .stage.focus .lbl:not(.hl) { opacity: var(--fade); transition: none; }
+.stage .off, .lbl.wait, .stage .pending { visibility: hidden; pointer-events: none; }
+.stage .off.leave { visibility: visible; }
+.stage .off:not(.leave) { display: none; }
+.stage.introing .lbl, .stage.introing .cell { pointer-events: none; }
+.stage.introing .cell, .stage.introing .lad { transition: none; will-change: transform, opacity; }
+.stage.dragging, .stage.dragging * { cursor: grabbing !important; }
+.arcs { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 2; }
+.arcs path { fill: none; stroke: var(--guide); stroke-width: 1; stroke-dasharray: 1; }
+
+/* the intro: the work's own words fill the viewport (.corpus, a canvas); one of each lane name and topic lifts out of it as a .fly, set
+   exactly as the label it lands on (it borrows the label's classes), and the gel is loaded behind it */
+.corpus { position: fixed; left: 0; top: 0; z-index: 30; pointer-events: none; }
+.fly { position: fixed; left: 0; top: 0; z-index: 31; pointer-events: none; white-space: nowrap; color: var(--mark); transform-origin: 0 0; will-change: transform, opacity; }   /* lit in the accent, ink by the time it lands */
+.fly.ilbl, .fly.clbl { background: none; }
+.fly { text-shadow: var(--fly-rim, none); }   /* where a slab is lighter than the words (the dark SDS-PAGE and Western pages), a hairline of the page keeps a crossing word */
+html.intro-full { overflow: hidden; }
+html.intro-full .head, html.intro-full #mapView { visibility: hidden; }
+html.intro-full.intro-rise #mapView { visibility: visible; }
+.skip { background: var(--paper); position: fixed; right: max(var(--m), env(safe-area-inset-right, 0px)); top: calc(40px + env(safe-area-inset-top, 0px)); z-index: 32; min-width: 44px; min-height: 44px; font: 15px var(--label); color: var(--mute); }
+@media (hover: hover) and (pointer: fine) { .skip:hover { color: var(--ink); } }
+
+
+/* ---------------------------------------------------------------- timeline: the same gel run over time; one slab, a lane per piece of work */
+.stage.tl { cursor: auto; }
+/* a band, the Gel view's drawing in a box of its own: as wide as a well, --T thick (set by the script) with room around it for the smile */
+.tb { position: absolute; left: 0; top: 0; translate: 0 0 .5px; transform-origin: 50% 0; pointer-events: none; transition: opacity .16s linear; }
+.lane { position: absolute; left: 0; top: 0; translate: 0 0 .75px; cursor: pointer; }
+.stage.focus .tb:not(.hl) { opacity: var(--fade); transition: none; }
+.stage.tl.focus .clbl { opacity: 1; }   /* the dates stay: the guide reads against them */
+
+
+.hcard { position: fixed; left: 0; top: 0; z-index: 12; width: max-content; max-width: min(240px, calc(100vw - 32px)); padding: 12px; background: var(--card);
+  border: 1px solid var(--rule); color: var(--ink); font-family: var(--label); visibility: hidden; pointer-events: none; }
+.hcard.on { visibility: visible; }
+.hcard.tap { pointer-events: auto; cursor: pointer; }
+.hcard > img, .panel img { box-shadow: 0 0 0 1px var(--img-rule); }
+.hcard > img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: contain; margin-bottom: 8px; }
+.hcard.small > img { display: none; }
+.hcard .dt { display: block; font-size: 12px; line-height: 16px; color: var(--mute); font-variant-numeric: tabular-nums lining-nums; }
+.hcard .cx { display: block; margin-top: 6px; font: 500 14px/18px var(--label); }
+.hcard p { margin: 6px 0 0; font: 15px/20px var(--serif); }
+.morph { position: fixed; inset: 0; z-index: 15; pointer-events: none; }
+.morph > * { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform, opacity; }
+.morph span { white-space: nowrap; line-height: 1; font-family: var(--label); color: var(--ink); }
+.morph span.sf { font-family: var(--serif); }
+/* a lane in flight between views, as a strip of gel with its bands: the lane runs along the strip, so a band's thickness is its width */
+.morph .strip { display: grid; }
+.strip i { display: block; position: relative; background: var(--gel); }
+.strip i { --u: .357px; }
+.strip i::before { rotate: -90deg; }   /* the cell's drawing on its side, the well end at the left */
+
+.scrim { touch-action: none; position: fixed; inset: 0; height: 100vh; height: 100dvh; z-index: 19; background: var(--paper); opacity: 0; pointer-events: none; transition: opacity .18s linear; }
+.scrim.on { opacity: 1; pointer-events: auto; }
+.panel { --zs: 40px; position: fixed; inset: 0; height: 100vh; height: 100dvh; z-index: 20; overflow-y: auto; overscroll-behavior: contain;
+  padding: 0 max(var(--m), env(safe-area-inset-right, 0px)) calc(72px + env(safe-area-inset-bottom, 0px)) calc(max(var(--m), env(safe-area-inset-left, 0px)) + var(--zs) + 120px); }
+.panel.closed { visibility: hidden; pointer-events: none; }
+.panel.closing { pointer-events: none; }
+.panel.pre .pc, .panel.closing .pc, .panel.pre-l .zl, .panel.closing .zl { visibility: hidden; }
+.panel:focus, .panel:focus-visible { outline: none; }
+.pbar { position: fixed; top: calc(16px + env(safe-area-inset-top, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); z-index: 2; }
+.x { position: relative; width: 44px; height: 44px; color: var(--mute); }
+.x::before, .x::after { content: ""; position: absolute; left: 12px; top: 21.25px; width: 20px; height: 1.5px; background: currentColor; transform: rotate(45deg); }
+.x::after { transform: rotate(-45deg); }
+@media (hover: hover) and (pointer: fine) { .x:hover { color: var(--ink); } }
+.pc { max-width: 1120px; padding-top: 96px; display: grid; grid-template-columns: minmax(0, 62ch) minmax(0, 1fr); gap: 24px 48px; align-items: start; }
+.panel h2 { grid-column: 1 / -1; font-weight: 500; font-size: 40px; line-height: 1.1; letter-spacing: -.01em; margin: 0; }
+.panel .ctx { font: 500 17px/1.4 var(--label); margin: 0 0 8px; }
+.panel .org { font: 15px/1.5 var(--label); color: var(--mute); margin: 0 0 12px; }
+.panel .desc { margin: 0 0 12px; }
+.panel ul { padding-left: 20px; margin: 0 0 16px; }
+.panel li { margin: 4px 0; }
+.panel figure { margin: 0; }
+.panel img { width: 100%; height: auto; display: block; }
+.tbl { border-collapse: collapse; font: 15px/1.5 var(--label); font-variant-numeric: tabular-nums lining-nums; margin: 0 0 16px; }
+.tbl th { font-weight: 400; color: var(--mute); text-align: left; }
+.tbl th, .tbl td { padding: 4px 24px 4px 0; border-bottom: 1px solid var(--rule); }
+.tbl td + td, .tbl th + th { text-align: right; }
+.panel .plinks { display: flex; gap: 0 20px; flex-wrap: wrap; margin-top: 8px; font: 500 15px var(--ui); }
+.panel .plinks a { color: var(--mark); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; }
+@media (hover: hover) and (pointer: fine) { .panel .plinks a:hover { color: var(--hover); } }
+.zcell { --u: calc(var(--zs) / 28); --e: calc(.8 * var(--u) + .09 * var(--T)); --f: calc(.6 * var(--u) + .05 * var(--T)); position: fixed; left: 0; top: 0; width: var(--zs); height: var(--zs); transform-origin: 0 0; z-index: 21; will-change: transform; }
+/* the panel's strip is the item's lane, cut out of the gel: each cell a piece of slab (its spread closes the gaps) with its band; seen
+   flat and larger, a band's edges fade over about half as many units as on the tilted slab, so they are as soft on screen */
+.zcell { background: var(--gel); box-shadow: 0 0 0 2px var(--gel); }
+.zcell:not(:last-of-type) { box-shadow: 0 0 0 2px var(--gel), 0 1px 0 2px var(--gel); }   /* … and laps the next by a pixel: no seam where a light lane lies on a dark page */
+.zl { position: fixed; left: 0; top: 0; z-index: 21; font: 12px/12px var(--label); white-space: nowrap; color: var(--ink); }
+.zl.z { color: var(--mute); }
+
+/* ---------------------------------------------------------------- skills: the stack drawn as a model, bottom to top like a forward pass; the work it ran in beside it */
+.sk { --sz: 1.18; position: relative; display: grid; grid-template-columns: max-content max-content; justify-content: center; align-content: center; align-items: center; column-gap: var(--skg, 160px); margin-top: 8px; user-select: none; -webkit-user-select: none; }
+.stack { display: grid; grid-template-columns: max-content minmax(0, max-content); column-gap: calc(12px * var(--sz)); align-items: center; }
+.stl { grid-column: 1; justify-self: end; font: 400 calc(var(--fs-head) * var(--sz))/1.2 var(--label); color: var(--mute); transition: color .16s linear; }
+.blk { grid-column: 2; display: flex; flex-wrap: wrap; justify-content: center; gap: calc(6px * var(--sz)); padding: calc(8px * var(--sz)); background: var(--plate); box-shadow: inset 0 0 0 1px var(--edge); }
+.blk.base { background: var(--edge); }
+.sar { grid-column: 2; justify-self: center; position: relative; width: 1px; height: calc(22px * var(--sz)); color: color-mix(in srgb, var(--mute) 55%, var(--paper)); background: currentColor; transition: color .16s linear; }
+.sar::before { content: ""; position: absolute; left: -3px; top: -1px; border: 3.5px solid transparent; border-top: 0; border-bottom: 6px solid currentColor; }
+.sgap { grid-column: 2; height: calc(8px * var(--sz)); }
+.chip { position: relative; z-index: 1; font: 400 calc(13px * var(--sz))/calc(16px * var(--sz)) var(--label); padding: calc(4px * var(--sz)) calc(8px * var(--sz)); white-space: nowrap; color: var(--ink); background: var(--paper); box-shadow: inset 0 0 0 1px var(--chip-rule); transition: color .16s linear, background-color .16s linear, box-shadow .16s linear; --bg: var(--plate); --dim: calc(var(--fade) * 100%); }
+.blk.base .chip { --bg: var(--edge); }
+span.chip { cursor: default; }
+.its { display: flex; flex-direction: column; align-items: flex-start; }
+.it { position: relative; font: 400 calc(var(--fs-item) * var(--sz))/calc(20px * var(--sz)) var(--serif); padding: calc(3px * var(--sz)) 0; white-space: nowrap; color: var(--ink); transition: opacity .16s linear; }
+.it.g0 { margin-top: calc(10px * var(--sz)); }
+.it:first-child { margin-top: 0; }
+/* the links between skills run over the plates and under the chips */
+.sklinks { position: absolute; z-index: 0; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.wires { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.wires path, .sklinks path { fill: none; stroke: var(--mark); stroke-width: 1; stroke-opacity: .7; stroke-dasharray: 1; stroke-linecap: round; }
+/* a chip steps back by mixing into its plate, not by fading: a link running behind it stays hidden */
+.sk.sel .chip:not(.on):not(.nb), .sk .chip.out { color: color-mix(in srgb, var(--ink) var(--dim), var(--bg)); background: color-mix(in srgb, var(--paper) var(--dim), var(--bg)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--chip-rule) var(--dim), var(--bg)); }
+.sk .chip.out { --dim: calc(var(--out) * 100%); }
+.sk.sel .it:not(.on) { opacity: var(--fade); }
+.sk .it.out, .sk.sel .it.out { opacity: var(--out); }
+.chip.on { color: var(--mark); box-shadow: inset 0 0 0 1.5px var(--mark); }
+.chip.src { color: var(--paper); background: var(--mark); }
+.chip.nb { color: var(--mark); box-shadow: inset 0 0 0 1px var(--mark); }
+.it.on { color: var(--mark); }
+.stl.on { color: var(--mark); }
+.sar.on { color: var(--mark); }
+.chip:focus-visible, .it:focus-visible { outline: none; }
+.sk.mo-l .it { visibility: hidden; }
+/* stacked: the work below the stack, as a wrapped list; stage names over their blocks */
+@media (max-width: 760px) { .sk { --sz: 1.1; } }
+.sk.col { grid-template-columns: minmax(0, 1fr); row-gap: 24px; justify-content: stretch; }
+.sk.col .stack { grid-template-columns: minmax(0, 1fr); justify-self: center; max-width: 100%; }
+.sk.col .stl { grid-column: 1; justify-self: start; display: flex; align-items: flex-end; height: 34px; padding-bottom: 4px; box-sizing: border-box; }
+.sk.col .stl:first-child { height: auto; }
+.sk.col .blk, .sk.col .sar, .sk.col .sgap { grid-column: 1; }
+.sk.col .sar { height: 16px; margin: 9px 0 -25px; }   /* centred in the 34px gap between two boxes, beside the label */
+.sk.col .its { flex-flow: row wrap; gap: 0 16px; }
+.sk.col .it.g0 { margin-top: 0; }
+.sk.col .wires { display: none; }
+@media (pointer: coarse), (hover: none) {
+  /* touch: every control is 44px to the finger; rows sit far enough apart that hit areas never reach a neighbour */
+  .blk { gap: 8px; }
+  button.chip { min-width: 44px; min-height: 36px; text-align: center; }
+  button.chip::after { content: ""; position: absolute; left: min(0px, (100% - 44px) / 2); right: min(0px, (100% - 44px) / 2); top: -4px; bottom: -4px; }
+  span.chip { min-height: 36px; display: inline-flex; align-items: center; }
+  .it { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; padding: 0; }
+}
+@media (hover: hover) and (pointer: fine) { button.chip:hover, .it:hover { color: var(--mark); } button.chip.src:hover { color: var(--paper); } }
+.chip:active, .it:active { color: var(--mark); }
+
+/* ---------------------------------------------------------------- logos: one, small, beside a name; the dark variant or a light plate in dark mode */
+.lg { display: inline-flex; align-items: center; vertical-align: -2px; margin-left: 6px; line-height: 0; }
+.lg img { height: calc(14px * var(--ls, 1)); width: auto; max-width: 64px; object-fit: contain; }   /* 64: a 4.3:1 wordmark at 14px */
+.lg .dk { display: none; }
+/* on the map the logo leads its slanted name, at the foot of the column */
+.ilbl .nm .lg { margin: 0 6px 0 0; }
+.ilbl .nm .lg img { height: calc(min(14px * var(--ls, 1), 19px) * var(--nmk, 1) * var(--lk, 1)); max-width: calc(64px * var(--lk, 1)); }   /* 19: the tallest that keeps the slanted names full size at 1280; --nmk shrinks with the names */
+.ilbl.rw .lg img { height: calc(15px * var(--ls, 1)); }
+/* Skills items: 19 is the tallest that keeps an item its height */
+.it .lg img { height: min(calc(15px * var(--ls, 1)), 19px); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .lg.dv .lt { display: none; }
+  :root:not([data-theme="light"]) .lg.dv .dk { display: block; }
+  :root:not([data-theme="light"]) .lg.lgp { background: var(--lgp); padding: 2px; border-radius: 2px; }
+}
+:root[data-theme="dark"] .lg.dv .lt { display: none; }
+:root[data-theme="dark"] .lg.dv .dk { display: block; }
+:root[data-theme="dark"] .lg.lgp { background: var(--lgp); padding: 2px; border-radius: 2px; }
+.hcard .lgn { display: flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 12px; line-height: 16px; color: var(--mute); }
+.hcard .lgn .lg { margin-left: 0; }
+/* lettering (a small wordmark) fills its image edge to edge: set it to the cap height of the name beside it, not the line */
+.lg.lgw img { height: 10px; }
+.ilbl.rw .lg.lgw img, .it .lg.lgw img { height: 11px; }
+.ilbl .nm .lg.lgw img { height: calc(9px * var(--nmk, 1) * var(--lk, 1)); }   /* over the gel too: lettering stays as small as the marks beside it */
+
+/* header: filter, view tabs and replay hold together; on phones they rejoin the controls row, which sets them out itself */
+.navr { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 0 var(--g); margin-left: auto; }
+/* a narrow window, one filter word per group: the filter gives up some of its gap to the views before anything wraps */
+@media (max-width: 899px) { .filt { margin-right: 16px; } }
+@media (max-width: 760px) { .navr { display: contents; } }
+
+/* taps: a quiet press state, accent for links and names, ink for controls */
+a:active, .links a:active { color: var(--hover); }
+.replay:active, .ilbl:active .nm, .glbl:active, .hcard.tap:active .dt { color: var(--mark); }
+.seg button:active, .corner button:active, .skip:active, .x:active { color: var(--ink); }
+
+
+@media (max-width: 1439px) { :root { --m: 72px; } }
+@media (max-width: 1199px) { :root { --m: 48px; } }
+@media (max-width: 760px) {
+  :root { --m: 16px; --g: 16px; --fs-title: 40px; --fs-name: 15px; --fs-context: 12.5px; --fs-head: 12px; }
+  .head { padding-top: calc(42px + env(safe-area-inset-top, 0px)); }   /* the gel switch has the line above the name to itself */
+  .corner { top: calc(12px + env(safe-area-inset-top, 0px)); }
+  .corner, .gels { gap: 0 18px; }
+  .thesis { margin-top: 4px; }
+  .controls { margin-top: 4px; }
+  /* phones: the links stay on one row */
+  .links { flex-wrap: nowrap; gap: 0 14px; }
+  .links a { gap: 5px; }
+  .filt { margin-left: 0; margin-right: 0; flex-basis: 100%; order: 1; }
+  /* however many groups the data has, the filter keeps to one row on a phone: its words a size down and closer; narrower still, it wraps */
+  .filt { gap: 0 14px; }
+  .filt button { font-size: 14px; }
+  @media (max-width: 389px) { .filt { gap: 0 12px; } .filt button { font-size: 13px; } }
+  :root { --fs-item: 14px; }
+  .panel { --zs: 20px; padding-left: calc(var(--m) + var(--zs) + 16px); }
+  .zl { display: none; }
+  .pc { grid-template-columns: minmax(0, 1fr); padding-top: 64px; }
+  .panel h2 { font-size: 24px; }
+  .skip { top: calc(16px + env(safe-area-inset-top, 0px)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
+</style>
+{% endraw %}{%- if site.posts.size > 1 %}
+<style>
+/* Blog makes five links, still one row on phones: closer together, and on the narrowest without their icons */
+@media (max-width: 400px) { .links { gap: 0 8px; } }
+@media (max-width: 359px) { .links svg { display: none; } }
+</style>
+{%- endif %}
+</head>
+<body>
+{%- comment %} The published blog posts, newest first, for the page's script; nothing at all is written while there are none. {% endcomment %}
+{%- if site.posts.size > 0 %}
+<script type="application/json" id="posts">{"blog":{% if site.posts.size > 1 %}{{ "/blog/" | relative_url | jsonify }}{% else %}null{% endif %},"posts":[{% for p in site.posts %}{% unless forloop.first %},{% endunless %}{"title":{{ p.title | jsonify | replace: "<", "<" }},"url":{{ p.url | relative_url | jsonify }},"date":{{ p.date | date: "%Y-%m-%d" | jsonify }},"date_label":{{ p.date | date: "%b %-d, %Y" | jsonify }},"related_items":{{ p.related_items | jsonify | replace: "<", "<" }}}{% endfor %}]}</script>
+{%- endif %}
+{% raw %}
+<div class="wrap">
+  <div class="head" id="head">
+    <div class="corner">
+      <div class="gels" role="group" aria-label="Gel">
+        <button type="button" data-gel="agarose" aria-pressed="true">Agarose</button>
+        <button type="button" data-gel="sds" aria-pressed="false">SDS-PAGE</button>
+        <button type="button" data-gel="western" aria-pressed="false">Western blot</button>
+      </div>
+      <button type="button" class="th" aria-label="Switch to dark mode"><svg class="mo" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="su" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg></button>
+    </div>
+    <header class="top">
+      <h1 class="name"><button type="button" class="replay" aria-describedby="rp-d">Alexander Kim</button><span id="rp-d" hidden>Replay intro</span></h1>
+      <p class="thesis" id="thesis">Protein engineering, mathematical modeling, and oncology</p>
+    </header>
+    <div class="controls">
+      <nav class="links" aria-label="Links" data-links></nav>
+      <div class="navr">
+      <div class="seg filt" role="group" aria-label="Show" data-filters></div>
+      <div class="seg views" role="group" aria-label="View">
+        <button type="button" data-mode="map" aria-pressed="true">Gel</button>
+        <button type="button" data-mode="seq" aria-pressed="false">Timeline</button>
+        <button type="button" data-mode="skl" aria-pressed="false">Skills</button>
+      </div>
+      <button type="button" class="rp" aria-label="Replay intro" title="Replay intro"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.5-6"/><path d="M3.5 3.5v5h5"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <section id="mapView">
+    <div class="stage" id="stage" aria-label="Alexander Kim's work as a gel: each lane a piece of work, each band a topic">
+      <div class="plane" id="plane"></div>
+    </div>
+  </section>
+
+  <section id="sklView" hidden>
+    <div class="sk" id="sk" aria-label="Alexander Kim's skills and the work that used them"></div>
+  </section>
+
+  <section id="seqView" hidden>
+    <div class="stage tl" id="tl" aria-label="Alexander Kim's work as a gel run over time: each lane a piece of work, each band when it happened">
+      <div class="plane" id="tlPlane"></div>
+    </div>
+  </section>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="panel closed" id="panel" role="dialog" aria-modal="true" aria-labelledby="p-title" tabindex="-1">
+  <div class="pbar" id="p-bar"><button type="button" class="x" id="p-close" aria-label="Close"></button></div>
+  <div id="p-strip" aria-hidden="true"></div>
+  <div id="p-body"></div>
+</aside>
+
+<script>
+(() => {
+"use strict";
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const root = document.documentElement;
+// the gel the page is run as: a class on <html> (set before first paint by the script in the head), so every colour follows its tokens at
+// once. A click keeps the choice and drops any ?gel= / ?stain= from the address, so a reload shows what was picked
+const GELS = ["agarose", "sds", "western"];
+const gelNow = () => GELS.find(g => root.classList.contains("gel-" + g)) || GELS[0];
+// … and the browser's own chrome follows the page: theme-color is the paper of the gel and theme in force
+const markGel = () => { const g = gelNow(); for (const b of document.querySelectorAll("[data-gel]")) b.setAttribute("aria-pressed", String(b.dataset.gel === g));
+  const c = getComputedStyle(root).getPropertyValue("--paper").trim(); if (c) for (const m of document.querySelectorAll('meta[name="theme-color"]')) m.content = c; };
+const setGel = g => {
+  if (!GELS.includes(g) || g === gelNow()) return;
+  const go = () => { for (const k of GELS) root.classList.toggle("gel-" + k, k === g); markGel(); };
+  if (document.startViewTransition && !REDUCED) document.startViewTransition(go); else go();
+  try { localStorage.setItem("ak-gel", g); } catch (e) {}
+  try { const u = new URL(location.href); if (u.searchParams.has("gel") || u.searchParams.has("stain")) { u.searchParams.delete("gel"); u.searchParams.delete("stain"); history.replaceState(history.state, "", u); } } catch (e) {}
+};
+// light or dark: the system's, until the corner's icon is clicked; then the choice, kept in localStorage "theme" (the key and the values
+// of the site's other pages, which share it) and set as data-theme on <html>, as the script in the head does before first paint
+const DARK = matchMedia("(prefers-color-scheme: dark)"), th = document.querySelector(".th");
+const isDark = () => root.dataset.theme ? root.dataset.theme === "dark" : DARK.matches;
+// … and when it has turned, the view on show is laid out again ("ak-theme"): a logo on a dark page can be another file, or sit on a plate
+let dark = isDark();
+const markTheme = () => { const d = isDark(); th.setAttribute("aria-label", "Switch to " + (d ? "light" : "dark") + " mode"); markGel();
+  if (d !== dark) { dark = d; dispatchEvent(new Event("ak-theme")); } };
+// the choice as stored, when another page or tab has changed it; "system" or nothing is no choice
+const readTheme = () => { let t; try { t = localStorage.getItem("theme"); } catch (e) {}
+  if (t === "dark" || t === "light") root.dataset.theme = t; else delete root.dataset.theme; markTheme(); };
+th.addEventListener("click", () => {
+  const t = th.getAttribute("aria-label").includes("dark") ? "dark" : "light", go = () => { root.dataset.theme = t; markTheme(); };
+  if (document.startViewTransition && !REDUCED) document.startViewTransition(go); else go();
+  try { localStorage.setItem("theme", t); } catch (e) {}
+});
+markTheme();
+DARK.addEventListener("change", markTheme);
+addEventListener("storage", e => { if (e.key === "theme" || e.key === null) readTheme(); });
+addEventListener("pageshow", e => { if (e.persisted) readTheme(); });
+for (const b of document.querySelectorAll("[data-gel]")) b.addEventListener("click", () => setGel(b.dataset.gel));
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+};
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const wait = ms => new Promise(res => setTimeout(res, ms));
+const RAD = Math.PI / 180;
+const knob = (n, f) => { const v = parseFloat(getComputedStyle(root).getPropertyValue(n)); return Number.isFinite(v) ? v : f; };
+
+// cubic-bezier as a function of x
+function bz(x1, y1, x2, y2) {
+  const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx, cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+  const X = t => ((ax * t + bx) * t + cx) * t, Y = t => ((ay * t + by) * t + cy) * t;
+  return x => {
+    if (x <= 0) return 0; if (x >= 1) return 1;
+    let a = 0, b = 1, t = x;
+    for (let n = 0; n < 22; n++) { t = (a + b) / 2; if (X(t) < x) a = t; else b = t; }
+    return Y(t);
+  };
+}
+const EASE = "cubic-bezier(.3,0,.1,1)", ease = bz(.3, 0, .1, 1);
+const T = { s: 180, m: 360, l: 560, xl: 700, axis: 640 }, OUT = .6;
+
+/* every animation runs through anim()/tween(), so a newer request can hurry whatever is still running */
+let RATE = 1;
+const live = new Set();
+function anim(el, frames, o) {
+  const a = el.animate(frames, { ...o, duration: REDUCED ? 0 : o.duration, delay: REDUCED ? 0 : (o.delay || 0) });
+  if (RATE !== 1) a.playbackRate = RATE;
+  live.add(a); const drop = () => live.delete(a); a.finished.then(drop, drop);
+  return a;
+}
+const HURRY = 8;   // a 1.2 s switch has about 150 ms left once hurried
+function hurry() { RATE = HURRY; for (const a of live) a.playbackRate = HURRY; }
+const tween = (ms, fn, abort) => new Promise(res => {
+  let k = 0, last = performance.now();
+  const tick = now => {
+    if (abort && abort()) return res();
+    k = ms > 0 && !REDUCED ? Math.min(1, k + Math.max(0, now - last) * RATE / ms) : 1; last = now;
+    fn(k); k < 1 ? requestAnimationFrame(tick) : res();
+  };
+  requestAnimationFrame(tick);
+});
+const done = a => a.finished.catch(() => {});
+const kf = (r, w, h) => ({ transform: `translate(${r.left.toFixed(1)}px, ${r.top.toFixed(1)}px) scale(${(r.width / w).toFixed(4)}, ${(r.height / h).toFixed(4)})`, opacity: r.opacity ?? 1 });
+function flipTo(el, from, to, { duration = T.m, delay = 0, easing = EASE } = {}) {
+  const w = el.offsetWidth || 1, h = el.offsetHeight || 1;
+  return done(anim(el, [kf(from, w, h), kf(to, w, h)], { duration, delay, easing, fill: "both" }));
+}
+const fadeTo = (el, a, b, duration, delay = 0) => {
+  el.style.opacity = b === 1 ? "" : b;
+  return done(anim(el, [{ opacity: a }, { opacity: b }], { duration, delay, fill: "backwards" }));
+};
+const slice = (c, r) => { const d = CATS.length, g = 2, w = (c.width - g * (d - 1)) / d; return { left: c.left + r * (w + g), top: c.top, width: w, height: c.height }; };
+
+const mstr = M => `matrix(${M.map(v => v.toFixed(4)).join(",")})`;
+// the largest value in [lo, hi] that ok() accepts (ok leaves the layout at the value it was last asked about)
+function fit(ok, lo, hi, steps = 18) {
+  if (ok(hi)) return hi;
+  for (let n = 0; n < steps; n++) { const m = (lo + hi) / 2; if (ok(m)) lo = m; else hi = m; }
+  return lo;
+}
+// the gels' labels grow with their lanes (--label-fit, --label-max): by the largest factor that leaves neighbours a gap of LKGAP of their
+// type size and costs the slab no more than 1 - LKTOL of its scale
+const LKGAP = .3, LKTOL = .9;
+// column heads stack into tiers; a head takes the lowest tier whose box touches no head already placed
+function tiers(pts, sz, TIER, LEADG) {
+  const placed = [];
+  return pts.map(([x, y], c) => {
+    const L = x - sz[c][0] / 2 - 6, R = x + sz[c][0] / 2 + 6;
+    for (let t = 0; ; t++) {
+      const B = y - LEADG - TIER * t + 3, A = B - sz[c][1] - 6;
+      if (t > 40 || placed.every(p => R <= p.L || L >= p.R || B <= p.A || A >= p.B)) { placed.push({ L, R, A, B }); return t; }
+    }
+  });
+}
+function stripEl(layer, vals) {
+  const e = document.createElement("div"); e.className = "strip";
+  e.style.cssText = `width:${vals.length * 10}px;height:10px;grid-template-columns:repeat(${vals.length},1fr)`;
+  e.innerHTML = vals.map(v => `<i${v > 0 ? ` style="${band(v)}"` : ""}></i>`).join("");
+  layer.appendChild(e); return e;
+}
+const cloneAt = (layer, src, r) => { const e = src.cloneNode(true); e.removeAttribute("id"); e.style.transform = `translate(${r.left.toFixed(1)}px, ${r.top.toFixed(1)}px)${r.a ? ` rotate(${r.a.toFixed(4)}rad)` : ""}`; e.style.height = ""; e.className = src.className.replace(/\b(hl|on|off|wait|cxw)\b/g, ""); layer.appendChild(e); return e; };
+const rectOf = e => { const r = e.getBoundingClientRect(); return { left: r.left, top: r.top, width: r.width, height: r.height }; };
+
+// header icons: assets/logos/*.svg inlined so fill="currentColor" takes the link colour in both themes
+const ICON = {scholar: `<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="currentColor"><path d="M5.242 13.769 0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/></svg>`, github: `<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>`, linkedin: `<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>`, orcid: `<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.378c.525 0 .947.431.947.947s-.422.947-.947.947a.95.95 0 0 1-.947-.947c0-.525.422-.947.947-.947zm-.722 3.038h1.444v10.041H6.647V7.416zm3.562 0h3.9c3.712 0 5.344 2.653 5.344 5.025 0 2.578-2.016 5.025-5.325 5.025h-3.919V7.416zm1.444 1.303v7.444h2.297c3.272 0 4.022-2.484 4.022-3.722 0-2.016-1.284-3.722-4.097-3.722h-2.222z"/></svg>`, cv: `<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm7 1.5V9h5.5L13 3.5zM8 9.5h3V11H8V9.5zm0 3.5h8v1.5H8V13zm0 3.5h8V18H8v-1.5z"/></svg>`, email: `<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2 5h20v14H2zm2 2v.6l8 5.2 8-5.2V7zm16 2.9-8 5.2-8-5.2V17h16z"/></svg>`};
+const COARSE = matchMedia("(pointer: coarse)").matches || matchMedia("(hover: none)").matches;
+/* ---------- hover card */
+const CARD = (() => {
+  const el = document.createElement("div"); el.className = "hcard" + (COARSE ? " tap" : ""); el.setAttribute("aria-hidden", "true");
+  document.body.appendChild(el);
+  let cur = null, out = null;
+  el.addEventListener("click", () => { if (cur) openPanel(cur); });
+  // Candidates beside the row (right, then left, level with it, slid past obstacles), then beside the whole map, then under or over it. Each is clamped
+  // to the viewport *before* it is judged, so the clamp can't push it onto a label. The full card goes first, then the card
+  // without its image, then a narrower one; the first that covers nothing wins, else the one that covers least. The row itself is never covered.
+  function place(a, avoid = [], edges = null, soft = []) {
+    const vw = document.documentElement.clientWidth, vh = innerHeight, g = 16, M = 6;
+    const area = (x, y, w, h, o, m) => Math.max(0, Math.min(x + w, o.right + m) - Math.max(x, o.left - m)) * Math.max(0, Math.min(y + h, o.bottom + m) - Math.max(y, o.top - m));
+    let best = null;
+    for (const [small, mw] of [[false, ""], [true, ""], [true, "180px"]]) {
+      el.classList.toggle("small", small); el.style.maxWidth = mw;
+      const w = el.offsetWidth, h = el.offsetHeight, fit = (x, y) => [clamp(x, g, vw - w - g), clamp(y, g, vh - h - g)];
+      const level = y => Math.min(y + h, a.bottom) - Math.max(y, a.top) >= Math.min(16, a.bottom - a.top);
+      const y0 = a.top, ys = [y0, ...avoid.flatMap(o => [o.bottom + 8, o.top - 8 - h])].sort((p, q) => Math.abs(p - y0) - Math.abs(q - y0));
+      const cands = [];
+      for (const x of [a.right + g, a.left - g - w, ...(edges ? [edges[1] + g, edges[0] - g - w] : [])]) for (const y of ys) { const c = fit(x, y); if (Math.abs(c[0] - x) < 1 && level(c[1])) cands.push(c); }
+      for (const y of [a.bottom + 8, a.top - 8 - h]) for (const x of [a.right - w, (a.left + a.right - w) / 2, a.left]) cands.push(fit(x, y));
+      for (const [x, y] of cands) {
+        const cost = 1e6 * area(x, y, w, h, a, 0) + avoid.reduce((s, o) => s + area(x, y, w, h, o, M), 0);
+        const sc = soft.reduce((s, o) => s + area(x, y, w, h, o, 0), 0);
+        if (!best || cost < best.cost || cost === best.cost && sc < best.sc) best = { x, y, cost, sc, small, mw };
+        if (!cost && !sc) break;
+      }
+      if (!best.cost) break;
+    }
+    el.classList.toggle("small", best.small); el.style.maxWidth = best.mw;
+    el.style.transform = `translate(${Math.round(best.x)}px, ${Math.round(best.y)}px)`;
+  }
+  function show(it, a, avoid = [], edges = null, soft = []) {
+    if (out) { out.cancel(); out = null; }
+    if (cur !== it) el.innerHTML = `${it.thumb ? `<img src="${esc(it.thumb)}" alt="">` : ""}<span class="dt">${esc(it.date_label)}</span>${it.logo ? `<span class="lgn">${logoHTML(it)}${it.logo.note ? `<span>${esc(it.logo.note)}</span>` : ""}</span>` : ""}<span class="cx">${esc(it.context)}</span><p>${esc(it.summary)}</p>`;
+    const first = !el.classList.contains("on");
+    el.classList.add("on"); place(a, avoid, edges, soft); cur = it;
+    if (first && !REDUCED) el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: T.s, easing: EASE });
+  }
+  function hide() {
+    if (!cur) return;
+    cur = null;
+    if (REDUCED) { el.classList.remove("on"); return; }
+    const a = out = el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: T.s * OUT, easing: EASE });
+    a.finished.then(() => { if (out === a) { out = null; el.classList.remove("on"); } }, () => {});
+  }
+  addEventListener("scroll", hide, { passive: true });
+  return { show, hide, el, get item() { return cur; } };
+})();
+const unite = rs => rs.reduce((a, b) => ({ left: Math.min(a.left, b.left), top: Math.min(a.top, b.top), right: Math.max(a.right, b.right), bottom: Math.max(a.bottom, b.bottom) }));
+const rowLayout = w => w < 640 || (COARSE && w < 900);
+const canIntro = () => !REDUCED && !COARSE;
+if (COARSE) $(".name").textContent = "Alexander Kim";
+
+/* ---------- data: _cool/*.json → scripts/build_cool.py → work.json; one axis at a time feeds CATS and every item's weights */
+let CATS = [], ITEMS = [], ORDER = [], AXES = [], GROUPS = [], AX = 0;
+function useAxis(k) {
+  AX = k; const a = AXES[k];
+  CATS = a.entries.map((e, j) => ({ id: j, label: e.label, head: e.head || e.label }));
+  ORDER = CATS.map((_, r) => r);
+  for (const it of ITEMS) it.weights = a.W[it.id] || CATS.map(() => 0);{% endraw %}{% if site.posts.size > 0 %}
+  for (const p of POSTS) p.rel = p.ids.map(byId).filter(Boolean);{% endif %}{% raw %}
+}{% endraw %}{% if site.posts.size > 0 %}
+/* blog posts: Jekyll writes the published ones into #posts. A post names the work it is about (related_items; ids not in work.json
+   are dropped): it is linked from each of those pieces' panels, newest first. A post about none of the work is only on /blog/.
+   Two or more posts put Blog in the links */
+let BLOG = null, POSTS = [];
+try {
+  const d = JSON.parse($("#posts").textContent);
+  BLOG = d.blog;
+  POSTS = d.posts.filter(p => p.title && p.url && p.date).map(p => ({ title: p.title, url: p.url, date: p.date, ids: Array.isArray(p.related_items) ? p.related_items : [], rel: [] }));
+} catch (err) { console.warn("posts failed to load:", err); }
+const postLinks = it => POSTS.filter(p => p.rel.includes(it)).sort((a, b) => b.date.localeCompare(a.date)).map(p => `<a href="${esc(p.url)}">${esc(p.title)}</a>`).join("");
+ICON.blog = `<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M17 2l5 5L8.5 20.5 2 22l1.5-6.5zm0 2.8L15.6 6.2l2.2 2.2L19.2 7zM14.2 7.6 5.9 15.9l2.2 2.2 8.3-8.3zM4.9 17.4l-.6 2.3 2.3-.6z"/></svg>`;{% endif %}{% raw %}
+const state = { mode: "map", filter: "all" };
+// the slab's pose at rest, [rotateX, rotateZ]: tilted with everything on show, straight on once a filter leaves one group
+const isFlat = () => state.filter !== "all";
+const restPose = ph => isFlat() ? [knob("--map-tilt-flat", 0), knob("--map-turn-flat", 0)] : [knob("--map-tilt", 54), ph ? knob("--map-turn-ph", -8) : knob("--map-turn", -13)];
+const mix = (a, b, t) => a + (b - a) * t;
+// a 2D matrix on a w×h box as angle, scales, shear and centre, and back: what a flying word is tweened in
+const dec = ([a, b, c, d, e, f], [w, h]) => { const sx = Math.hypot(a, b); return { th: Math.atan2(b, a), sx, sy: (a * d - b * c) / sx, m: (a * c + b * d) / sx, cx: e + (a * w + c * h) / 2, cy: f + (b * w + d * h) / 2 }; };
+const comp = ({ th, sx, sy, m, cx, cy }, [w, h]) => { const co = Math.cos(th), si = Math.sin(th), a = co * sx, b = si * sx, c = co * m - si * sy, d = si * m + co * sy; return [a, b, c, d, cx - (a * w + c * h) / 2, cy - (b * w + d * h) / 2]; };
+const visibleItems = () => ITEMS.filter(i => state.filter === "all" || i.type === state.filter);
+// one small logo after a name; dark mode swaps in its dark variant, or sets it on a light plate; --ls scales a logo that reads small at the shared height
+const logoHTML = it => { const g = it.logo; if (!g) return "";
+  return `<span class="lg${g.word ? " lgw" : ""}${g.plate ? " lgp" : ""}${g.dark ? " dv" : ""}"${g.scale ? ` style="--ls: ${g.scale}"` : ""} aria-hidden="true"><img class="lt" src="${esc(g.src)}" alt="">${g.dark ? `<img class="dk" src="${esc(g.dark)}" alt="">` : ""}</span>`; };
+// a weight's colour on the stain's band ramp: mixes of the --b0…--b4 tokens, so it follows the theme and the stain live
+const heat = w => {
+  if (!(w > 0)) return "";
+  const x = clamp(w, 0, 1) * 4, i = Math.min(3, Math.floor(x)), f = x - i;
+  return `color-mix(in srgb, var(--b${i + 1}) ${(100 * f).toFixed(1)}%, var(--b${i}))`;
+};
+// a band from a weight, as a stained gel shows mass: the signal rises fast and saturates (sig: the step on the ramp), and past that a
+// heavier band runs thicker, not brighter (thick: of a cell, from a hairline to half of it, mostly gained at the top). One function for every band drawn
+const SAT = 1.6, sig = w => (1 - Math.exp(-SAT * w)) / (1 - Math.exp(-SAT)), thick = w => .05 + .45 * w ** 2.2;
+const band = w => w > 0 ? `--c:${heat(sig(w))};--t:${thick(w).toFixed(3)}` : "";
+const byId = id => ITEMS.find(i => i.id === id);
+const hashId = () => { try { return decodeURIComponent(location.hash.slice(1)); } catch (e) { return ""; } };
+// the fragment: #<item id> opens it; #<group> is the filter (#research); #intro replays the intro
+const isGroup = h => GROUPS.some(([g]) => g === h);
+const baseHash = () => want.filter !== "all" ? "#" + want.filter : "";
+const clearHash = () => history.replaceState(null, "", location.pathname + location.search + baseHash());
+
+let lastInput = "pointer";
+addEventListener("keydown", () => { lastInput = "key"; }, true);
+addEventListener("pointerdown", () => { lastInput = "pointer"; }, true);
+const touches = new Set(); let multi = false;
+addEventListener("pointerdown", e => { if (e.pointerType !== "touch") return; touches.add(e.pointerId); if (touches.size > 1) multi = true; }, true);
+const lift = e => { touches.delete(e.pointerId); if (!touches.size) setTimeout(() => { if (!touches.size) multi = false; }, 350); };
+addEventListener("pointerup", lift, true); addEventListener("pointercancel", lift, true);
+
+/* ------------------------------------------------ requests: the page converges on the last thing asked for
+   Buttons show the request at once. A request that lands mid-switch hurries the running switch (about 150 ms), then the next step runs. */
+const want = { mode: "map", filter: "all" };
+let morphing = false;
+function syncPressed() {
+  for (const b of $$("[data-mode]")) b.setAttribute("aria-pressed", String(b.dataset.mode === want.mode));
+  for (const b of $$(".glbl")) b.setAttribute("aria-pressed", String(b.dataset.g === want.filter));
+  for (const b of $$("[data-filter]")) b.setAttribute("aria-pressed", String(b.dataset.filter === want.filter));
+}
+function request(change) {
+  if (MAP) MAP.endIntro();
+  Object.assign(want, change); syncPressed();
+  if ("filter" in change && !isOpen() && location.hash !== baseHash()) history.pushState(null, "", location.pathname + location.search + baseHash());   // Back undoes a filter (Back/Forward and boot arrive with the hash already right)
+  if (morphing) hurry(); else drain();
+}
+async function drain() {
+  morphing = true;
+  try {
+    for (let n = 0; n < 16; n++) {
+      RATE = 1;
+      if (want.mode !== state.mode) await toMode(want.mode);
+      else if (want.filter !== state.filter) await toFilter(want.filter);
+      else break;
+    }
+  } catch (err) { console.error(err); }
+  finally { settle(); morphing = false; RATE = 1; if (replayQ) { replayQ = false; replayIntro(); } }
+}
+// whatever a switch left behind goes: borrowed layers, hiding classes, opacity it set
+function settle() {
+  $$(".morph").forEach(e => e.remove());
+  $$(".mo-c, .mo-l, .mo-v").forEach(e => e.classList.remove("mo-c", "mo-l", "mo-v"));
+  for (const s of ["#stage", "#tl", "#sk"]) { const e = $(s); e.getAnimations().forEach(a => a.cancel()); e.style.opacity = ""; e.style.visibility = ""; }
+  if (SKL) SKL.reset();
+}
+const setMode = m => { CARD.hide(); request({ mode: m }); };
+const setFilter = f => request({ filter: f });
+
+/* ------------------------------------------------ view morphs */
+function swapView(m) {
+  state.mode = m;
+  $("#mapView").hidden = m !== "map"; $("#seqView").hidden = m !== "seq"; $("#sklView").hidden = m !== "skl";
+  root.classList.toggle("skl", m === "skl");
+  scrollTo(0, 0);
+  if (m === "map" && MAP) MAP.layout();
+  if (m === "seq" && SEQ) SEQ.layout();
+  if (m !== "skl" && SKL) SKL.select(null);
+  if (m === "skl" && SKL) SKL.layout();
+}
+// pose: point u at P
+function pose({ P, u = [0, 0], a = 0, s = 1 }) {
+  const c = Math.cos(a), sn = Math.sin(a), ux = u[0] * s, uy = u[1] * s;
+  return `translate(${(P[0] - ux * c + uy * sn).toFixed(1)}px, ${(P[1] - ux * sn - uy * c).toFixed(1)}px) rotate(${a.toFixed(4)}rad) scale(${s.toFixed(4)})`;
+}
+const poseTo = (el, A, B, { duration, delay = 0, easing = EASE }) => done(anim(el, [{ transform: pose(A), opacity: A.o ?? 1 }, { transform: pose(B), opacity: B.o ?? 1 }], { duration, delay, easing, fill: "both" }));
+function texts(layer, list, cls = "") {
+  const els = list.map(([t, fs]) => { const e = document.createElement("span"); e.textContent = t; e.className = cls; e.style.fontSize = fs + "px"; layer.appendChild(e); return e; });
+  for (const e of els) { e._w = e.offsetWidth; e._h = e.offsetHeight; }
+  return els;
+}
+const newLayer = () => { const l = document.createElement("div"); l.className = "morph"; l.setAttribute("aria-hidden", "true"); document.body.appendChild(l); return l; };
+async function toMode(m) {
+  CARD.hide();
+  const from = state.mode;
+  if (REDUCED || !MAP) { swapView(m); return; }
+  else if (from === "map" && m === "skl") await toSkills();
+  else if (from === "skl" && m === "map") await fromSkills();
+  else await swapFade(m);
+}
+async function toFilter(f) {
+  state.filter = f;
+  await Promise.all([MAP && MAP.refilter(), SEQ && SEQ.refilter(), SKL && SKL.refilter()]);
+}
+/* Map → Skills: the names leave their slants and line up as the column of work; the planes and topics fade; the stack is built
+   bottom to top, one stage after another, like a forward pass */
+const STAGE_MS = 70;
+const stackSteps = parts => { let k = -1; return parts.map(e => { if (e.classList.contains("blk")) k++; return k + (e.classList.contains("sar") ? .5 : 0); }); };
+async function toSkills() {
+  const sk = $("#sk"), bx = [CATS.length * 10, 10];
+  MAP.focus(null);
+  const vis = MAP.visible(), from = vis.map(i => [i, MAP.stripAff(i, bx)]), names = MAP.poses("name"), heads = MAP.headRects();
+  swapView("skl"); sk.classList.add("mo-l");
+  const layer = newLayer(), fs = SKL.fs(), at = ITEMS.map((_, i) => SKL.nameAt(i));
+  const strips = from.map(([i, A]) => { const e = stripEl(layer, MAP.vals(i)); e.style.transform = mstr(A); return e; });
+  const hd = heads.map(h => cloneAt(layer, h.el, h.rect));
+  const nm = texts(layer, ITEMS.map(it => [it.name, fs]), "sf");
+  const start = (i, end) => { const p = names.get(i); return p ? { ...p, s: p.font / end.font } : { ...end, o: 0 }; };
+  const parts = SKL.pieces(), step = stackSteps(parts);
+  await Promise.all([
+    ...strips.map(e => fadeTo(e, 1, 0, T.m)),
+    ...hd.map(e => fadeTo(e, 1, 0, T.s)),
+    ...nm.map((e, i) => poseTo(e, start(i, at[i]), at[i], { duration: T.l })),
+    ...parts.map((e, n) => done(anim(e, [{ opacity: 0, transform: "translateY(8px)" }, { opacity: 1, transform: "none" }], { duration: T.m, delay: T.s + STAGE_MS * step[n], easing: EASE, fill: "backwards" })))]);
+  sk.classList.remove("mo-l"); layer.remove();
+}
+async function fromSkills() {
+  const sk = $("#sk"), bx = [CATS.length * 10, 10];
+  SKL.select(null);
+  swapView("map"); MAP.focus(null);
+  const vis = MAP.visible(), to = vis.map(i => [i, MAP.stripAff(i, bx)]), names = MAP.poses("name"), heads = MAP.headRects();
+  swapView("skl");
+  const layer = newLayer(), fs = SKL.fs(), at = ITEMS.map((_, i) => SKL.nameAt(i));
+  sk.classList.add("mo-l");
+  const nm = texts(layer, ITEMS.map(it => [it.name, fs]), "sf");
+  const end = (i, a) => { const p = names.get(i); return p ? { ...p, s: p.font / a.font } : { ...a, o: 0 }; };
+  const strips = to.map(([i, A]) => { const e = stripEl(layer, MAP.vals(i)); e.style.transform = mstr(A); e.style.opacity = 0; return e; });
+  const hd = heads.map(h => cloneAt(layer, h.el, h.rect)); hd.forEach(e => { e.style.opacity = 0; });
+  // the stack comes down top first, faster than it went up
+  const parts = SKL.pieces(), step = stackSteps(parts), top = Math.max(...step), A = T.l * .8;
+  await Promise.all([
+    ...parts.map((e, n) => done(anim(e, [{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateY(8px)" }], { duration: T.s, delay: STAGE_MS * .5 * (top - step[n]), easing: EASE, fill: "forwards" }))),
+    ...nm.map((e, i) => poseTo(e, at[i], end(i, at[i]), { duration: A })),
+    ...strips.map(e => fadeTo(e, 0, 1, T.m * OUT, A - T.m * OUT)),
+    ...hd.map(e => fadeTo(e, 0, 1, T.s, A - T.s))]);
+  swapView("map"); sk.classList.remove("mo-l"); parts.forEach(e => e.getAnimations().forEach(a => a.cancel()));
+  layer.remove();
+}
+async function swapFade(m) {
+  const box = v => v === "seq" ? $("#tl") : v === "skl" ? $("#sk") : $("#stage");
+  const out = box(state.mode), inn = box(m);
+  await fadeTo(out, 1, 0, T.s * OUT);
+  swapView(m); out.style.opacity = "";
+  await Promise.all([fadeTo(inn, 0, 1, T.s), m === "seq" && SEQ.run()]);   // into the Timeline, the gel runs
+}
+for (const b of $$("[data-mode]")) b.addEventListener("click", () => setMode(b.dataset.mode));
+
+/* ------------------------------------------------ detail panel */
+const panel = $("#panel"), scrim = $("#scrim"), strip = $("#p-strip");
+let openIt = null, lastFocus = null, keyOpen = false, pushed = false, lockY = 0, openedAt = 0, zoomId = 0;
+const isOpen = () => !!openIt;
+const ZOOM = T.l, ZOUT = 340;
+function srcRects(it) {
+  const i = ITEMS.indexOf(it);
+  const m = MAP && MAP.cellRects(i);
+  if (m) return m;
+  const k = SKL && SKL.itemRect(i);
+  if (k) return ORDER.map((_, r) => slice(k, r));
+  return SEQ ? SEQ.bandRects(i) : null;
+}
+function stripRects(dy = 0) {
+  const zs = parseFloat(getComputedStyle(panel).getPropertyValue("--zs")) || 40, g = 4;
+  const left = parseFloat(getComputedStyle($(".wrap")).paddingLeft) || 16, h2 = $("#p-title");
+  const top = (h2 ? h2.getBoundingClientRect().top + 4 : 64) + dy;
+  return ORDER.map((_, r) => ({ left: Math.round(left), top: Math.round(top) + r * (zs + g), width: zs, height: zs }));   // whole px: the strip's bands rest on the pixel grid
+}
+function body(it) {
+  const links = it.links.map(([t, u]) => `<a href="${u}" target="_blank" rel="noopener">${esc(t)}</a>`).join(""){% endraw %}{% if site.posts.size > 0 %} + postLinks(it){% endif %}{% raw %};
+  const lines = [it.description, ...it.bullets].filter(Boolean);
+  return `<div class="pc">
+    <h2 id="p-title">${esc(it.title)}</h2>
+    <div class="ptext">
+      ${it.title.includes(it.context) ? "" : `<p class="ctx">${esc(it.context)}</p>`}
+      ${it.roles ? `<p class="org">${it.roles.map(([r, t]) => `${esc(r)} · ${esc(t)}`).join("<br>")}</p>` : it.org && !lines[0].toLowerCase().includes(it.org.toLowerCase()) ? `<p class="org">${esc(it.org)}</p>` : ""}
+      ${it.description ? `<p class="desc">${esc(it.description)}</p>` : ""}
+      ${it.table ? `<table class="tbl">${it.table.map((row, n) => `<tr>${row.map(c => n ? `<td>${esc(c)}</td>` : `<th>${esc(c)}</th>`).join("")}</tr>`).join("")}</table>` : ""}
+      ${it.bullets.length ? `<ul>${it.bullets.map(b => `<li>${esc(b)}</li>`).join("")}</ul>` : ""}
+      ${links ? `<div class="plinks">${links}</div>` : ""}
+    </div>
+    ${it.image ? `<figure><a href="${it.image}" target="_blank" rel="noopener"><img src="${it.image}" alt="${esc(it.name)} figure"></a></figure>` : ""}
+  </div>`;
+}
+function openPanel(it, fromHistory) {
+  if (!it) return;
+  CARD.hide();
+  const again = isOpen(), id = ++zoomId;
+  if (!again) { lastFocus = document.activeElement; keyOpen = lastInput === "key"; }
+  const from = again ? null : srcRects(it);
+  openIt = it;
+  $("#p-body").innerHTML = body(it);
+  strip.innerHTML = ORDER.map(r => { const w = it.weights[CATS[r].id]; return `<i class="zcell${w > 0 ? "" : " z"}"${w > 0 ? ` style="${band(w)}"` : ""}></i>`; }).join("") +
+    ORDER.map(r => `<span class="zl${it.weights[CATS[r].id] > 0 ? "" : " z"}">${esc(CATS[r].label)}</span>`).join("");
+  if (!again) { lockY = scrollY; root.classList.add("locked"); openedAt = performance.now(); panel.classList.add("pre", "pre-l"); }
+  panel.classList.remove("closed", "closing"); panel.style.transform = "";
+  scrim.classList.add("on"); root.classList.add("zoomed");
+  if (MAP) MAP.focus(ITEMS.indexOf(it));
+  panel.scrollTop = 0;
+  panel.focus({ preventScroll: true });
+  const to = stripRects();
+  $$(".zl", strip).forEach((e, r) => { e.style.transform = `translate(${(to[r].left + to[r].width + 8).toFixed(1)}px, ${(to[r].top + (to[r].height - 12) / 2).toFixed(1)}px)`; });
+  $$(".zcell", strip).forEach((e, r) => flipTo(e, from ? from[r] : to[r], to[r], { duration: ZOOM }));
+  if (!again) {
+    setTimeout(() => { if (id === zoomId) panel.classList.remove("pre"); }, REDUCED ? 0 : T.s);
+    setTimeout(() => { if (id === zoomId) panel.classList.remove("pre-l"); }, REDUCED || !from ? 0 : ZOOM);
+  }
+  const h = "#" + it.id;
+  if (!fromHistory && location.hash !== h) {
+    if (pushed) history.replaceState(null, "", h); else { history.pushState(null, "", h); pushed = true; }
+  }
+  return id;
+}
+function closePanel(fromHistory) {
+  if (!isOpen()) return;
+  const it = openIt, id = ++zoomId;
+  openIt = null;
+  const dy = parseFloat((panel.style.transform.match(/translateY\(([-\d.]+)px\)/) || [0, 0])[1]) || 0;
+  const from = stripRects(dy);
+  panel.style.transform = ""; panel.classList.add("closing"); panel.classList.remove("pre", "pre-l");
+  scrim.classList.remove("on");
+  root.classList.remove("locked"); if (scrollY !== lockY) scrollTo(0, lockY);
+  const to = srcRects(it), cells = $$(".zcell", strip);
+  if (!to) cells.forEach(e => { e.style.visibility = "hidden"; });
+  Promise.all(to ? cells.map((e, r) => flipTo(e, from[r], to[r], { duration: ZOUT })) : []).then(() => {
+    if (id !== zoomId) return;
+    panel.classList.add("closed"); panel.classList.remove("closing"); strip.innerHTML = ""; $("#p-body").innerHTML = "";
+    root.classList.remove("zoomed"); if (MAP) MAP.focus(null);
+  });
+  if (!fromHistory && byId(hashId())) {
+    if (pushed) history.back(); else history.replaceState(null, "", location.pathname + location.search + baseHash());
+  }
+  pushed = false;
+  if (keyOpen && lastFocus && document.contains(lastFocus)) lastFocus.focus({ preventScroll: true });
+  else if (document.activeElement && panel.contains(document.activeElement)) document.activeElement.blur();
+}
+$("#p-close").addEventListener("click", () => closePanel());
+panel.addEventListener("click", e => { if (performance.now() - openedAt > 350 && !e.target.closest(".pc, .pbar")) closePanel(); });
+addEventListener("keydown", e => {
+  if (!isOpen()) return;
+  if (e.key === "Escape") { closePanel(); return; }
+  if (e.key === "Tab") {
+    const f = $$("a[href], button", panel); if (!f.length) return;
+    const a = f[0], z = f[f.length - 1];
+    if (e.shiftKey && (document.activeElement === a || document.activeElement === panel)) { e.preventDefault(); z.focus(); }
+    else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); }
+  }
+});
+addEventListener("popstate", () => {
+  const h = hashId();
+  pushed = false;
+  if (byId(h)) openPanel(byId(h), true); else closePanel(true);
+  if (h === "intro") replayIntro();
+  else if (isGroup(h)) { if (want.filter !== h) request({ filter: h }); }
+  else if (!location.hash && want.filter !== "all") request({ filter: "all" });
+  else if (location.hash && !byId(h)) clearHash();
+});
+// phones: swipe the sheet down
+(() => {
+  let y0 = null, dy = 0, drag = false, fromTop = false;
+  panel.addEventListener("touchstart", e => {
+    if (innerWidth > 760 || e.touches.length > 1) { y0 = null; return; }
+    y0 = e.touches[0].clientY; dy = 0; drag = false; fromTop = panel.scrollTop <= 8 || !!e.target.closest("#p-bar");
+  }, { passive: true });
+  panel.addEventListener("touchmove", e => {
+    if (y0 == null) return;
+    if (!fromTop) { if (panel.scrollTop > 8) return; fromTop = true; y0 = e.touches[0].clientY; }
+    if (e.touches.length > 1) { y0 = null; panel.style.transform = ""; return; }
+    dy = e.touches[0].clientY - y0;
+    if (!drag) { if (dy > 6) { drag = true; panel.style.transition = "none"; } else if (dy < -6) { y0 = null; return; } else return; }
+    e.preventDefault(); panel.style.transform = `translateY(${Math.max(0, dy)}px)`;
+  }, { passive: false });
+  const end = () => { if (y0 == null) return; y0 = null; if (!drag) return; drag = false; panel.style.transition = ""; if (dy > 90) closePanel(); else panel.style.transform = ""; };
+  panel.addEventListener("touchend", end); panel.addEventListener("touchcancel", end);
+})();
+
+/* ------------------------------------------------ intro text */
+const SUF = ["ation", "tion", "ment", "ness", "able", "ally", "ing", "ers", "ies", "ed", "ly", "es", "er", "al", "s"];
+const split = w => {
+  const m = w.match(/^([^A-Za-z0-9]*)(.*?)([^A-Za-z0-9]*)$/), out = [];
+  if (m[1]) out.push(m[1]);
+  const core = m[2];
+  if (/^\d+$/.test(core)) for (let i = 0; i < core.length; i += 3) out.push(core.slice(i, i + 3));
+  else if (core) {
+    let stem = core, suf = "";
+    if (core.length > 5) for (const x of SUF) if (core.endsWith(x) && core.length - x.length >= 3) { stem = core.slice(0, -x.length); suf = x; break; }
+    while (stem.length > 7) { out.push(stem.slice(0, 5)); stem = stem.slice(5); }
+    out.push(stem); if (suf) out.push(suf);
+  }
+  if (m[3]) out.push(m[3]);
+  return out;
+};
+// the work's own words, justified edge to edge across the viewport; two layers (text, token rules) drawn in row strips
+const CS = 12, CLH = 16, CP = 8;
+function corpus(ink, family, serif) {
+  const W = innerWidth, H = innerHeight, dpr = Math.min(2, devicePixelRatio || 1), FONT = `400 ${CS}px ${family}`, SFONT = `400 ${CS}px ${serif}`;
+  const mk = () => { const c = document.createElement("canvas"); c.width = Math.ceil(W * dpr); c.height = Math.ceil(H * dpr); return [c, c.getContext("2d")]; };
+  const [cv, ctx] = mk(), [A, a] = mk(), [B, b] = mk();
+  cv.className = "corpus"; cv.setAttribute("aria-hidden", "true"); cv.style.width = W + "px"; cv.style.height = H + "px";
+  for (const x of [a, b]) { x.setTransform(dpr, 0, 0, dpr, 0, 0); x.font = FONT; x.fillStyle = ink; }
+  // baseline of a line-height 1 box, as the DOM sets it, so a span can sit exactly on a drawn word
+  const pr = document.createElement("span"); pr.style.cssText = "position:fixed;left:0;top:0;visibility:hidden;white-space:nowrap";
+  pr.style.font = FONT; pr.style.lineHeight = "1"; pr.innerHTML = 'x<i style="display:inline-block;width:0;height:0"></i>'; document.body.appendChild(pr);
+  const base = pr.lastChild.getBoundingClientRect().top - pr.getBoundingClientRect().top; pr.remove();
+  const cache = new Map(), wd = (t, f) => { const key = (f ? "s" : "l") + t; if (!cache.has(key)) { a.font = f ? SFONT : FONT; cache.set(key, a.measureText(t).width); a.font = FONT; } return cache.get(key); }, sp = wd(" ");
+  const words = s => s.split(/\s+/).filter(Boolean).map(t => [t, -1]);
+  const units = ITEMS.flatMap((it, n) => {
+    const tags = ORDER.filter(r => it.weights[CATS[r].id] > 0).sort((p, q) => it.weights[CATS[q].id] - it.weights[CATS[p].id]);
+    const head = [[it.name, -1, n], ["—", -1], ...tags.flatMap((r, n) => n ? [["·", -1], [CATS[r].head, r]] : [[CATS[r].head, r]])];
+    return [[...head, ...words(it.summary || "")], words(it.description || ""), ...(it.bullets || []).map(words)];
+  }).filter(u => u.length);
+  const out = []; let line = [], lw = 0, y = CP / 2, seed = 7;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const flush = () => {
+    const extra = line.length > 1 ? (W - 2 * CP - lw) / (line.length - 1) : 0; let x = CP;
+    for (const w of line) { w.x = x; w.y = y; out.push(w); x += w.w + sp + extra; }
+    line = []; lw = 0; y += CLH;
+  };
+  fill: for (let pass = 0; pass < 80; pass++) {
+    const u = units.slice(); for (let q = u.length - 1; q > 0; q--) { const j = Math.floor(rnd() * (q + 1)); [u[q], u[j]] = [u[j], u[q]]; }
+    for (const list of u) for (const [t, r, n] of list) {
+      const w = wd(t, n != null);
+      if (line.length && lw + sp + w > W - 2 * CP) { flush(); if (y >= H) break fill; }
+      lw += (line.length ? sp : 0) + w; line.push({ t, r, n, w });
+    }
+  }
+  if (line.length && y < H) flush();
+  for (const w of out) {
+    if (w.n != null) a.font = SFONT; a.fillText(w.t, w.x, w.y + base); a.font = FONT;
+    let x = w.x; for (const t of split(w.t)) { const tw = wd(t); b.fillRect(x, w.y + base + 3, Math.max(1, tw - 1), 1); x += tw; }
+  }
+  const rows = Math.ceil(H / CLH);
+  const strip = (src, r, w, al) => {
+    const sy = Math.round((CP / 2 + r * CLH) * dpr), sh = Math.min(cv.height - sy, Math.round(CLH * dpr)), sw = Math.min(cv.width, Math.round(w * dpr));
+    if (sw <= 0 || sh <= 0 || al <= 0) return; ctx.globalAlpha = al; ctx.drawImage(src, 0, sy, sw, sh, 0, sy, sw, sh);
+  };
+  // fill: rows fade in top to bottom; tok: a diagonal pass rules the token boundaries
+  function draw(fill, tok) {
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    for (let r = 0; r < rows; r++) {
+      const f = ease(clamp((fill - .5 * r / rows) / .5, 0, 1));
+      strip(A, r, W, f);
+      if (tok > 0) strip(B, r, tok * (W + H * .5) - (r * CLH) * .5, f);
+    }
+  }
+  return { cv, words: out, draw };
+}
+
+/* ------------------------------------------------ gel: tilted slabs side by side, one per group. Items are lanes, topics are
+   rows; a weight is a band (heavier: darker and thicker), none is an empty stretch of lane. Each lane has a well at the top, and the
+   first slab (every slab on phones) a ladder lane beside the topic names. Every label is a screen-aligned billboard pinned to a
+   projected point, so it stays level whatever the turn */
+let MAP = null;
+function buildMap() {
+  const stage = $("#stage"), plane = $("#plane"), N = ITEMS.length, NS = "http://www.w3.org/2000/svg";
+  const itemEl = [], grpEl = {}, plateEl = {}, leadOf = new Map();
+  let d = 0, cellEl = [], catEl = [], wellEl = [], ladEl = [];
+  plane.innerHTML = "";
+  $$(".arcs, .labs", stage).forEach(e => e.remove());
+  const arcs = document.createElementNS(NS, "svg"); arcs.setAttribute("class", "arcs"); arcs.setAttribute("aria-hidden", "true"); stage.appendChild(arcs);
+  const labs = document.createElement("div"); labs.className = "labs"; stage.appendChild(labs);
+  const add = (tag, cls, host) => { const el = document.createElement(tag); el.className = cls; host.appendChild(el); return el; };
+  const leader = el => { const e = add("i", "lbl lead", labs); e.setAttribute("aria-hidden", "true"); leadOf.set(el, e); };
+  for (const [t] of GROUPS) plateEl[t] = [add("div", "slab", plane), add("div", "plate", plane)];
+  let touchAt = null;   // where the last finger lifted, before the browser adjusted it
+  labs.addEventListener("pointerup", e => { touchAt = e.pointerType === "touch" ? [e.clientX, e.clientY, e.timeStamp] : null; }, true);
+  const tappedName = i => { if (!touchAt || performance.now() - touchAt[2] > 800) return i; const e = document.elementFromPoint(touchAt[0], touchAt[1]), l = e && e.closest(".ilbl"); return l && labs.contains(l) && !l.classList.contains("off") ? +l.dataset.i : i; };
+  ITEMS.forEach((it, i) => {
+    const b = add("button", "lbl ilbl", labs); b.type = "button"; b.innerHTML = `<span class="nm">${logoHTML(it)}${esc(it.name)}</span><span class="cx">${esc(it.context)}</span>`; b.dataset.i = i;
+    b.setAttribute("aria-label", `${it.title}, ${it.date_label}`);
+    b.addEventListener("click", () => { if (multi || dragged) return; const j = tappedName(i); if (COARSE && focus !== j) setFocus(j); else openPanel(ITEMS[j]); });
+    b.addEventListener("focus", () => { if (b.matches(":focus-visible")) setFocus(i); });
+    b.addEventListener("blur", () => clearFocus());
+    itemEl[i] = b; leader(b);
+  });
+  for (const [t, word] of GROUPS) {
+    const b = add("button", "lbl glbl", labs); b.type = "button"; b.textContent = word; b.dataset.g = t; b.setAttribute("aria-pressed", "false");
+    b.addEventListener("click", () => { if (!multi && !dragged) setFilter(want.filter === t ? "all" : t); });
+    grpEl[t] = b;
+  }
+  // cells and topic labels belong to the axis on show; items and groups stay. Topics come in one set per plane (catEl[b]): the
+  // first plane's set beside the planes side by side, every plane's set when they stack on phones
+  function rebuild() {
+    d = CATS.length;
+    cellEl.flat().forEach(e => e.remove()); catEl.flat().forEach(e => { e.remove(); leadOf.get(e).remove(); leadOf.delete(e); });
+    [...wellEl, ...ladEl.flat()].forEach(e => e.remove());
+    const box = (cls, w, h) => { const el = add("div", cls, plane); el.style.width = w + "px"; el.style.height = h + "px"; return el; };
+    wellEl = ITEMS.map(() => box("well", 0, WELL[1]));   // as wide as layout() makes their lanes
+    // a ladder per slab: d even bands, then its well
+    ladEl = GROUPS.map(() => [...CATS.map(() => box("lad", LW, LH)), box("well lw", LW, WELL[1])]);
+    cellEl = ITEMS.map((it, i) => CATS.map((c, r) => {
+      const w = it.weights[c.id], el = add("div", "cell", plane); el.style.cssText = band(w);
+      el.dataset.i = i; el.dataset.r = r; return el; }));
+    catEl = GROUPS.map(() => CATS.map((c, r) => { const el = add("div", "lbl clbl", labs); el.dataset.r = r; el.textContent = c.head; el.title = c.label; leader(el); return el; }));
+    size = new Map(); at = new Map();
+  }
+
+  /* ---------- geometry: an orthographic tilt about the middle of the planes, scaled by k. In plane units a row is 28 (CELL) on a 32 pitch (P);
+     across, a lane is CW wide on a pitch of LP: the knobs --lane (tilted) and --lane-flat (straight on), set by layout(), so lanes are wider than
+     rows are tall and widest where one slab has the page; a window short of room gets the widest pitch that costs the planes no more than
+     1 - LTOL of their scale. The wells (WELL: their inset in the lane, h) take TOP above the first row, and the
+     ladder lane (LW wide, bands LH thick; it stays narrow) takes LAD at a slab's left.
+     Side by side the planes stand GGAP apart. Phones (PH) stack them instead, each moved straight down the screen until it clears
+     the one above by SGAP px; there the pose is fixed (a sideways swipe would fight the page's scroll). Under a filter the one slab left
+     is straight on (FLAT), larger (up to MAXKF) and fixed too: it is there to be read. On phones it shrinks to fit the screen's height,
+     to MINKF at least */
+  const CELL = 28, GAP = 4, P = CELL + GAP, GGAP = 40, PAD = 10, LG = 10, LEADG = 8, MAXK = 1.7, MAXKF = 2.1, MINKF = .85, LTOL = .93, SGAP = 28, TOP = 18, WELL = [2, 4], LW = 16, LH = 2, LAD = LW + 10, MINPX = 1.5;
+  let LP = P, CW = CELL;
+  let rx = 54, rz = -13, k = 1, dx = 0, dy = 0, PH = false, G = null, SW = 0, SH = 0, MY = 12, userA = null, lastPH = null, FLAT = false, pageTop = 0;
+  let cols = [], size = new Map(), at = new Map(), SLANT = 0, BASEA = [54, -13], RX = [46, 62], RZ = [-22, -4];
+  const BASE = () => BASEA;
+  const setT = () => {
+    plane.style.transform = `translate(${(SW / 2 + dx).toFixed(2)}px, ${dy.toFixed(2)}px) scale(${k.toFixed(4)}) rotateX(${rx.toFixed(3)}deg) rotateZ(${rz.toFixed(3)}deg) translate(${-G.w / 2}px, ${-G.h / 2}px)`;
+    placeLabels();
+  };
+  function proj(px, py, ax = rx, az = rz) {
+    const ox = px - G.w / 2, oy = py - G.h / 2, b = ax * RAD, z = az * RAD;
+    const x1 = ox * Math.cos(z) - oy * Math.sin(z), y1 = ox * Math.sin(z) + oy * Math.cos(z);
+    return [SW / 2 + dx + k * x1, dy + k * y1 * Math.cos(b)];
+  }
+  const sz = el => size.get(el) || [0, 0];
+  // a slanted name's ink across its slant, measured up from the label's bottom edge (which sits at a fixed offset from its column): [top, bottom]
+  const nameBand = el => { const H = el.offsetHeight, e = [...el.querySelectorAll(".nm, .nm .lg")]; return [H - Math.min(...e.map(q => q.offsetTop)), H - Math.max(...e.map(q => q.offsetTop + q.offsetHeight))]; };
+  // neighbouring slanted names may overlap by NMG px at most; they never shrink below NMK0 of full size
+  const NMG = 1, NMK0 = .6;
+  // cell (i, r) on the plane: x, y, w, h. G.x / G.y: an item's column and its plane's top edge; G.px: its plane's left edge
+  const cellBox = (i, r) => [G.x[i], G.y[i] + PAD + TOP + r * P, CW, CELL];
+  // the ladder of the slab item i is on: band r, or (r = d) its well
+  const ladBox = (i, r) => [G.px[i] + PAD, G.y[i] + PAD + (r < d ? TOP + r * P + (CELL - LH) / 2 : 0)];
+  const blocks = () => GROUPS.map(([t]) => [t, cols.filter(i => ITEMS[i].type === t)]).filter(b => b[1].length);
+  const plateBox = ids => { const x0 = G.px[ids[0]]; return [x0, G.y[ids[0]], G.x[ids[ids.length - 1]] + CW + PAD - x0, G.ph]; };
+  // a label's four corners on screen: translate(P + o) rotate(a)
+  const corners = (A, [w, h], Pt) => { const c = Math.cos(A.a), s = Math.sin(A.a), x0 = Pt[0] + A.ox, y0 = Pt[1] + A.oy; return [[0, 0], [w, 0], [0, h], [w, h]].map(([x, y]) => [x0 + x * c - y * s, y0 + x * s + y * c]); };
+  // label anchors (a plane point, an offset in px, an angle, and the plane it belongs to), worked out at the pose on show
+  function place() {
+    at = new Map();
+    const set = (el, p, ox, oy, a = 0, lead = false, t = null) => at.set(el, { p, ox, oy, a, lead, t });
+    blocks().forEach(([t, ids], b) => {
+      const x0 = G.px[ids[0]], y0 = G.y[ids[0]];
+      if (!b || PH) for (const r of ORDER) { const el = catEl[b][r], [w, h] = sz(el); set(el, [x0, y0 + PAD + TOP + r * P + CELL / 2], -(LG + w), -h / 2, 0, false, t); }
+      // each heading is its plane's caption, under the near left corner (below the plane's edge), so names alone take the space above
+      set(grpEl[t], [x0, y0 + G.ph], 0, 6 * k * Math.sin(rx * RAD) + 6, 0, false, t);
+    });
+    // names over their columns: level, stacked in tiers with a leader down to the column; or rising at --map-slant
+    const top = i => [G.x[i] + CW / 2, G.y[i]], pts = cols.map(i => proj(...top(i))), s = cols.map(i => sz(itemEl[i]));
+    if (!SLANT) {
+      const TIER = Math.max(...s.map(q => q[1])) + 4, tt = tiers(pts, s, TIER, LEADG);
+      cols.forEach((i, n) => set(itemEl[i], top(i), -s[n][0] / 2, -(LEADG + TIER * tt[n] + s[n][1]), 0, true, ITEMS[i].type));
+    } else {
+      const sn = Math.sin(SLANT * RAD), cn = Math.cos(SLANT * RAD);
+      cols.forEach((i, n) => set(itemEl[i], top(i), -s[n][1] * sn - 4, -s[n][1] * cn - LEADG, -SLANT * RAD, false, ITEMS[i].type));
+    }
+  }
+  function placeLabels() {
+    for (const [el, A] of at) {
+      const Pt = proj(...A.p), x = Pt[0] + A.ox, y = Pt[1] + A.oy;
+      el.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px)${A.a ? ` rotate(${A.a.toFixed(4)}rad)` : ""}`;
+      // a leader runs from under the label down to its column's top edge
+      if (A.lead) { const ld = leadOf.get(el), y0 = y + sz(el)[1] + 1; ld.style.transform = `translate(${Pt[0].toFixed(2)}px, ${y0.toFixed(2)}px)`; ld.style.height = Math.max(0, Pt[1] - 2 - y0).toFixed(2) + "px"; }
+    }
+  }
+  function bbox(list) {
+    let L = 1e9, T = 1e9, R = -1e9, B = -1e9;
+    for (const [x0, y0, x1, y1] of list) for (const [px, py] of [[x0, y0], [x1, y0], [x0, y1], [x1, y1]]) {
+      const [X, Y] = proj(px, py); if (X < L) L = X; if (X > R) R = X; if (Y < T) T = Y; if (Y > B) B = Y;
+    }
+    return { L, T, R, B };
+  }
+  // what a pose covers: the planes and their edges, and every label (of the planes in only, when given; names unless bare)
+  function extent(only = null, bare = false) {
+    const bl = blocks().filter(([t]) => !only || only.includes(t));
+    const b = bbox(bl.map(([, ids]) => { const [x, y, w, h] = plateBox(ids); return [x, y, x + w, y + h]; }));
+    b.B += 6 * k * Math.sin(rx * RAD);
+    for (const [el, A] of at) if ((!only || only.includes(A.t)) && !(bare && el.classList.contains("ilbl"))) for (const [x, y] of corners(A, sz(el), proj(...A.p))) { if (x < b.L) b.L = x; if (x > b.R) b.R = x; if (y < b.T) b.T = y; if (y > b.B) b.B = y; }
+    return b;
+  }
+  const POSES = () => PH || FLAT ? [BASE()] : [RX[0], (RX[0] + RX[1]) / 2, RX[1]].flatMap(x => [RZ[0], (RZ[0] + RZ[1]) / 2, RZ[1]].map(z => [x, z]));
+  // every pose a drag can reach, at the current anchor
+  function union() {
+    const keep = [rx, rz];
+    const u = POSES().map(p => { [rx, rz] = p; return extent(); }).reduce((u, b) => ({ L: Math.min(u.L, b.L), T: Math.min(u.T, b.T), R: Math.max(u.R, b.R), B: Math.max(u.B, b.B) }));
+    [rx, rz] = keep; return u;
+  }
+  // at rest: centred across the stage; every pose stays below its top margin
+  function centre() { dx = dy = 0; const b = extent(), U = union(); dx = (SW - (b.R - b.L)) / 2 - b.L; dy = MY - U.T; }
+  function layout(forcePH) {
+    SW = stage.clientWidth;
+    if (!SW || !cellEl.length) return;
+    PH = forcePH === true || rowLayout(SW); stage.classList.toggle("ph", PH);
+    if (PH !== lastPH || isFlat() !== FLAT) { userA = null; cancelAnimationFrame(spin); spin = 0; lastPH = PH; }
+    FLAT = isFlat(); stage.classList.toggle("flat", FLAT);
+    BASEA = restPose(PH); SLANT = knob("--map-slant", 0);
+    RX = [BASEA[0] - 6, Math.min(80, BASEA[0] + 6)]; RZ = [BASEA[1] - 8, BASEA[1] + 8];
+    cols = visibleItems().map(it => ITEMS.indexOf(it));
+    const vis = new Set(cols), bl = blocks();
+    for (let i = 0; i < N; i++) {
+      const on = vis.has(i);
+      for (const el of cellEl[i]) el.classList.toggle("off", !on);
+      itemEl[i].classList.toggle("off", !on); itemEl[i].inert = !on;
+      itemEl[i].classList.toggle("lv", !SLANT); itemEl[i].classList.toggle("sl", !!SLANT);
+    }
+    for (const [t] of GROUPS) { const on = cols.some(i => ITEMS[i].type === t); grpEl[t].classList.toggle("off", !on); grpEl[t].inert = !on; plateEl[t].forEach(e => e.classList.toggle("off", !on)); }
+    for (let i = 0; i < N; i++) wellEl[i].classList.toggle("off", !vis.has(i));
+    [catEl, ladEl].forEach(sets => sets.forEach((set, b) => set.forEach(e => e.classList.toggle("off", b >= (PH ? bl.length : 1)))));
+    syncPressed();
+    root.style.removeProperty("--nmk");
+    const measure = () => { size = new Map(); for (const el of labs.querySelectorAll(".lbl:not(.off):not(.lead)")) size.set(el, [el.offsetWidth, el.offsetHeight]); };
+    const setLk = l => { stage.style.setProperty("--lk", l.toFixed(3)); measure(); };
+    setLk(1);
+    // the labels at l times their size, in the layout as it stands: a name within --label-fit of its lane's pitch on screen, neighbouring
+    // names LKGAP of their size apart across their slant, and the topics as far apart down their rows
+    const FITR = knob("--label-fit", 0), LKMAX = SLANT ? Math.max(1, knob("--label-max", 1)) : 1;
+    const roomy = l => {
+      [rx, rz] = BASE(); place();
+      const fs = parseFloat(getComputedStyle(itemEl[cols[0]].querySelector(".nm")).fontSize), nx = Math.sin(SLANT * RAD), ny = Math.cos(SLANT * RAD);
+      const c = cols.map(i => { const q = proj(G.x[i] + CW / 2, G.y[i]); return q[0] * nx + q[1] * ny; }), H = Math.max(...cols.map(i => sz(itemEl[i])[1]));
+      const th = sz(catEl[0][0])[1], row = k * P * Math.cos(rz * RAD) * Math.cos(rx * RAD);
+      return fs <= FITR * k * LP * Math.cos(rz * RAD) && row - th >= LKGAP * th / 1.2
+        && cols.every((i, n) => !n || ITEMS[i].type !== ITEMS[cols[n - 1]].type || c[n] - c[n - 1] - H >= LKGAP * fs);
+    };
+    const x = {}, y = {}, px = {}, ph = 2 * PAD + TOP + d * P - GAP, LANE = Math.max(P, knob(FLAT ? "--lane-flat" : "--lane", P));
+    const lanes = lp => { LP = lp; CW = lp - GAP; };
+    // phones: every plane from the same corner, so the widest one, with its topics and names, sets k
+    const stack = lp => {
+      lanes(lp);
+      for (const [, ids] of bl) ids.forEach((i, n) => { x[i] = PAD + LAD + n * LP; y[i] = 0; px[i] = 0; });
+      G = { x, y, px, ph, w: Math.max(...bl.map(([, ids]) => ids.length)) * LP - GAP + 2 * PAD + LAD, h: ph };
+    };
+    // side by side: columns on the lane pitch, after the first slab's ladder; a new group starts a new plane
+    const row = lp => {
+      lanes(lp);
+      let u = PAD + LAD, prev = null, x0 = 0;
+      for (const i of cols) { const t = ITEMS[i].type; if (prev && t !== prev) { u += CW + 2 * PAD + GGAP - LP; x0 = u - PAD; } x[i] = u; y[i] = 0; px[i] = x0; u += LP; prev = t; }
+      G = { x, y, px, ph, w: u - LP + CW + PAD, h: ph };
+    };
+    MY = 16;
+    pageTop = stage.getBoundingClientRect().top + scrollY;
+    if (!PH) {
+      // the largest planes whose every turn keeps the labels on the page and the whole map on one screen
+      const spill = Math.max(0, stage.getBoundingClientRect().left - 12), room = Math.max(280, innerHeight - pageTop - 18);
+      const fitK = () => fit(kk => { k = kk; [rx, rz] = BASE(); place(); centre(); const U = union(); return U.L >= -spill && U.R <= SW + spill && U.B - U.T + 2 * MY <= room; }, .3, FLAT ? MAXKF : MAXK);
+      // the lanes widen as far as LANE where there is room: to the widest pitch that costs the planes little of their scale (LTOL) and
+      // leaves the rows no closer than the topic names' ink is tall (3px under their line), so a narrow window gives the width back
+      const kAt = lp => { row(lp); return k = fitK(); }, k0 = kAt(P);
+      if (LANE > P) { const lp = fit(l => kAt(l) >= LTOL * k0 && k * P * Math.cos(rz * RAD) * Math.cos(rx * RAD) >= sz(catEl[0][0])[1] - 3, P, LANE, 5); if (LP !== lp) kAt(lp); }
+      // slanted names stay apart: where a name would reach past the next one's column, every name shrinks until none does
+      // (tested at the k that fits full-size names; the larger k smaller names then allow only adds room)
+      if (SLANT) {
+        [rx, rz] = BASE(); place();
+        const nx = Math.sin(SLANT * RAD), ny = Math.cos(SLANT * RAD), c = cols.map(i => { const q = proj(G.x[i] + CW / 2, G.y[i]); return q[0] * nx + q[1] * ny; });
+        const apart = () => { const e = cols.map(i => nameBand(itemEl[i])); return cols.every((_, n) => !n || c[n] - c[n - 1] - e[n][0] + e[n - 1][1] >= -NMG); };
+        if (!apart()) {
+          const f = fit(f => { root.style.setProperty("--nmk", f.toFixed(3)); return apart(); }, NMK0, 1, 8);
+          root.style.setProperty("--nmk", f.toFixed(3));
+          for (const i of cols) size.set(itemEl[i], [itemEl[i].offsetWidth, itemEl[i].offsetHeight]);
+          k = fitK();
+        }
+      }
+      if (LKMAX > 1 && cols.length) {
+        const k1 = k, grow = l => { setLk(l); k = fitK(); return k >= LKTOL * k1 && roomy(l); }, l = fit(grow, 1, LKMAX, 6);
+        setLk(l); k = fitK();
+      }
+      // too small to read: stack them
+      if (k * CELL < 15) { layout(true); return; }
+    } else {
+      // k from the planes and their topics; then the names rise at --map-slant, or steeper where a long one would leave the screen
+      [rx, rz] = BASE(); dx = dy = 0;
+      const wide = (bare = false) => { place(); const b = extent(null, bare); return b.R - b.L <= SW; }, slant = SLANT;
+      const kAt = (lp, steep = 60) => {
+        stack(lp); SLANT = slant;
+        k = fit(kk => { k = kk; return wide(true); }, .3, MAXK, 11);
+        while (SLANT && SLANT < steep && !wide()) SLANT += 5;
+        if (!wide()) k = fit(kk => { k = kk; return wide(); }, .3, k, 11);
+        if (FLAT && k > MINKF) { const room = innerHeight - pageTop - 18; k = fit(kk => { k = kk; place(); const b = extent(); return b.B - b.T + 2 * MY <= room; }, MINKF, k, 11); }
+        return k;
+      };
+      // the lanes widen only as far as the screen allows: to the widest pitch, LANE at most, that costs the planes no scale to speak of
+      // and the names one step of slant at most
+      const k0 = kAt(P), s0 = SLANT, lp = fit(l => kAt(l) >= .99 * k0 && SLANT <= s0 + 5, P, LANE, 6);
+      if (LP !== lp) kAt(lp);
+      if (LKMAX > 1 && cols.length) {
+        // (the names get no steeper for it: past the slant they have, the slab gives way instead)
+        const k1 = k, s1 = SLANT, grow = l => { setLk(l); return kAt(LP, s1) >= LKTOL * k1 && roomy(l); }, l = fit(grow, 1, LKMAX, 6);
+        setLk(l); kAt(LP, s1);
+      }
+      place();
+      // then down the screen: s px straight down is this shift in the plane (rotateZ undone, rotateX's squash undone)
+      const z = rz * RAD, f = 1 / (k * Math.cos(rx * RAD));
+      let floor = null;
+      for (const [t, ids] of bl) {
+        const e = extent([t]), s = floor == null ? 0 : floor + SGAP - e.T, sx = s * f * Math.sin(z), sy = s * f * Math.cos(z);
+        for (const i of ids) { x[i] += sx; y[i] += sy; px[i] += sx; }
+        floor = e.B + s;
+      }
+      // the stack's own box in the plane, from 0
+      const L = Math.min(...cols.map(i => px[i])), T = Math.min(...cols.map(i => y[i]));
+      for (const i of cols) { x[i] -= L; px[i] -= L; y[i] -= T; }
+      G.w = Math.max(...cols.map(i => x[i] + CW + PAD)); G.h = Math.max(...cols.map(i => y[i] + ph));
+    }
+    [rx, rz] = BASE(); place(); centre();
+    const U = union();
+    SH = Math.ceil(U.B - U.T + 2 * MY);
+    plane.style.width = G.w + "px"; plane.style.height = G.h + "px";
+    for (const i of cols) cellEl[i].forEach((el, r) => {
+      const [x, y, w, h] = cellBox(i, r);
+      el.style.width = w + "px"; el.style.height = h + "px"; el.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px)`;
+    });
+    for (const [t, ids] of bl) { const [x, y, w, h] = plateBox(ids); plateEl[t].forEach(e => { e.style.left = x + "px"; e.style.top = y + "px"; e.style.width = w + "px"; e.style.height = h + "px"; }); }
+    // a band's core is never under MINPX on screen, however small the slab is drawn; a lane's smear runs from its well through its last band
+    plane.style.setProperty("--w", CW - 2 * WELL[0]);
+    plane.style.setProperty("--bmin", (MINPX / (k * Math.hypot(Math.sin(rz * RAD), Math.cos(rz * RAD) * Math.cos(rx * RAD)))).toFixed(2) + "px");
+    for (const i of cols) {
+      wellEl[i].style.width = CW - 2 * WELL[0] + "px"; wellEl[i].style.transform = `translate(${(G.x[i] + WELL[0]).toFixed(2)}px, ${(G.y[i] + PAD).toFixed(2)}px)`;
+      const last = Math.max(-1, ...CATS.map((c, r) => ITEMS[i].weights[c.id] > 0 ? r : -1));
+      wellEl[i].style.setProperty("--lane-h", (last < 0 ? 0 : TOP - WELL[1] + last * P + CELL) + "px");
+    }
+    bl.forEach(([, ids], b) => { if (b && !PH) return; ladEl[b].forEach((el, r) => { const [x, y] = ladBox(ids[0], r); el.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px)`; }); });
+    // a slanted name is a band as thick as the gap to the next one, so a tap between two names finds one of them
+    stage.style.setProperty("--nb", (PH && SLANT ? Math.max(0, (k * LP * Math.sin(SLANT * RAD) - Math.max(...cols.map(i => sz(itemEl[i])[1]))) / 2) : 0).toFixed(1) + "px");
+    for (const [el, ld] of leadOf) ld.classList.toggle("off", !(at.get(el) || {}).lead);
+    stage.style.height = SH + "px";
+    [rx, rz] = userA || BASE();
+    setT();
+    clearFocus();
+  }
+
+  /* ---------- hover: the lane stays, the rest steps back; its topics go to the accent, and a guide runs from the ladder to each of its strongest bands */
+  let focus = null;
+  function clearFocus(keep) { if (!keep) CARD.hide(); focus = null; arcs.replaceChildren(); stage.classList.remove("focus"); $$(".hl, .hot", stage).forEach(e => e.classList.remove("hl", "hot")); }
+  function setFocus(i) {
+    if (introOn || focus === i) return;
+    clearFocus(true); focus = i;
+    stage.classList.add("focus");
+    itemEl[i].classList.add("hl"); leadOf.get(itemEl[i]).classList.add("hl"); wellEl[i].classList.add("hl");
+    const tp = catEl[PH ? blocks().findIndex(([t]) => t === ITEMS[i].type) : 0];
+    CATS.forEach((c, r) => { cellEl[i][r].classList.add("hl"); if (ITEMS[i].weights[c.id] > 0) tp[r].classList.add("hl"); });
+    drawArcs(i);
+    // the card goes beside the column or beside the whole map, off every name, heading and topic, and off the planes where it can
+    const [vx] = viewport(), b = extent();
+    const rects = sel => $$(sel, stage).map(e => e.getBoundingClientRect()).filter(r => r.width && r.bottom > 0 && r.top < innerHeight);
+    CARD.show(ITEMS[i], unite([itemEl[i], ...cellEl[i]].map(e => e.getBoundingClientRect())), rects(".glbl:not(.off), .ilbl:not(.off), .clbl:not(.off)"), PH ? null : [vx + b.L, vx + b.R], rects(".plate:not(.off)"));
+  }
+  function drawArcs(i) {
+    const it = ITEMS[i], best = ORDER.filter(r => it.weights[r] > 0).sort((a, b) => it.weights[b] - it.weights[a]).slice(0, 4);
+    const lx = ladBox(PH ? i : cols[0], 0)[0] + LW + 3;
+    best.forEach((r, n) => {
+      const w = it.weights[r], [cx, cy, , ch] = cellBox(i, r), [x1, y1] = proj(lx, cy + ch / 2), [x2, y2] = proj(cx - 1, cy + ch / 2);
+      const p = document.createElementNS(NS, "path");
+      p.setAttribute("d", `M${x1.toFixed(1)},${y1.toFixed(1)} L${x2.toFixed(1)},${y2.toFixed(1)}`); p.setAttribute("stroke-opacity", (.3 + .5 * w).toFixed(2)); p.setAttribute("pathLength", "1");
+      arcs.appendChild(p);
+      if (!REDUCED) p.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration: 220, delay: n * 25, easing: EASE, fill: "backwards" });
+    });
+  }
+  let clearT = 0;
+  stage.addEventListener("pointermove", e => {
+    if (e.pointerType !== "mouse" || drag || spin) return;   // no hover while a press may become a drag
+    const t = e.target.closest(".cell:not(.off), .ilbl:not(.off)");
+    if (t) { clearTimeout(clearT); clearT = 0; setFocus(+t.dataset.i); }
+    else if (focus != null && !clearT) clearT = setTimeout(() => { clearT = 0; unhover(); }, 90);
+  });
+  function unhover() {
+    clearFocus();
+    const a = document.activeElement;
+    if (a && a.classList && a.classList.contains("ilbl") && a.matches(":focus-visible")) setFocus(+a.dataset.i);
+  }
+  stage.addEventListener("pointerleave", e => { if (e.pointerType !== "mouse") return; clearTimeout(clearT); clearT = 0; unhover(); });
+  // stacked on phones a column is narrower than a finger: a tap in the gutter between cells goes to the nearest cell
+  const nearCell = (x, y) => {
+    let best = null, bd = 1e9;
+    for (const i of cols) for (const el of cellEl[i]) { const r = el.getBoundingClientRect(), dd = Math.hypot(Math.max(r.left - x, 0, x - r.right), Math.max(r.top - y, 0, y - r.bottom)); if (dd < bd) { bd = dd; best = el; } }
+    return bd <= k * GAP + 2 ? best : null;
+  };
+  const hitCell = e => e.target.closest(".cell") || (PH && e.target.closest(".plane") ? nearCell(e.clientX, e.clientY) : null);
+  stage.addEventListener("click", e => {
+    const c = hitCell(e);
+    if (!c || multi || c.classList.contains("off") || introOn) return;
+    const i = +c.dataset.i; if (COARSE && focus !== i) setFocus(i); else openPanel(ITEMS[i]);
+  });
+  document.addEventListener("click", e => { if (COARSE && focus != null && !e.target.closest(".ilbl, .hcard") && !hitCell(e)) clearFocus(); });
+
+  /* ---------- drag: the planes turn about their middle, with soft limits; on release they coast and settle */
+  let drag = null, dragged = false, spin = 0;
+  const frame = () => setT();
+  const SOFT = 4, TAU = 260, WS = .012, VMAX = .04;   // give past a limit (deg), coast friction (ms), return spring (rad/ms), top speed (deg/ms)
+  // free inside [lo, hi]; past it the angle approaches lo - SOFT / hi + SOFT, ever more slowly
+  const give = (x, [lo, hi]) => x < lo ? lo - SOFT * (1 - 1 / (1 + (lo - x) / SOFT)) : x > hi ? hi + SOFT * (1 - 1 / (1 + (x - hi) / SOFT)) : x;
+  // inside the range velocity decays by friction; outside, or when a target is set, a critically damped spring pulls it in
+  function coast(vx, vz, to = null) {
+    cancelAnimationFrame(spin);
+    let last = performance.now();
+    const axis = (x, v, [lo, hi], t, dt) => {
+      const pull = t != null ? x - t : x < lo ? x - lo : x > hi ? x - hi : 0;
+      v = pull || t != null ? v + (-WS * WS * pull - 2 * WS * v) * dt : v * Math.exp(-dt / TAU);
+      // never past the soft band: a release already deep in the give stops there and the spring brings it back
+      let y = x + v * dt; if (y < lo - SOFT || y > hi + SOFT) { y = clamp(y, lo - SOFT, hi + SOFT); v = 0; }
+      return [y, v, Math.abs(pull) < .01 && Math.abs(v) < .0004];
+    };
+    const step = now => {
+      const dt = Math.min(32, now - last); last = now;
+      let sx, sz; [rx, vx, sx] = axis(rx, vx, RX, to && to[0], dt); [rz, vz, sz] = axis(rz, vz, RZ, to && to[1], dt);
+      if (REDUCED || (sx && sz)) { if (to) [rx, rz] = to; spin = 0; frame(); userA = [rx, rz]; return; }
+      frame(); spin = requestAnimationFrame(step);
+    };
+    spin = requestAnimationFrame(step);
+  }
+  stage.addEventListener("pointerdown", e => {
+    if (PH || FLAT || introOn || morphing || e.button > 0 || multi || !e.isPrimary) return;
+    // a press holds a coasting or springing pose; if it never becomes a drag, the motion goes on (else the planes stay in the give)
+    const held = !!spin; cancelAnimationFrame(spin); spin = 0;
+    drag = { id: e.pointerId, x0: e.clientX, y0: e.clientY, on: false, held, touch: e.pointerType !== "mouse", hist: [] };
+  });
+  // grab: the plane point under the pointer when the drag starts follows the pointer. Each move takes a few Gauss-Newton
+  // steps on the raw angles q, minimising |pointer - point at q|^2 + GRAB_DAMP |q - q0|^2 (q0: the pose at the press), and the
+  // planes are drawn at give(q). The pull to q0 makes the pose a function of the pointer alone, so a drag past a limit winds
+  // nothing up (coming back turns the planes back at once), and a tilt the pointer barely moves (the narrow rx range, or the
+  // centre) can't lurch to its limit. Inside the range a point off the centre stays within a few px of the pointer. Touch
+  // turns rz only (a vertical swipe scrolls the page).
+  const GRAB_DAMP = 100 * 100, GRAB_STEP = .15, RAW = 4 * SOFT, ACROSS = 3;   // pull to q0 (px^2 per rad^2), largest step per iteration (rad), raw reach past a limit (deg), weight of sideways error
+  // raw angles stay within RAW of the range (rx short of flat and of edge-on; a pointer far off the page can't wind rz round the
+  // centre); ungive is give's inverse, on that box
+  const box = ([qx, qz]) => [clamp(qx, Math.max(5, RX[0] - RAW), Math.min(85, RX[1] + RAW)), clamp(qz, RZ[0] - RAW, RZ[1] + RAW)];
+  const ungive = (y, [lo, hi]) => { const t = Math.min(Math.max(lo - y, y - hi, 0) / SOFT, 1 - 1 / (1 + RAW / SOFT)), x = SOFT * t / (1 - t); return y < lo ? lo - x : y > hi ? hi + x : y; };
+  function grabStart(d, cx, cy) {
+    const sr = stage.getBoundingClientRect(), ox = sr.left + stage.clientLeft, oy = sr.top + stage.clientTop;
+    // q0: the raw angles the planes are drawn at (a press during the spring back is in the give); the grabbed point is where the pointer is at q0,
+    // so the solver starts with no error and the first move doesn't jump
+    const q0 = box([ungive(rx, RX), ungive(rz, RZ)]), X = (cx - ox - SW / 2 - dx) / k, Y = (cy - oy - dy) / (k * Math.cos(q0[0] * RAD)), z = q0[1] * RAD;
+    // undo rotateZ: the grabbed point in plane coordinates
+    Object.assign(d, { ox, oy, p0: [cx, cy], q0, q: q0.slice(), u: [G.w / 2 + X * Math.cos(z) + Y * Math.sin(z), G.h / 2 - X * Math.sin(z) + Y * Math.cos(z)] });
+  }
+  function grabMove(d, cx, cy) {
+    const ou = d.u[0] - G.w / 2, ov = d.u[1] - G.h / 2;
+    // error across the drag (from where it began) costs ACROSS^2 times error along it: when the turn can't keep up, the point falls
+    // behind the pointer rather than off to the side, so it moves the way the hand does (touch turns rz alone, which can't steer). W: that form
+    const mx = cx - d.p0[0], my = cy - d.p0[1], m2 = mx * mx + my * my, c = m2 > 1 && !d.touch ? (ACROSS * ACROSS - 1) / m2 : 0;
+    const w11 = 1 + c * my * my, w12 = -c * mx * my, w22 = 1 + c * mx * mx, W = (a, b) => a[0] * (w11 * b[0] + w12 * b[1]) + a[1] * (w12 * b[0] + w22 * b[1]);
+    // the pose the pull goes to: q0 turned as if the hand held the planes' near edge (R from the centre), so sideways turns them and up
+    // tilts them away, whichever way the grabbed point's own lever runs. Near the centre, where a turn barely moves the point, this sets the way
+    const R = k * G.h / 2, qa = [d.q0[0] - (d.touch ? 0 : my / (R * Math.sin(d.q0[0] * RAD)) / RAD), d.q0[1] - mx / R / RAD];
+    // the point at raw angles q, as offsets from the turning centre in rotated plane units; its error to the pointer; the cost
+    const fit = ([qx, qz]) => {
+      const b = qx * RAD, z = qz * RAD, x1 = ou * Math.cos(z) - ov * Math.sin(z), y1 = ou * Math.sin(z) + ov * Math.cos(z);
+      const e = [cx - d.ox - (SW / 2 + dx + k * x1), cy - d.oy - (dy + k * y1 * Math.cos(b))];
+      return { b, x1, y1, e, f: W(e, e) + GRAB_DAMP * ((qx - qa[0]) ** 2 + (qz - qa[1]) ** 2) * RAD * RAD };
+    };
+    let F = fit(d.q);
+    for (let n = 0; n < 3; n++) {
+      const [qx, qz] = d.q, { b, x1, y1, e } = F;
+      // the screen derivatives d/dz = k(-y1, x1 cos b), d/dx = (0, -k y1 sin b)
+      const jz = [-k * y1, k * x1 * Math.cos(b)], jx = [0, d.touch ? 0 : -k * y1 * Math.sin(b)];
+      // (J^T W J + damp I) step = J^T W e + damp (q0 - q), solved in closed form for 2x2
+      const a11 = W(jx, jx) + GRAB_DAMP, a12 = W(jx, jz), a22 = W(jz, jz) + GRAB_DAMP;
+      const g1 = W(jx, e) + GRAB_DAMP * (qa[0] - qx) * RAD, g2 = W(jz, e) + GRAB_DAMP * (qa[1] - qz) * RAD, det = a11 * a22 - a12 * a12;
+      const sx = clamp((a22 * g1 - a12 * g2) / det, -GRAB_STEP, GRAB_STEP), sz = clamp((a11 * g2 - a12 * g1) / det, -GRAB_STEP, GRAB_STEP);
+      // far out of reach a full step overshoots (and the pose would flicker between two): halve it until the cost goes down
+      for (let h = 1; h > 1 / 32; h /= 2) {
+        const q = box([qx + h * sx / RAD, qz + h * sz / RAD]), E = fit(q);
+        if (E.f < F.f) { d.q = q; F = E; break; }
+      }
+    }
+    rx = give(d.q[0], RX); rz = give(d.q[1], RZ);
+  }
+  addEventListener("pointermove", e => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const ddx = e.clientX - drag.x0, ddy = e.clientY - drag.y0;
+    if (!drag.on) {
+      if (Math.hypot(ddx, ddy) < 6) return;
+      if (drag.touch && Math.abs(ddy) >= Math.abs(ddx)) { if (drag.held) coast(0, 0); drag = null; return; }
+      drag.on = true; clearFocus(); stage.classList.add("dragging");
+      try { stage.setPointerCapture(e.pointerId); } catch (_) {}
+      grabStart(drag, e.clientX, e.clientY); drag.hist.push([e.timeStamp, rx, rz]); return;
+    }
+    grabMove(drag, e.clientX, e.clientY);
+    const h = drag.hist; h.push([e.timeStamp, rx, rz]); while (h.length > 2 && e.timeStamp - h[0][0] > 80) h.shift();
+    if (!spin) spin = requestAnimationFrame(() => { spin = 0; frame(); });
+  });
+  const release = e => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const dd = drag; drag = null; if (!dd.on) { if (dd.held) coast(0, 0); return; }
+    dragged = true; setTimeout(() => { dragged = false; }, 0);
+    stage.classList.remove("dragging");
+    const [t0, x0, z0] = dd.hist[0], dt = Math.max(16, e.timeStamp - t0), still = e.timeStamp - dd.hist[dd.hist.length - 1][0] > 60, cap = v => still ? 0 : clamp(v, -VMAX, VMAX);
+    coast(cap((rx - x0) / dt), cap((rz - z0) / dt));
+  };
+  addEventListener("pointerup", release); addEventListener("pointercancel", release);
+  stage.addEventListener("click", e => { if (dragged) { e.stopPropagation(); e.preventDefault(); } }, true);
+  stage.addEventListener("dblclick", e => { if (PH || FLAT || introOn || morphing || e.target.closest(".lbl")) return; userA = null; coast(0, 0, BASE()); });
+  let vw = innerWidth, vh = innerHeight;
+  addEventListener("resize", () => {
+    const wChanged = innerWidth !== vw, big = COARSE ? Math.abs(innerHeight - vh) >= 120 : innerHeight !== vh;
+    if (!wChanged && !big) return;
+    vw = innerWidth; vh = innerHeight;
+    if ($("#mapView").hidden || morphing) return;
+    if (introOn) endIntro("skip");
+    layout();
+  });
+  // isolation: the planes that go fade where they stand, the survivors close ranks, new ones fade in; transform and opacity only.
+  // Into or out of a filter the pose changes too, and the planes turn: a label is keyed along its point's path through the turn.
+  // Phones, where that turn is between the stack and one slab: the stage fades out, and fades back in turning, as the Timeline does
+  function refilter() {
+    [plane, labs].forEach(l => l.getAnimations({ subtree: true }).forEach(a => a.cancel()));
+    $$(".pending, .leave", stage).forEach(e => e.classList.remove("pending", "leave"));
+    if (REDUCED || $("#mapView").hidden) { layout(); return Promise.resolve(); }
+    if (PH && isFlat() !== FLAT) return (async () => {
+      const a = [rx, rz];
+      await fadeTo(stage, 1, 0, T.s * OUT);
+      layout();
+      const b = [rx, rz];
+      await Promise.all([fadeTo(stage, 0, 1, T.s), tween(T.m, t => { rx = mix(a[0], b[0], ease(t)); rz = mix(a[1], b[1], ease(t)); setT(); })]);
+    })();
+    const box = el => { const s = el.style; return { transform: s.transform, left: parseFloat(s.left) || 0, top: parseFloat(s.top) || 0, w: el.offsetWidth, h: el.offsetHeight }; };
+    const all = [...plane.children, ...labs.children], old = new Map();
+    for (const el of all) if (!el.classList.contains("off")) old.set(el, box(el));
+    const oldPlane = plane.style.transform, at0 = at, q0 = [SW / 2 + dx, dy, k, rx, rz, G.w, G.h];
+    layout();
+    const q1 = [SW / 2 + dx, dy, k, rx, rz, G.w, G.h], turned = q0[3] !== q1[3] || q0[4] !== q1[4], STEPS = 10;
+    // a label through the turn: the plane's transform and the label's anchor both run linearly from old to new, sampled STEPS times
+    const along = (A, B, sx, sy) => Array.from({ length: STEPS + 1 }, (_, n) => {
+      const t = n / STEPS, [cx, cy, kk, ax, az, w, h] = q0.map((v, j) => mix(v, q1[j], t)), z = az * RAD;
+      const px = mix(A.p[0], B.p[0], t) - w / 2, py = mix(A.p[1], B.p[1], t) - h / 2;
+      const X = cx + kk * (px * Math.cos(z) - py * Math.sin(z)) + mix(A.ox, B.ox, t), Y = cy + kk * (px * Math.sin(z) + py * Math.cos(z)) * Math.cos(ax * RAD) + mix(A.oy, B.oy, t);
+      return { transform: `translate(${X.toFixed(2)}px, ${Y.toFixed(2)}px) rotate(${mix(A.a, B.a, t).toFixed(4)}rad) scale(${mix(sx, 1, t).toFixed(4)}, ${mix(sy, 1, t).toFixed(4)})` };
+    });
+    const o = { duration: T.m, easing: EASE }, runs = [done(anim(plane, [{ transform: oldPlane }, { transform: plane.style.transform }], o))];
+    for (const el of all) {
+      const a = old.get(el);
+      if (el.classList.contains("off")) {   // leaving: held where it was (a label through a turn: on its plane), fading
+        const A = turned && at0.get(el);
+        if (a) { el.classList.add("leave"); runs.push(done(A ? anim(el, along(A, A, 1, 1).map((f, n) => ({ ...f, opacity: Math.max(0, 1 - n / STEPS * T.m / T.s) })), o) : anim(el, [{ opacity: 1 }, { opacity: 0 }], { duration: T.s, easing: EASE })).then(() => el.classList.remove("leave"))); }
+        continue;
+      }
+      if (!a) { runs.push(done(anim(el, [{ opacity: 0 }, { opacity: 1 }], { duration: T.s, delay: T.m * .5, easing: EASE, fill: "backwards" }))); continue; }
+      const b = box(el), base = b.transform || getComputedStyle(el).transform.replace("none", "");
+      const dx = a.left - b.left, dy = a.top - b.top, sx = a.w / (b.w || 1), sy = a.h / (b.h || 1);
+      if (a.transform === b.transform && !dx && !dy && sx === 1 && sy === 1) continue;
+      // the old box as a transform of the new one (left/top shift, old transform, old size)
+      const scaled = sx !== 1 || sy !== 1;
+      if (turned && at0.has(el) && at.has(el)) { runs.push(done(anim(el, along(at0.get(el), at.get(el), sx, sy), o))); continue; }
+      const from = `translate(${dx}px, ${dy}px) ${a.transform || base}${scaled ? ` scale(${sx.toFixed(4)}, ${sy.toFixed(4)})` : ""}`;
+      if (scaled) el.style.transformOrigin = "0 0";
+      runs.push(done(anim(el, [{ transform: from }, { transform: base || "none" }], o)).then(() => { if (scaled) el.style.transformOrigin = ""; }));
+    }
+    return Promise.all(runs);
+  }
+
+  /* ---------- intro */
+  let introOn = false, introFinish = null;
+  function endIntro(reason = "external") { if (introFinish) introFinish(reason); }
+  // intro timeline, ms: the work's words fill the viewport (fill) and are ruled into tokens (tok); one of each lane name and topic lights
+  // while the rest dims (lit); the names fly to their lanes (items: first, flight, per slab, per lane) and the topics to the ladder
+  // (topics: first, flight, per topic) as the slabs and their wells come up under them (show; tilted slabs rise into their pose: rise)
+  // and the field goes (out). A lane is loaded as its name comes in: its bands appear in its well (load) and leave it as the name lands,
+  // migrating to their rows (run); the ladder (lad) does the same under the topics. Then the rest and the header
+  const IT = { fill: [0, 600], tok: [350, 750], lit: [1000, 400], items: [1400, 800, 150, 30], topics: [1650, 850, 30], out: [1500, 700],
+    rise: [1500, 1100, 84], show: [1500, 450], lad: 1750, load: 250, run: 1300, rest: [3900, 350], head: [4150, 450], end: 4600 };
+  async function intro(onDone) {
+    if (introOn) endIntro("external");
+    introOn = true; const born = performance.now();
+    root.classList.add("intro-full"); root.classList.remove("intro-rise");
+    scrollTo(0, 0);
+    cancelAnimationFrame(spin); spin = 0; userA = null;
+    stage.classList.remove("fadeout"); stage.classList.add("introing");
+    const cs = getComputedStyle(root), family = cs.getPropertyValue("--label").trim(), serif = cs.getPropertyValue("--serif").trim();
+    if (document.fonts) await Promise.race([Promise.all([document.fonts.ready, document.fonts.load(`${CS}px ${family}`), document.fonts.load(`${CS}px ${serif}`)]).catch(() => {}), wait(1500)]);
+    if (!introOn) return;
+    layout();
+    const fin = [rx, rz], lbls = [...labs.querySelectorAll(".lbl:not(.off)")], head = $("#head");
+    lbls.forEach(e => e.classList.add("wait"));
+    plane.style.opacity = 0;
+    // tilted slabs rise into their pose; one held up straight on (a filter) or a stack is only shown
+    const rises = !FLAT && !PH && IT.rise[2] > fin[0];
+    if (rises) { rx = IT.rise[2]; setT(); }
+    const C = corpus(getComputedStyle(root).getPropertyValue("--corpus").trim(), family, serif);
+    document.body.appendChild(C.cv);
+    const W = innerWidth, H = innerHeight;
+    const sr = stage.getBoundingClientRect(), ox = sr.left + stage.clientLeft, oy = sr.top + stage.clientTop, lk = stage.style.getPropertyValue("--lk");
+    // one occurrence of each name and topic word, spread over the field: each pick is the one farthest from those before it
+    const bl = blocks(), want = [...cols.map(i => ({ i })), ...ORDER.map(r => ({ r }))];
+    const used = [], fly = [], mid = w => [w.x + w.w / 2, w.y + CLH / 2], landing = new Map();
+    for (const q of want) {
+      let best = null, bd = -1;
+      for (const w of C.words) {
+        if ((q.i != null ? w.n !== q.i : w.r !== q.r) || w.x + w.w > W - CP || w.y + CLH > H - CP) continue;
+        const [x, y] = mid(w), dd = used.length ? Math.min(...used.map(([u, v]) => Math.hypot(x - u, (y - v) * 1.4))) : -Math.hypot(x - W / 2, y - H / 2);
+        if (best === null || dd > bd) { bd = dd; best = w; }
+      }
+      const lab = q.i != null ? itemEl[q.i] : catEl[0][q.r];
+      // names: slab by slab, then within the slab; topics after them
+      let t0, d;
+      if (q.i != null) { const b = bl.findIndex(([, l]) => l.includes(q.i)); t0 = IT.items[0] + b * IT.items[2] + bl[b][1].indexOf(q.i) * IT.items[3]; d = IT.items[1]; landing.set(q.i, t0 + d); }
+      else { t0 = IT.topics[0] + IT.topics[2] * q.r; d = IT.topics[1]; }
+      if (!best || !at.has(lab)) continue;   // a word the field has no room for: its label comes in with the rest
+      used.push(mid(best));
+      // the flying word is set exactly like the label it lands on (its classes, its size, its logo), so the landing is seamless
+      const el = document.createElement("span"); el.className = "fly " + (q.i != null ? "ilbl " + (SLANT ? "sl" : "lv") : "clbl"); el.setAttribute("aria-hidden", "true");
+      if (q.i != null) el.innerHTML = lab.querySelector(".nm").outerHTML; else el.textContent = lab.textContent;
+      if (lk) el.style.setProperty("--lk", lk);
+      el.style.opacity = 0;
+      document.body.appendChild(el);
+      fly.push({ el, lab, t0, d, n: fly.length, w: best, lg: el.querySelector(".lg") });
+    }
+    // measured together (one layout), then placed: scaled down to the field's type, its text on the word drawn there
+    for (const f of fly) {
+      const tn = [...(f.el.querySelector(".nm") || f.el).childNodes].find(n => n.nodeType === 3), rg = document.createRange(); rg.selectNodeContents(tn);
+      const tr = rg.getBoundingClientRect(), er = f.el.getBoundingClientRect();
+      f.box = [f.el.offsetWidth, f.el.offsetHeight]; f.fz = parseFloat(getComputedStyle(tn.parentElement).fontSize); f.tx = tr.left - er.left; f.ty = (tr.top + tr.bottom) / 2 - er.top;
+    }
+    for (const f of fly) {
+      const sc = CS / f.fz, M0 = [sc, 0, 0, sc, f.w.x - f.tx * sc, f.w.y + CS / 2 - f.ty * sc];
+      f.el.style.transform = `matrix(${M0.join(",")})`; f.d0 = dec(M0, f.box);
+      if (f.lg) f.lg.style.opacity = 0;   // its logo comes in on the way
+    }
+    // a run: one lane's bands, each from its well (y0) to its row (y). A lane is loaded as its name comes in, and runs as it lands
+    const runs = [];
+    bl.forEach(([, ids], b) => {
+      if (!b || PH) runs.push({ t0: IT.lad + b * IT.items[2],
+        els: ladEl[b].slice(0, d).map((el, r) => { const [x, y] = ladBox(ids[0], r); return { el, x, y, y0: G.y[ids[0]] + PAD + (WELL[1] - LH) / 2 }; }) });
+      ids.forEach(i => runs.push({ t0: landing.get(i) - IT.load, well: wellEl[i],
+        els: ORDER.filter(r => ITEMS[i].weights[r] > 0).map(r => { const [x, y] = cellBox(i, r); return { el: cellEl[i][r], x, y, y0: G.y[i] + PAD + (WELL[1] - CELL) / 2 }; }) }));
+    });
+    // however many lanes there are, the rest and the header wait for the last of them
+    const late = Math.max(0, Math.max(0, ...runs.map(L => L.t0 + IT.load + IT.run)) + 50 - IT.head[0]);
+    // each heading arrives as the last name of its slab lands
+    const heads = bl.map(([t, ids]) => ({ el: grpEl[t], t0: landing.get(ids[ids.length - 1]) - 250 }));
+    const flown = new Set(fly.map(f => f.lab)), rest = lbls.filter(e => !flown.has(e) && !heads.some(h => h.el === e));
+    const moved = runs.flatMap(L => L.els);
+    // a band in its well is as thin as the well; it takes its own thickness as it leaves
+    const put = (c, p) => { c.el.style.transform = `translate(${c.x.toFixed(2)}px, ${(c.y0 + (c.y - c.y0) * p).toFixed(2)}px)${p < .25 ? ` scaleY(${(.4 + 2.4 * p).toFixed(3)})` : ""}`; };
+    moved.forEach(c => { c.el.style.opacity = 0; put(c, 0); });
+    const smear = p => { for (const L of runs) if (L.well) p == null ? L.well.style.removeProperty("--sm") : L.well.style.setProperty("--sm", p); };   // a lane's smear trails its run
+    smear(0);
+    // where the label is on screen right now, as a matrix on the flying word
+    const target = f => {
+      const A = at.get(f.lab), Pt = proj(...A.p), c = Math.cos(A.a), s = Math.sin(A.a);
+      return [c, s, -s, c, ox + Pt[0] + A.ox, oy + Pt[1] + A.oy];
+    };
+    const skip = document.createElement("button"); skip.type = "button"; skip.className = "skip"; skip.textContent = "Skip"; skip.style.opacity = 0; document.body.appendChild(skip);
+    let done = false, raf = 0;
+    const finish = reason => {
+      if (done) return; done = true; introFinish = null; cancelAnimationFrame(raf);
+      skip.remove(); C.cv.remove(); fly.forEach(f => f.el.remove());
+      root.classList.remove("intro-full", "intro-rise");
+      lbls.forEach(e => { e.classList.remove("wait"); e.style.opacity = ""; });
+      moved.forEach(c => { c.el.style.opacity = ""; put(c, 1); }); smear();
+      head.style.opacity = ""; plane.style.opacity = "";
+      [rx, rz] = fin; setT();
+      introOn = false;
+      stage.classList.remove("introing");
+      store.set("ak-intro-seen", "1");
+      removeEventListener("keydown", onKey, true);
+      removeEventListener("wheel", onSkip);
+      removeEventListener("resize", onSkip);
+      removeEventListener("ak-theme", onTheme);
+      removeEventListener("pointerdown", onPress, true);
+      if (onDone) onDone(reason);
+    };
+    introFinish = finish;
+    const onKey = e => { if (e.key === "Tab") return; if (e.target.closest && e.target.closest(".replay, .rp")) return; finish("skip"); };
+    const onPress = e => { if (e.target !== skip && !e.target.closest(".replay, .rp") && performance.now() - born > 400) finish("skip"); };
+    const onSkip = () => finish("skip");
+    // … and the Gel is laid out again for the new theme once the intro has let go (its own ak-theme listener ran while it still held on)
+    const onTheme = () => { finish("skip"); if (!$("#mapView").hidden && !morphing) layout(); };
+    skip.addEventListener("click", onSkip);
+    addEventListener("pointerdown", onPress, true);
+    addEventListener("keydown", onKey, true);
+    addEventListener("wheel", onSkip, { passive: true });
+    addEventListener("resize", onSkip);
+    addEventListener("ak-theme", onTheme);   // the field is drawn in the page's colours as they were
+
+    const at01 = (t, [a, d]) => ease(clamp((t - a) / d, 0, 1));
+    const show = (e, o) => { e.classList.remove("wait"); e.style.opacity = o.toFixed(3); };
+    let ruled = false, gone = false, rising = false, settling = false;
+    const T0 = performance.now();
+    const frame = now => {
+      if (done) return;
+      const t = now - T0;
+      if (t < IT.head[0] + late) skip.style.opacity = at01(t, IT.fill).toFixed(3);
+      if (!ruled) { const tk = at01(t, IT.tok); C.draw(clamp((t - IT.fill[0]) / IT.fill[1], 0, 1), tk); ruled = tk >= 1; }
+      if (!gone) { const o = (1 - .8 * at01(t, IT.lit)) * (1 - at01(t, IT.out)); C.cv.style.opacity = o.toFixed(3); if (t >= IT.out[0] + IT.out[1]) { gone = true; C.cv.remove(); } }
+      if (t >= IT.show[0]) {
+        if (!rising) { rising = true; root.classList.add("intro-rise"); }
+        if (t < IT.rise[0] + IT.rise[1] + 100) {
+          plane.style.opacity = at01(t, IT.show).toFixed(3);
+          if (rises) { rx = mix(IT.rise[2], fin[0], at01(t, IT.rise)); setT(); }
+        }
+      }
+      for (const f of fly) {
+        if (f.done) continue;
+        const p = at01(t, [f.t0, f.d]);
+        if (p >= 1) { f.done = true; f.el.remove(); f.lab.classList.remove("wait"); continue; }
+        f.el.style.opacity = at01(t, [IT.lit[0] + 12 * f.n, IT.lit[1]]).toFixed(3);
+        if (p > 0) {
+          const q = dec(target(f), f.box), o = {}; for (const key in q) o[key] = mix(f.d0[key], q[key], p);
+          f.el.style.transform = `matrix(${comp(o, f.box).map(v => v.toFixed(4)).join(",")})`;
+          if (f.lg) f.lg.style.opacity = p.toFixed(3);
+          // it turns from the accent to ink late, in the landing's slow tail: still the accent while it crosses a slab, ink as it settles
+          f.el.style.color = `color-mix(in srgb, var(--ink) ${(100 * p ** 4).toFixed(1)}%, var(--mark))`;
+        }
+      }
+      for (const L of runs) {
+        if (L.done || t < L.t0) continue;
+        const o = at01(t, [L.t0, IT.load]).toFixed(3), p = at01(t, [L.t0 + IT.load, IT.run]);
+        for (const c of L.els) { c.el.style.opacity = o; put(c, p); }
+        if (L.well) L.well.style.setProperty("--sm", p.toFixed(3));
+        L.done = p >= 1;
+      }
+      for (const h of heads) if (t >= h.t0 && !h.done) { const o = at01(t, [h.t0, 450]); show(h.el, o); h.done = o >= 1; }
+      if (t >= IT.rest[0] + late) { const o = at01(t - late, IT.rest); for (const e of rest) show(e, o); }
+      if (t >= IT.head[0] + late) {
+        if (!settling) { settling = true; head.style.opacity = 0; root.classList.remove("intro-full"); }
+        const o = at01(t - late, IT.head); head.style.opacity = o.toFixed(3); skip.style.opacity = (1 - o).toFixed(3);
+      }
+      if (t >= IT.end + late) { finish("done"); return; }
+      raf = requestAnimationFrame(frame);
+    };
+    raf = requestAnimationFrame(frame);
+  }
+  if (document.fonts) document.fonts.ready.then(() => { if (!introOn && !$("#mapView").hidden && !morphing) layout(); });
+  addEventListener("ak-theme", () => { if (!introOn && !$("#mapView").hidden && !morphing) layout(); });
+  const cellRects = i => (!$("#mapView").hidden && cols.includes(i)) ? ORDER.map(r => rectOf(cellEl[i][r])) : null;
+  const viewport = () => { const sr = stage.getBoundingClientRect(); return [sr.left + stage.clientLeft, sr.top + stage.clientTop]; };
+  // item i's cells as one strip on screen: the affine that lays a bw×bh box along its column, topic 0 first
+  function stripAff(i, [bw, bh]) {
+    const [vx, vy] = viewport(), q = (x, y) => { const p = proj(x, y); return [p[0] + vx, p[1] + vy]; };
+    const [x0, y0, w, h] = cellBox(i, 0), [x1, y1, w1, h1] = cellBox(i, d - 1);
+    const [A, B, C] = [q(x0 + w, y0), q(x0 + w, y1 + h1), q(x0, y0)];
+    return [(B[0] - A[0]) / bw, (B[1] - A[1]) / bw, (C[0] - A[0]) / bh, (C[1] - A[1]) / bh, A[0], A[1]];
+  }
+  const hide = on => { stage.style.visibility = on ? "hidden" : ""; };
+  // where each name's text starts on screen, for words that fly from it
+  function poses() {
+    const [vx, vy] = viewport();
+    return new Map(cols.map(i => {
+      const nm = $(".nm", itemEl[i]), cs = getComputedStyle(nm), font = parseFloat(cs.fontSize), lh = parseFloat(cs.lineHeight) || font, A = at.get(itemEl[i]);
+      if (A && A.a) {
+        const ls = getComputedStyle(itemEl[i]), px = parseFloat(ls.paddingLeft) || 0, py = (parseFloat(ls.paddingTop) || 0) + (lh - font) / 2, Pt = proj(...A.p), c = Math.cos(A.a), s = Math.sin(A.a);
+        return [i, { text: ITEMS[i].name, font, P: [vx + Pt[0] + A.ox + px * c - py * s, vy + Pt[1] + A.oy + px * s + py * c], u: [0, 0], a: A.a }];
+      }
+      const r = nm.getBoundingClientRect();
+      return [i, { text: ITEMS[i].name, font, P: [r.left, r.top + (lh - font) / 2], u: [0, 0], a: 0 }];
+    }));
+  }
+  // a slanted name keeps its angle: its rect is the label's own top-left corner on screen, plus the angle
+  const labelRects = list => list.filter(el => !el.classList.contains("off")).map(el => {
+    const A = at && at.get(el);
+    if (!A || !A.a) return { el, rect: rectOf(el) };
+    const o = el.parentElement.getBoundingClientRect(), Pt = proj(...A.p);
+    return { el, rect: { left: o.left + Pt[0] + A.ox, top: o.top + Pt[1] + A.oy, a: A.a } };
+  });
+  return { get top() { return pageTop; }, get stacked() { return PH; }, layout, refilter, intro, endIntro, hide, poses, rebuild, cellRects, stripAff,
+    visible: () => cols.slice(), vals: i => ITEMS[i].weights.slice(),
+    // what fades in a switch: the topics and headings
+    headRects: () => labelRects([...catEl.flat(), ...Object.values(grpEl)]),
+    focus: i => { clearFocus(); if (i != null) setFocus(i); }, get introOn() { return introOn; },
+    get pose() { return [rx, rz]; },
+    get pivot() { const r = stage.getBoundingClientRect(); return [r.left + stage.clientLeft + SW / 2 + dx, r.top + stage.clientTop + dy]; } };
+}
+
+/* ---------- timeline: the same gel, run over time. One slab: its lanes are the work in date order, its ladder marks the years
+   (a band at each January, named), and every entry is a band, the Gel view's, at the month it started: level with a ladder band, it is
+   that January. Later is further from the wells. Work that ran into later years has one more band, a step dimmer, at each of those Januaries.
+   Work the data dates by year alone is one faint band at the middle of that year, between months, so no month is implied.
+   The units, the pose and the labels are the Gel view's */
+let SEQ = null;
+function buildTimeline() {
+  const stage = $("#tl"), plane = $("#tlPlane"), NS = "http://www.w3.org/2000/svg";
+  const CELL = 28, GAP = 4, P = CELL + GAP, PAD = 10, LG = 10, LEADG = 8, TOP = 18, WELL = [2, 4], LW = 16, LH = 2, LAD = LW + 10, MY = 16;
+  let LP = P, CW = CELL, BW = CW - 2 * WELL[0];   // across, as the Gel view: the lane pitch (the knobs --lane and --lane-flat), a lane's width, and a well's and a band's
+  const YR = .2, CT = .5, MAXK = 1.5, MP0 = 11, MPF = .55, MPMAX = [14, 44], NMK0 = .6, CARDH = 150;   // a year-only band's weight, and a later year's (a dated band is a full one: band()); largest scale; plane units per month (times MPF straight on, where no tilt shortens the run), and the most they stretch to (desktop, phones); names shrink to this at most
+  const mi = s => +s.slice(0, 4) * 12 + +s.slice(5, 7) - 1, today = new Date(), NOW = today.getFullYear() * 12 + today.getMonth();
+  // where an entry's band sits, in months: the month it started; dated by year alone (yr), the middle of that year, never past this month
+  const AT = ITEMS.map(it => { const a = mi(it.start), y = a - a % 12; return it.end == null ? { m: Math.max(y, Math.min(y + 5.5, NOW)), yr: true } : { m: a }; });
+  // work that runs into later years: one more band, a step dimmer, at each later January it was still going (to its end, or this month)
+  const CONT = ITEMS.map(it => { const a = mi(it.start), z = it.end === "present" ? NOW : it.end ? mi(it.end) : a, js = []; for (let m = a - a % 12 + 12; m <= z; m += 12) js.push(m); return js; });
+  // the run: from the January of the year the first band is in to the month of the last, a ladder band at every January
+  const M0 = Math.min(...AT.map(s => Math.floor(s.m) - Math.floor(s.m) % 12)), M1 = Math.max(...AT.map(s => Math.ceil(s.m)), ...CONT.flat()) + 1, MARKS = [];
+  for (let m = M0; m < M1; m += 12) MARKS.push(m);
+
+  plane.innerHTML = "";
+  const add = (tag, cls, host = plane) => { const el = document.createElement(tag); el.className = cls; host.appendChild(el); return el; };
+  const box = (cls, w, h) => { const el = add("div", cls); el.style.width = w + "px"; el.style.height = h + "px"; return el; };
+  const plateEl = [add("div", "slab"), add("div", "plate")];
+  const arcs = document.createElementNS(NS, "svg"); arcs.setAttribute("class", "arcs"); arcs.setAttribute("aria-hidden", "true"); stage.appendChild(arcs);
+  const labs = add("div", "labs", stage);
+  const ladEl = MARKS.map(() => box("lad", LW, LH)), ladWell = box("well lw", LW, WELL[1]);
+  const markEl = MARKS.map(m => { const el = add("div", "lbl clbl", labs); el.textContent = m / 12; return el; });
+  const wellEl = ITEMS.map(() => box("well", 0, WELL[1]));
+  // a band is as thick as a Gel band of its weight (BH: its core), in a box BM taller each side for its smile and soft edges; where the slab is
+  // drawn small (phones) a band's core keeps a floor on screen, MINPX for the faintest and more for a heavier one, so the three kinds stay apart
+  const MINPX = 1.5, BM = 7, tb = w => { const el = add("div", "tb"); el.style.cssText = band(w); return el; }, wOf = i => AT[i].yr ? YR : 1;
+  const BH = w => Math.max(CELL * thick(w), MINPX * (.6 + 2 * w) / (k * Math.hypot(Math.sin(rz * RAD), Math.cos(rz * RAD) * Math.cos(rx * RAD))));
+  const sizeTb = (el, w) => { el.style.setProperty("--T", BH(w).toFixed(2) + "px"); el.style.height = (BH(w) + 2 * BM).toFixed(2) + "px"; };
+  const bandEl = ITEMS.map((_, i) => tb(wOf(i)));
+  const contEl = CONT.map(js => js.map(() => tb(CT))), bandsOf = i => [bandEl[i], ...contEl[i]];
+  const laneEl = ITEMS.map((_, i) => { const el = add("div", "lane"); el.dataset.i = i; return el; });
+  const itemEl = ITEMS.map((it, i) => {
+    const b = add("button", "lbl ilbl sl", labs); b.type = "button"; b.innerHTML = `<span class="nm">${logoHTML(it)}${esc(it.name)}</span>`; b.dataset.i = i;
+    b.setAttribute("aria-label", `${it.title}, ${it.date_label}`);
+    b.addEventListener("focus", () => { if (b.matches(":focus-visible")) setFocus(i); });
+    b.addEventListener("blur", () => clearFocus());
+    return b;
+  });
+
+  /* ---------- geometry: the Gel view's orthographic tilt, fixed. Across, a lane every LP after the ladder; along, MP to a month */
+  let SW = 0, k = 1, dx = 0, dy = 0, rx = 58, rz = -13, SLANT = 35, MP = MP0, W = 0, H = 0, PH = false, cols = [], size = new Map(), at = new Map();
+  const X = [];
+  const proj = (px, py) => {
+    const ox = px - W / 2, oy = py - H / 2, z = rz * RAD;
+    return [SW / 2 + dx + k * (ox * Math.cos(z) - oy * Math.sin(z)), dy + k * (ox * Math.sin(z) + oy * Math.cos(z)) * Math.cos(rx * RAD)];
+  };
+  const sz = el => size.get(el) || [0, 0];
+  const measure = () => { size = new Map(); for (const el of [...markEl, ...cols.map(i => itemEl[i])]) size.set(el, [el.offsetWidth, el.offsetHeight]); };
+  const yOf = m => PAD + TOP + (m - M0 + .5) * MP;   // the middle of a month
+  const bandBox = i => [X[i] + WELL[0], yOf(AT[i].m) - BH(wOf(i)) / 2 - BM, BW, BH(wOf(i)) + 2 * BM];   // a band's box, its margins in
+  // label anchors: a plane point, an offset in px and an angle. The dates beside the ladder, the names rising from their wells
+  function place() {
+    H = 2 * PAD + TOP + (M1 - M0) * MP; at = new Map();
+    MARKS.forEach((m, n) => { const [w, h] = sz(markEl[n]); at.set(markEl[n], { p: [0, yOf(m)], ox: -(LG + w), oy: -h / 2, a: 0 }); });
+    const sn = Math.sin(SLANT * RAD), cn = Math.cos(SLANT * RAD);
+    for (const i of cols) { const h = sz(itemEl[i])[1]; at.set(itemEl[i], { p: [X[i] + CW / 2, 0], ox: -h * sn - 4, oy: -h * cn - LEADG, a: -SLANT * RAD }); }
+  }
+  // what the slab, its edge and every label cover on the stage
+  function extent() {
+    const b = { L: 1e9, T: 1e9, R: -1e9, B: -1e9 }, grow = ([x, y]) => { b.L = Math.min(b.L, x); b.R = Math.max(b.R, x); b.T = Math.min(b.T, y); b.B = Math.max(b.B, y); };
+    for (const [x, y] of [[0, 0], [W, 0], [0, H], [W, H]]) { const q = proj(x, y); grow(q); grow([q[0], q[1] + 6 * k * Math.sin(rx * RAD)]); }
+    for (const [el, A] of at) {
+      const [w, h] = sz(el), q = proj(...A.p), c = Math.cos(A.a), s = Math.sin(A.a);
+      for (const [x, y] of [[0, 0], [w, 0], [0, h], [w, h]]) grow([q[0] + A.ox + x * c - y * s, q[1] + A.oy + x * s + y * c]);
+    }
+    return b;
+  }
+  function layout() {
+    SW = stage.clientWidth;
+    if (!SW) return;
+    PH = rowLayout(SW); stage.classList.toggle("ph", PH);
+    [rx, rz] = restPose(PH); SLANT = knob("--map-slant", 35);
+    cols = visibleItems().map(it => ITEMS.indexOf(it)).sort((a, b) => AT[a].m - AT[b].m || a - b);   // the lanes: by where their bands sit, then file order
+    ITEMS.forEach((_, i) => { const on = cols.includes(i); for (const e of [itemEl[i], wellEl[i], ...bandsOf(i), laneEl[i]]) e.classList.toggle("off", !on); itemEl[i].inert = !on; });
+    if (cols.some((i, n) => n && !(itemEl[cols[n - 1]].compareDocumentPosition(itemEl[i]) & 4))) for (const i of cols) labs.appendChild(itemEl[i]);   // the Tab order is the lanes', left to right
+    const mp0 = MP0 * (isFlat() ? MPF : 1), LANE = Math.max(P, knob(isFlat() ? "--lane-flat" : "--lane", P)), slant = SLANT;
+    // the largest slab that keeps every label on the page and the whole view on one screen (phones keep CARDH under it for the card)
+    const r = stage.getBoundingClientRect(), spill = PH ? 0 : Math.max(0, r.left - 12), room = Math.max(280, innerHeight - (r.top + scrollY) - 18 - (PH ? CARDH : 0));
+    const ok = () => { place(); const b = extent(); return b.R - b.L <= SW + 2 * spill && b.B - b.T + 2 * MY <= room; };
+    const fitK = () => { k = fit(kk => { k = kk; return ok(); }, .3, MAXK); };
+    // neighbouring names stay apart: across their slant, two wells are this far from each other
+    const apart = () => k * LP * (Math.cos(rz * RAD) * Math.sin(SLANT * RAD) + Math.sin(rz * RAD) * Math.cos(rx * RAD) * Math.cos(SLANT * RAD));
+    const tallest = () => Math.max(0, ...cols.map(i => sz(itemEl[i])[1]));
+    const nmk = () => parseFloat(stage.style.getPropertyValue("--nmk")) || 1;
+    // a narrow slab: the names rise more steeply, then shrink
+    const clear = () => {
+      while (apart() < tallest() - 1 && SLANT < 60) { SLANT += 5; fitK(); }
+      if (apart() < tallest() - 1) { stage.style.setProperty("--nmk", Math.max(NMK0, nmk() * apart() / tallest()).toFixed(3)); measure(); fitK(); }
+    };
+    // the slab with its lanes on a pitch of lp
+    const solve = lp => {
+      LP = lp; CW = lp - GAP; BW = CW - 2 * WELL[0]; cols.forEach((i, n) => { X[i] = PAD + LAD + n * LP; });
+      W = 2 * PAD + LAD + Math.max(1, cols.length) * LP - GAP; MP = mp0; dx = dy = 0; SLANT = slant;
+      stage.style.setProperty("--nmk", 1); measure();
+      fitK(); clear();
+      // then the run stretches into the height that is left, for as long as that costs the slab little of its width
+      const k0 = k, mp = fit(m => { MP = m; fitK(); return k >= .85 * k0; }, mp0, MPMAX[+PH], 6);
+      MP = mp; fitK(); if (isFlat()) { clear(); } place();   // straight on, the stretch can cost the names their room: they are cleared again
+      return k;
+    };
+    // the lanes widen only as far as the page allows: to the widest pitch, LANE at most, that costs the slab little of its scale
+    // (phones: none), and the names no slant and no size
+    stage.style.setProperty("--lk", 1);
+    const k0 = solve(P), s0 = SLANT, n0 = nmk(), lp = fit(l => solve(l) >= (PH ? .995 : .93) * k0 && SLANT <= s0 && nmk() >= n0, P, LANE, 6);
+    if (LP !== lp) solve(lp);
+    // then the labels grow with the lanes, as the Gel view's do
+    const FITR = knob("--label-fit", 0), LKMAX = Math.max(1, knob("--label-max", 1));
+    if (LKMAX > 1 && cols.length) {
+      const k1 = k, fs0 = parseFloat(getComputedStyle(itemEl[cols[0]].querySelector(".nm")).fontSize);
+      const grow = l => { stage.style.setProperty("--lk", l.toFixed(3)); measure(); fitK(); return k >= LKTOL * k1 && fs0 * l <= FITR * k * LP * Math.cos(rz * RAD) && (cols.length < 2 || apart() - tallest() >= LKGAP * fs0 * l); };
+      const l = fit(grow, 1, LKMAX, 6);
+      grow(l); place();
+    }
+    const b = extent();
+    dx = (SW - (b.R - b.L)) / 2 - b.L; dy = MY - b.T;
+    stage.style.height = Math.ceil(b.B - b.T + 2 * MY) + "px";
+    stage.style.setProperty("--nb", Math.max(0, (apart() - tallest()) / 2).toFixed(1) + "px");
+    const put = (el, x, y) => { el.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px)`; };
+    plane.style.width = W + "px"; plane.style.height = H + "px"; plane.style.setProperty("--w", BW);
+    plateEl.forEach(e => { e.style.width = W + "px"; e.style.height = H + "px"; });
+    put(ladWell, PAD, PAD); MARKS.forEach((m, n) => put(ladEl[n], PAD, yOf(m) - LH / 2));
+    for (const i of cols) {
+      const [x, y, , h] = bandBox(i);
+      put(wellEl[i], X[i] + WELL[0], PAD); for (const el of [wellEl[i], ...bandsOf(i)]) el.style.width = BW + "px";
+      put(bandEl[i], x, y); sizeTb(bandEl[i], wOf(i));
+      contEl[i].forEach((el, n) => { put(el, x, yOf(CONT[i][n]) - BH(CT) / 2 - BM); sizeTb(el, CT); });
+      wellEl[i].style.setProperty("--lane-h", (yOf(Math.max(AT[i].m, ...CONT[i])) + BM - PAD - WELL[1]).toFixed(1) + "px");   // the smear: through the lane's last band
+      put(laneEl[i], X[i] - GAP / 2, 0); laneEl[i].style.width = LP + "px"; laneEl[i].style.height = H + "px";
+    }
+    setT();
+    clearFocus();
+  }
+  // the slab and its labels at the pose (rx, rz)
+  function setT() {
+    plane.style.transform = `translate(${(SW / 2 + dx).toFixed(2)}px, ${dy.toFixed(2)}px) scale(${k.toFixed(4)}) rotateX(${rx.toFixed(3)}deg) rotateZ(${rz.toFixed(3)}deg) translate(${-W / 2}px, ${-H / 2}px)`;
+    for (const [el, A] of at) { const q = proj(...A.p); el.style.transform = `translate(${(q[0] + A.ox).toFixed(2)}px, ${(q[1] + A.oy).toFixed(2)}px)${A.a ? ` rotate(${A.a.toFixed(4)}rad)` : ""}`; }
+  }
+
+  /* ---------- hover: the lane stays, the rest steps back; a guide runs from the ladder to its band (none for a year alone) */
+  let focus = null, clearT = 0;
+  function clearFocus(keep) { if (!keep) CARD.hide(); focus = null; arcs.replaceChildren(); stage.classList.remove("focus"); $$(".hl", stage).forEach(e => e.classList.remove("hl")); }
+  function setFocus(i) {
+    if (focus === i || morphing) return;
+    clearFocus(true); focus = i;
+    stage.classList.add("focus");
+    for (const e of [itemEl[i], wellEl[i], ...bandsOf(i)]) e.classList.add("hl");
+    if (!AT[i].yr) {
+      const y = yOf(AT[i].m), [x1, y1] = proj(PAD + LW + 3, y), [x2, y2] = proj(X[i] + 1, y), p = document.createElementNS(NS, "path");
+      p.setAttribute("d", `M${x1.toFixed(1)},${y1.toFixed(1)} L${x2.toFixed(1)},${y2.toFixed(1)}`); p.setAttribute("stroke-opacity", ".8"); p.setAttribute("pathLength", "1");
+      arcs.appendChild(p);
+      if (!REDUCED) p.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration: 220, easing: EASE, fill: "backwards" });
+    }
+    const rects = list => list.map(e => e.getBoundingClientRect()), sr = stage.getBoundingClientRect(), b = extent();
+    CARD.show(ITEMS[i], unite(rects([itemEl[i], wellEl[i], ...(PH ? [laneEl[i]] : bandsOf(i))])), rects([$("#head"), ...markEl, ...cols.map(j => itemEl[j])]), PH ? null : [sr.left + b.L, sr.left + b.R], rects([plateEl[1]]));
+  }
+  // a click opens the piece; a finger shows it first (its lane and card), then opens it, as on the Gel view
+  function tap(i) { if (COARSE && focus !== i) { setFocus(i); return; } clearFocus(); openPanel(ITEMS[i]); }
+  const hit = e => e.target.closest(".lane:not(.off), .ilbl:not(.off)");
+  // lanes and names are narrower than a finger: a tap goes to whatever is under the point the finger lifted from, before the browser adjusts it
+  let touchAt = null;
+  stage.addEventListener("pointerup", e => { touchAt = e.pointerType === "touch" ? [e.clientX, e.clientY, e.timeStamp] : null; }, true);
+  const tapped = e => { const el = touchAt && performance.now() - touchAt[2] < 800 && document.elementFromPoint(touchAt[0], touchAt[1]); return hit(el && stage.contains(el) ? { target: el } : e); };
+  const unhover = () => { clearFocus(); const a = document.activeElement; if (a && labs.contains(a) && a.matches(":focus-visible")) setFocus(+a.dataset.i); };
+  stage.addEventListener("pointermove", e => {
+    if (e.pointerType !== "mouse") return;
+    const t = hit(e);
+    if (t) { clearTimeout(clearT); clearT = 0; setFocus(+t.dataset.i); }
+    else if (focus != null && !clearT) clearT = setTimeout(() => { clearT = 0; unhover(); }, 90);
+  });
+  stage.addEventListener("pointerleave", e => { if (e.pointerType !== "mouse") return; clearTimeout(clearT); clearT = 0; unhover(); });
+  stage.addEventListener("click", e => { const t = tapped(e); if (t && !multi && !morphing) tap(+t.dataset.i); });
+  document.addEventListener("click", e => { if (COARSE && focus != null && !e.target.closest(".lane, .ilbl, .hcard")) clearFocus(); });
+  for (const ev of ["resize", "ak-theme"]) addEventListener(ev, () => { if (!$("#seqView").hidden && !morphing) layout(); });
+  if (document.fonts) document.fonts.ready.then(() => { if (!$("#seqView").hidden && !morphing) layout(); });
+
+  /* ---------- the run: on the way in, the ladder and every band leave their wells and migrate to their dates */
+  function run() {
+    if (REDUCED) return Promise.resolve();
+    const go = (el, x, h, n) => done(anim(el, [{ transform: `translate(${x.toFixed(2)}px, ${PAD}px) scaleY(${(WELL[1] / h).toFixed(4)})`, opacity: 0 }, { opacity: 1, offset: .2 }, { transform: el.style.transform, opacity: 1 }],
+      { duration: T.xl, delay: T.s + 20 * n, easing: EASE, fill: "backwards" }));
+    return Promise.all([...ladEl.map(el => go(el, PAD, WELL[1], 0)), ...cols.flatMap((i, n) => { const [x, , , h] = bandBox(i); return [...bandsOf(i).map((el, c) => go(el, x, c ? BH(CT) + 2 * BM : h, n + 1)),
+        done(anim(wellEl[i], [{ transform: "scaleY(0)" }, { transform: "scaleY(1)" }], { duration: T.xl, delay: T.s + 20 * (n + 1), easing: EASE, fill: "backwards", pseudoElement: "::after" }))]; }),
+      ...[...markEl, ...cols.map(i => itemEl[i])].map(e => done(anim(e, [{ opacity: 0 }, { opacity: 1 }], { duration: T.m, delay: T.s, fill: "backwards" })))]);
+  }
+  // the work shown changes (a filter): on show, the slab fades out, is laid out over the new set and fades back in; into or out of
+  // a filter it comes back turning, from the pose it left in to the one it rests in now
+  async function refilter() {
+    if ($("#seqView").hidden || REDUCED) { layout(); return; }
+    const a = [rx, rz];
+    await fadeTo(stage, 1, 0, T.s * OUT);
+    layout();
+    const b = [rx, rz], turn = a[0] !== b[0] || a[1] !== b[1];
+    await Promise.all([fadeTo(stage, 0, 1, T.s), turn && tween(T.m, t => { rx = mix(a[0], b[0], ease(t)); rz = mix(a[1], b[1], ease(t)); setT(); })]);
+  }
+  return { layout, run, refilter, get stacked() { return PH; }, visible: () => cols.slice(),
+    // the panel's strip leaves from the piece's band, cut into one slice per topic
+    bandRects: i => { if ($("#seqView").hidden || !cols.includes(i)) return null; const r = rectOf(bandEl[i]); return ORDER.map((_, n) => slice(r, n)); } };
+}
+
+/* ---------- skills: the resume's stack as a model, stages bottom to top like a forward pass, the base under them all.
+   A skill lights the work it was used in and the skills it works with; a piece of work lights its skills across the stack, the arrows
+   between them as a path, and the links among them. */
+let SKL = null;
+function buildSkills(D) {
+  const sk = $("#sk"), NS = "http://www.w3.org/2000/svg";
+  const stages = D.stages.map((b, s) => ({ ...b, s })), base = { ...D.base, s: -1 };
+  const used = new Map(Object.entries(D.used).map(([x, ids]) => [x, ids.map(id => ITEMS.findIndex(it => it.id === id)).filter(i => i >= 0)]));
+  const skillsOf = ITEMS.map(() => []);
+  for (const [x, is] of used) for (const i of is) skillsOf[i].push(x);
+  // skill → skill: one feeds or is built on the other (drawn without direction)
+  const edges = (D.edges || []), nbrsOf = x => edges.filter(e => e.includes(x)).map(([a, b]) => a === x ? b : a);
+  const chipEl = new Map(), stageOf = new Map(), blkEl = [], slEl = [], arEl = [];
+  sk.innerHTML = "";
+  const stack = document.createElement("div"); stack.className = "stack"; sk.appendChild(stack);
+  const add = (cls, tag = "div") => { const e = document.createElement(tag); e.className = cls; stack.appendChild(e); return e; };
+  // top of the page is the top of the stack: last stage first
+  const blocks = [...stages].reverse().concat(base);
+  blocks.forEach((b, n) => {
+    if (b === base) add("sar", "i");   // the base feeds the first stage: same arrow, same spacing
+    else if (n) arEl[b.s] = add("sar", "i");   // the arrow from this stage up into the one above
+    const l = add("stl", "span"); l.textContent = b.label; l.setAttribute("aria-hidden", "true"); slEl[b.s + 1] = l;
+    const k = add("blk" + (b === base ? " base" : "")); k.setAttribute("role", "group"); k.setAttribute("aria-label", b.label); blkEl[b.s + 1] = k;
+    for (const x of b.skills) {
+      const live = used.has(x), c = document.createElement(live ? "button" : "span");
+      c.className = "chip"; c.textContent = x; c.dataset.k = x;
+      if (live) { c.type = "button"; c.setAttribute("aria-label", `${x}: ${used.get(x).map(i => ITEMS[i].name).join(", ")}${nbrsOf(x).length ? `; with ${nbrsOf(x).join(", ")}` : ""}`); }
+      k.appendChild(c); chipEl.set(x, c); stageOf.set(x, b.s);
+    }
+  });
+  const its = document.createElement("div"); its.className = "its"; its.setAttribute("aria-label", "Alexander Kim's work"); sk.appendChild(its);
+  const itEl = ITEMS.map((it, i) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "it" + (i && it.type !== ITEMS[i - 1].type ? " g0" : ""); b.dataset.i = i;
+    b.innerHTML = `<span class="nm">${esc(it.name)}</span>${logoHTML(it)}`;
+    b.setAttribute("aria-label", `${it.title}, ${it.date_label}${skillsOf[i].length ? `: ${skillsOf[i].join(", ")}` : ""}`);
+    its.appendChild(b); return b;
+  });
+  const links = document.createElementNS(NS, "svg"); links.setAttribute("class", "sklinks"); links.setAttribute("aria-hidden", "true"); sk.appendChild(links);
+  const wires = document.createElementNS(NS, "svg"); wires.setAttribute("class", "wires"); wires.setAttribute("aria-hidden", "true"); sk.appendChild(wires);
+
+  let L = null;
+  function layout() {
+    const SW = sk.clientWidth; if (!SW) return;
+    sk.classList.remove("col"); sk.style.minHeight = "";
+    const gap = clamp(Math.round(SW * .12), 64, 200);
+    sk.style.setProperty("--skg", gap + "px");
+    const col = stack.offsetWidth + gap + its.offsetWidth > SW;
+    sk.classList.toggle("col", col);
+    const top = sk.getBoundingClientRect().top + scrollY;
+    if (!col) sk.style.minHeight = Math.max(0, Math.floor(innerHeight - top - 16)) + "px";
+    L = { col };
+    if (sel) light(sel, false);
+  }
+
+  /* ---------- selection: { k: skill } or { i: item } */
+  let sel = null, clearT = 0;
+  const same = (a, b) => a && b && a.k === b.k && a.i === b.i;
+  function clear() {
+    sk.classList.remove("sel"); wires.replaceChildren(); links.replaceChildren();
+    $$(".on, .src, .nb", sk).forEach(e => e.classList.remove("on", "src", "nb"));
+  }
+  const curve = (svg, d, n, draw) => {
+    const p = document.createElementNS(NS, "path"); p.setAttribute("d", d); p.setAttribute("pathLength", "1"); svg.appendChild(p);
+    if (draw && !REDUCED) p.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration: 220, delay: n * 25, easing: EASE, fill: "backwards" });
+  };
+  function wire(b, it, n, draw) {
+    const s = sk.getBoundingClientRect(), r = blkEl[b + 1].getBoundingClientRect(), q = itEl[it].querySelector(".nm").getBoundingClientRect();
+    const x1 = r.right - s.left, y1 = r.top + r.height / 2 - s.top, x2 = q.left - s.left - 8, y2 = q.top + q.height / 2 - s.top, dx = (x2 - x1) * .5;
+    curve(wires, `M${x1.toFixed(1)},${y1.toFixed(1)} C${(x1 + dx).toFixed(1)},${y1.toFixed(1)} ${(x2 - dx).toFixed(1)},${y2.toFixed(1)} ${x2.toFixed(1)},${y2.toFixed(1)}`, n, draw);
+  }
+  // links between skills. Rows apart: from the facing edges, leaving and arriving upright. Side by side: an arc over the row when
+  // the first feeds rightwards, under it when leftwards, as tall as it is long. Each chip side spreads its ends along its width:
+  // links to other rows in the order of where they go, arcs outside them with the nearer inside, so nothing crosses at a chip
+  function drawLinks(es, draw) {
+    const s = sk.getBoundingClientRect(), R = new Map(), rect = x => R.get(x) || R.set(x, chipEl.get(x).getBoundingClientRect()).get(x);
+    const mid = x => { const r = rect(x); return r.left + r.width / 2; }, f = v => v.toFixed(1), BIG = 1e5;
+    const ls = es.map(([a, b]) => {
+      const A = rect(a), B = rect(b);
+      if (A.bottom <= B.top || B.bottom <= A.top) { const [p, q] = A.top < B.top ? [a, b] : [b, a]; return { p, q, ps: "bottom", qs: "top" }; }
+      const up = A.left < B.left, [p, q] = up ? [a, b] : [b, a], side = up ? "top" : "bottom";
+      return { p, q, ps: side, qs: side, arc: true, up };
+    });
+    const ports = new Map(), at = (k, v) => (ports.get(k) || ports.set(k, []).get(k)).push(v);
+    for (const l of ls) {
+      const d = Math.abs(mid(l.q) - mid(l.p));
+      at(l.p + "|" + l.ps, { l, end: "px", key: l.arc ? BIG - d : mid(l.q) });
+      at(l.q + "|" + l.qs, { l, end: "qx", key: l.arc ? d - BIG : mid(l.p) });
+    }
+    for (const [k, ends] of ports) {
+      const r = rect(k.slice(0, k.lastIndexOf("|")));
+      ends.sort((u, v) => u.key - v.key).forEach((e, n) => { e.l[e.end] = r.left + r.width * (n + 1) / (ends.length + 1) - s.left; });
+    }
+    ls.forEach((l, n) => {
+      const P = rect(l.p), Q = rect(l.q), x1 = l.px, x2 = l.qx;
+      let d;
+      if (!l.arc) { const y1 = P.bottom - s.top, y2 = Q.top - s.top, m = (y2 - y1) / 2; d = `M${f(x1)},${f(y1)} C${f(x1)},${f(y1 + m)} ${f(x2)},${f(y2 - m)} ${f(x2)},${f(y2)}`; }
+      else {
+        const h = clamp((x2 - x1) * .22, 8, 34) * (l.up ? -1 : 1), y = (l.up ? Math.min(P.top, Q.top) : Math.max(P.bottom, Q.bottom)) - s.top;
+        d = `M${f(x1)},${f(y)} C${f(x1)},${f(y + h)} ${f(x2)},${f(y + h)} ${f(x2)},${f(y)}`;
+      }
+      curve(links, d, n, draw);
+    });
+  }
+  function light(v, draw = true) {
+    clear(); if (!v) return;
+    sk.classList.add("sel");
+    const ks = v.k != null ? [v.k] : skillsOf[v.i], is = v.k != null ? (used.get(v.k) || []).filter(i => shown.has(i)) : [v.i];
+    ks.forEach(x => chipEl.get(x).classList.add("on"));
+    if (v.k != null) chipEl.get(v.k).classList.add("src");
+    is.forEach(i => itEl[i].classList.add("on"));
+    const lit = [...new Set(ks.map(x => stageOf.get(x)))].sort((a, b) => a - b);
+    lit.forEach(s => slEl[s + 1].classList.add("on"));
+    // the path: every arrow between the lowest and the highest lit stage
+    const up = lit.filter(s => s >= 0);
+    for (let s = up[0]; up.length > 1 && s < up[up.length - 1]; s++) arEl[s].classList.add("on");
+    // the links: a skill's to each skill it works with (lit beside it); a piece of work's among its own skills
+    const live = x => !chipEl.get(x).classList.contains("out");
+    const es = edges.filter(([a, b]) => live(a) && live(b) && (v.k != null ? a === v.k || b === v.k : ks.includes(a) && ks.includes(b)));
+    if (v.k != null) es.forEach(e => chipEl.get(e[0] === v.k ? e[1] : e[0]).classList.add("nb"));
+    if (L) drawLinks(es, draw);
+    if (!L || L.col) return;
+    if (v.k != null) is.forEach((i, n) => wire(stageOf.get(v.k), i, n, draw));
+    else lit.forEach((s, n) => wire(s, v.i, n, draw));
+  }
+  function select(v) {
+    if (same(v, sel) || (!v && !sel)) return;
+    sel = v; light(v);   // no hover card here: anywhere it fits, it covers the stack it is lighting
+  }
+  const target = e => {
+    const c = e.target.closest && e.target.closest("button.chip, .it");
+    if (!c || !sk.contains(c)) return null;
+    return c.classList.contains("it") ? { i: +c.dataset.i } : { k: c.dataset.k };
+  };
+  const focused = () => { const a = document.activeElement; return a && sk.contains(a) && a.matches(":focus-visible") ? target({ target: a }) : null; };
+  const unhover = () => select(focused());
+  sk.addEventListener("pointermove", e => {
+    if (e.pointerType !== "mouse" || morphing) return;
+    const v = target(e);
+    if (v) { clearTimeout(clearT); clearT = 0; select(v); }
+    else if (sel && !clearT) clearT = setTimeout(() => { clearT = 0; unhover(); }, 90);
+  });
+  sk.addEventListener("pointerleave", e => { if (e.pointerType !== "mouse") return; clearTimeout(clearT); clearT = 0; unhover(); });
+  sk.addEventListener("focusin", e => { if (e.target.matches(":focus-visible")) select(target(e)); });
+  sk.addEventListener("click", e => {
+    const v = target(e); if (!v || multi || morphing) return;
+    if (v.i != null && same(v, sel)) openPanel(ITEMS[v.i]); else select(v);
+  });
+  document.addEventListener("click", e => {
+    if (state.mode !== "skl" || isOpen() || morphing || !sel) return;
+    if (!e.target.closest("button.chip, .it, .panel, .scrim")) select(null);
+  });
+  addEventListener("keydown", e => {
+    if (state.mode !== "skl" || morphing || isOpen() || e.key !== "Escape" || !sel) return;
+    select(null); if (sk.contains(document.activeElement)) document.activeElement.blur();
+  }, true);   // capture: runs before the panel's own Esc, so closing the panel doesn't also clear
+  for (const ev of ["resize", "ak-theme"]) addEventListener(ev, () => { if (!$("#sklView").hidden && !morphing) layout(); });
+  if (document.fonts) document.fonts.ready.then(() => { if (!$("#sklView").hidden && !morphing) layout(); });
+
+  /* ---------- the filter: only that group's work answers; skills none of it used step back */
+  let shown = new Set();
+  function refilter() {
+    shown = new Set(visibleItems().map(it => ITEMS.indexOf(it)));
+    itEl.forEach((b, i) => { const on = shown.has(i); b.classList.toggle("out", !on); b.inert = !on; });
+    for (const [x, c] of chipEl) { const on = (used.get(x) || []).some(i => shown.has(i)); c.classList.toggle("out", !on); if (c.tagName === "BUTTON") c.inert = !on; }
+    if (sel && (sel.i != null ? !shown.has(sel.i) : chipEl.get(sel.k).classList.contains("out"))) select(null);
+    else if (sel) light(sel, false);
+  }
+  refilter();
+
+  /* ---------- for the switches: where each name sits, and the stack's pieces bottom first */
+  function nameAt(i) {
+    const nm = itEl[i].querySelector(".nm"), r = nm.getBoundingClientRect(), cs = getComputedStyle(nm), font = parseFloat(cs.fontSize), lh = parseFloat(cs.lineHeight) || font;
+    return { P: [r.left, r.top + (lh - font) / 2], u: [0, 0], a: 0, font };
+  }
+  const pieces = () => [...stack.children].reverse();
+  const reset = () => { select(null); sk.classList.remove("mo-l"); pieces().forEach(e => { e.getAnimations().forEach(a => a.cancel()); }); };
+  return { layout, select, reset, nameAt, refilter, pieces, fs: () => parseFloat(getComputedStyle(itEl[0]).fontSize),
+    get sel() { return sel; }, get col() { return L && L.col; }, used, skillsOf,
+    itemRect: i => (!$("#sklView").hidden && i >= 0) ? rectOf(itEl[i].querySelector(".nm")) : null };
+}
+
+/* ------------------------------------------------ intro replay */
+// one replay at a time: mid-intro it starts over, mid-switch it waits for the Map, and presses during the fade-out are dropped
+let replayT = 0, replayQ = false;
+function replayIntro() {
+  if (!MAP || REDUCED) return;
+  if (MAP.introOn) { MAP.intro(clearIntroHash); return; }
+  if (replayT || replayQ) return;
+  closePanel(); CARD.hide();
+  if (morphing) { replayQ = true; request({ mode: "map" }); return; }
+  scrollTo(0, 0);
+  if (state.mode !== "map") { want.mode = "map"; syncPressed(); swapView("map"); MAP.intro(clearIntroHash); return; }
+  const st = $("#stage"); st.classList.add("fadeout");
+  replayT = setTimeout(() => { replayT = 0; MAP.intro(clearIntroHash); }, T.s);
+}
+const clearIntroHash = () => { if (location.hash === "#intro") history.replaceState(null, "", location.pathname + location.search + baseHash()); };
+for (const b of $$(".replay, .rp")) b.addEventListener("click", replayIntro);
+if (REDUCED) $(".rp").remove();   // no intro to replay
+
+const AWAY = 30 * 60e3, HIDDEN = 10 * 60e3;
+const seen = () => store.set("ak-last", String(Date.now()));
+setInterval(() => { if (!document.hidden) seen(); }, 60e3);
+addEventListener("pagehide", seen);
+let hiddenAt = 0;
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) { hiddenAt = Date.now(); seen(); return; }
+  if (hiddenAt && Date.now() - hiddenAt > HIDDEN && MAP && canIntro() && !isOpen()) replayIntro();
+  hiddenAt = 0; seen();
+});
+
+/* ------------------------------------------------ boot */
+const introLikely = canIntro() && (location.hash === "#intro" || !store.get("ak-intro-seen") || Date.now() - (+store.get("ak-last") || 0) > AWAY);
+if (introLikely) root.classList.add("intro-full"); else root.classList.remove("intro-full");
+fetch("{% endraw %}{{ site.data.cool.work_json }}{% raw %}").then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(data => {
+  // work.json → the names this page uses: group → type, start → event.date, axes[k].W → weights
+  ITEMS = data.items.map(it => ({ ...it, type: it.group, event: { date: it.start } }));
+  AXES = data.axes; GROUPS = data.groups;
+  { const h = hashId(); if (isGroup(h)) state.filter = want.filter = h; }
+  $("[data-filters]").innerHTML = [["all", "All"], ...GROUPS].map(([g, w]) => `<button type="button" data-filter="${esc(g)}" aria-pressed="false">${esc(w)}</button>`).join("");
+  for (const b of $$("[data-filter]")) b.addEventListener("click", () => setFilter(b.dataset.filter));
+  const site = data.site;
+  if (COARSE) $(".name").textContent = site.name; else $(".replay").textContent = site.name;
+  $("#thesis").textContent = site.tagline;
+  $("[data-links]").innerHTML = site.links.map(([t, u, k]) => `<a href="${esc(u)}"${u.startsWith("mailto:") ? "" : ' target="_blank" rel="noopener"'}>${ICON[k] || ""}${esc(t)}</a>`).join("");{% endraw %}{% if site.posts.size > 0 %}
+  if (BLOG) { const a = `<a href="${esc(BLOG)}">${ICON.blog}Blog</a>`, m = $("[data-links] a[href^='mailto:']"); if (m) m.insertAdjacentHTML("beforebegin", a); else $("[data-links]").insertAdjacentHTML("beforeend", a); }{% endif %}{% raw %}
+  // Topics only for now: the other axes stay in the data, unshown
+  useAxis(Math.max(0, AXES.findIndex(a => a.id === "topics")));
+  MAP = buildMap();
+  MAP.rebuild();
+  MAP.layout();
+  SEQ = buildTimeline();
+  if (data.skills) SKL = buildSkills(data.skills); else $("[data-mode=skl]").remove();
+  syncPressed();
+  const h = hashId();
+  const away = Date.now() - (+store.get("ak-last") || 0) > AWAY;
+  seen();
+  // ?view=timeline or ?view=skills opens on that view (no intro: it belongs to the Gel)
+  const v0 = { timeline: "seq", skills: SKL && "skl" }[new URLSearchParams(location.search).get("view")];
+  if (v0) { want.mode = v0; swapView(v0); syncPressed(); }
+  if (byId(h)) { root.classList.remove("intro-full"); openPanel(byId(h), true); }
+  else {
+    if (location.hash && h !== "intro" && !isGroup(h)) clearHash();
+    if (!v0 && canIntro() && (h === "intro" || !store.get("ak-intro-seen") || away)) MAP.intro(clearIntroHash);
+    else { root.classList.remove("intro-full"); clearIntroHash(); }
+  }
+  // test hook
+  window.__site = { state, want, ITEMS, AXES, setMode, setFilter, setGel, get busy() { return morphing; }, get AX() { return AX; }, MAP, SEQ, SKL };
+  document.body.dataset.ready = "1";
+}).catch(err => {
+  console.warn("work.json failed to load:", err);
+  root.classList.remove("intro-full");
+  $("#stage").innerHTML = `<p style="padding:16px;color:var(--mute)">Couldn’t load data/work.json.</p>`;
+});
+})();
+</script>
+{% endraw %}
+</body>
+</html>

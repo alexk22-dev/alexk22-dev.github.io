@@ -1,0 +1,25 @@
+{
+  "logos": [
+    {
+      "file": "/assets/cool/logos/orgs/msk.svg",
+      "dark": "/assets/cool/logos/orgs/msk-dark.svg"
+    },
+    {
+      "file": "/assets/cool/logos/venues/acro.png",
+      "plate": true,
+      "note": "needs a light plate on dark (black ACRO text + white bands)"
+    },
+    {
+      "file": "/assets/cool/logos/venues/asco.png",
+      "small": "/assets/cool/logos/venues/asco-small.png",
+      "plate": true,
+      "note": "small = the ASCO lettering cropped from the official header logo; navy, so a light plate on dark"
+    },
+    {
+      "file": "/assets/cool/logos/venues/astro.png",
+      "small": "/assets/cool/logos/venues/astro-small.png",
+      "plate": true,
+      "note": "small = the ASTRO lettering cropped from the official header logo (tagline row removed); blue/green, so a light plate on dark"
+    }
+  ]
+}

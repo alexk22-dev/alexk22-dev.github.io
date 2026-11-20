@@ -1,0 +1,81 @@
+{
+  "id": "msk",
+  "group": "research",
+  "name": "MSK",
+  "context": "Language models for radiology reports",
+  "summary": "Lightweight LLM pipeline for CT chest radiology reports",
+  "start": "2025-01",
+  "end": "present",
+  "title": "Research Intern",
+  "org": "Advanced Computing and Oncology Laboratory, Department of Radiation Oncology, Memorial Sloan Kettering Cancer Center",
+  "bullets": [
+    "Developed a lightweight large language model pipeline that extracts thoracic cancer progression from CT chest radiology reports and runs on a personal computer without GPU acceleration.",
+    "Extended the same architecture to automate referral decision-making from radiology reports.",
+    "Conducted statistical analysis of the MSK-CHORD clinicogenomic dataset to identify molecular determinants of breast cancer metastasis.",
+    "Contributing to longitudinal immune profiling analysis for a thymus biomarker study using mixed-effects and joint longitudinal-survival models."
+  ],
+  "logo": "/assets/cool/logos/orgs/msk.svg",
+  "links": [],
+  "topics": [
+    {
+      "entry": "Oncology",
+      "weight": 0.9,
+      "source": "CV: Department of Radiation Oncology; thoracic cancer progression; breast cancer metastasis"
+    },
+    {
+      "entry": "NLP & LLMs",
+      "weight": 1.0,
+      "source": "CV: Developed a lightweight large language model pipeline that extracts thoracic cancer progression from CT chest radiology reports and runs on a personal computer without GPU acceleration."
+    },
+    {
+      "entry": "Clinical data",
+      "weight": 0.8,
+      "source": "CV: CT chest radiology reports; the MSK-CHORD clinicogenomic dataset"
+    },
+    {
+      "entry": "Statistics",
+      "weight": 0.6,
+      "source": "CV: Conducted statistical analysis of the MSK-CHORD clinicogenomic dataset to identify molecular determinants of breast cancer metastasis. Contributing to longitudinal immune profiling analysis for a thymus biomarker study using mixed-effects and joint longitudinal-survival models."
+    },
+    {
+      "entry": "Clinical workflow",
+      "weight": 0.3,
+      "source": "CV: Extended the same architecture to automate referral decision-making from radiology reports."
+    }
+  ],
+  "methods": [
+    {
+      "entry": "Local LLM pipelines",
+      "weight": 1.0,
+      "source": "CV: Developed a lightweight large language model pipeline that extracts thoracic cancer progression from CT chest radiology reports and runs on a personal computer without GPU acceleration."
+    },
+    {
+      "entry": "Statistical analysis",
+      "weight": 1.0,
+      "source": "CV: Conducted statistical analysis of the MSK-CHORD clinicogenomic dataset to identify molecular determinants of breast cancer metastasis."
+    },
+    {
+      "entry": "Mixed-effects models",
+      "weight": 0.7,
+      "source": "CV: Contributing to longitudinal immune profiling analysis for a thymus biomarker study using mixed-effects and joint longitudinal-survival models."
+    },
+    {
+      "entry": "Joint longitudinal-survival models",
+      "weight": 0.7,
+      "source": "CV: Contributing to longitudinal immune profiling analysis for a thymus biomarker study using mixed-effects and joint longitudinal-survival models."
+    }
+  ],
+  "tools": [],
+  "output": [
+    {
+      "entry": "Research lab role",
+      "weight": 1.0,
+      "source": "CV: Research Intern, Advanced Computing and Oncology Laboratory, Department of Radiation Oncology"
+    },
+    {
+      "entry": "Working system",
+      "weight": 1.0,
+      "source": "CV: Developed a lightweight large language model pipeline that extracts thoracic cancer progression from CT chest radiology reports and runs on a personal computer without GPU acceleration."
+    }
+  ]
+}

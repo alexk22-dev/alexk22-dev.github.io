@@ -1,0 +1,74 @@
+{
+  "id": "progression-abstract",
+  "group": "publication",
+  "name": "ASCO Quality 2025",
+  "context": "Published abstract and poster",
+  "summary": "LLMs on personal computers for identifying lung cancer progression",
+  "start": "2025-10",
+  "end": "2025-10",
+  "title": "Leveraging large language models on personal computers for automated identification of lung cancer progression in radiology reports",
+  "org": "JCO Oncology Practice 21(10_suppl), 624 (2025)",
+  "description": "Alexander Kim*, David Gibbes Miller, Victor Lee, Anish Kumar Simhal, Yuzhong Jeff Meng, A.J. Book, Alexis Chidi, Daniel Richard Gomez, Tafadzwa Lawrence Chaunzwa. (* denotes presenting author)",
+  "bullets": [
+    "Poster presentation, ASCO Quality Care Symposium, Chicago, Illinois, October 2025."
+  ],
+  "logo": "/assets/cool/logos/venues/asco.png",
+  "links": [
+    {
+      "label": "doi:10.1200/OP.2025.21.10_suppl.624",
+      "url": "https://doi.org/10.1200/OP.2025.21.10_suppl.624"
+    }
+  ],
+  "topics": [
+    {
+      "entry": "Oncology",
+      "weight": 0.9,
+      "source": "CV: automated identification of lung cancer progression; JCO Oncology Practice"
+    },
+    {
+      "entry": "NLP & LLMs",
+      "weight": 1.0,
+      "source": "CV: Leveraging large language models on personal computers"
+    },
+    {
+      "entry": "Clinical data",
+      "weight": 0.8,
+      "source": "CV: lung cancer progression in radiology reports"
+    },
+    {
+      "entry": "Clinical workflow",
+      "weight": 0.7,
+      "source": "Owner decision 2026-11-19: same Clinical workflow weight as the ACRO 2026 poster"
+    }
+  ],
+  "methods": [
+    {
+      "entry": "Local LLM pipelines",
+      "weight": 1.0,
+      "source": "CV: Leveraging large language models on personal computers"
+    }
+  ],
+  "tools": [],
+  "output": [
+    {
+      "entry": "Published abstract",
+      "weight": 1.0,
+      "source": "CV: Published abstracts: JCO Oncology Practice 21(10_suppl), 624 (2025)"
+    },
+    {
+      "entry": "Poster",
+      "weight": 1.0,
+      "source": "CV: Poster presentation, ASCO Quality Care Symposium, Chicago, Illinois, October 2025"
+    },
+    {
+      "entry": "First author",
+      "weight": 1.0,
+      "source": "CV: Alexander Kim*, David Gibbes Miller, ... (listed first)"
+    },
+    {
+      "entry": "Presenting author",
+      "weight": 1.0,
+      "source": "CV: Alexander Kim* (* denotes presenting author)"
+    }
+  ]
+}

@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="{{ site.lang }}">
+  <!-- Head -->
+  <head>
+    {% if page.redirect %}
+      {% if page.redirect == true %}
+        {% assign redirect = site.baseurl | append: '/' %}
+      {% elsif page.redirect contains '://' %}
+        {% assign redirect = page.redirect %}
+      {% else %}
+        {% assign redirect = page.redirect | relative_url %}
+      {% endif %}
+      <meta http-equiv="refresh" content="3; url={{ redirect }}">
+    {% endif %}
+    {% include head.liquid %}
+  </head>
+
+  <!-- Body -->
+  <body class="{% if site.navbar_fixed %}fixed-top-nav{% endif %} {% unless site.footer_fixed %}sticky-bottom-footer{% endunless %}">
+    <script>
+      (function () {
+        // Show the branded intro loader only on a visitor's first ever load.
+        // Returning visitors (and all subsequent page navigations) skip it.
+        var seen = null;
+        try {
+          seen = window.localStorage.getItem("ryk-loader-seen");
+        } catch (e) {
+          seen = null;
+        }
+
+        if (seen) {
+          // Already seen — never add the loader class, and drop the element so
+          // there is zero chance of a flash before content paints.
+          var skipLoader = document.getElementById("ryk-loader");
+          if (skipLoader && skipLoader.parentNode) {
+            skipLoader.parentNode.removeChild(skipLoader);
+          }
+          return;
+        }
+
+        try {
+          window.localStorage.setItem("ryk-loader-seen", "1");
+        } catch (e) {}
+
+        document.body.classList.add("has-page-loader");
+        window.__rykLoaderStartedAt = Date.now();
+        window.__rykLoaderMinDuration = 1470;
+        window.setTimeout(function () {
+          document.body.classList.remove("has-page-loader");
+          var staleLoader = document.getElementById("ryk-loader");
+          if (staleLoader) {
+            staleLoader.classList.add("is-hidden");
+            window.setTimeout(function () {
+              staleLoader.remove();
+            }, 460);
+          }
+        }, 2400);
+      })();
+    </script>
+
+    <style id="ryk-loader-critical">
+      /* Always reserve scrollbar space so toggling the loader's overflow:hidden
+         never changes page width — kills the brief "top bar gets longer" flash. */
+      html {
+        scrollbar-gutter: stable;
+      }
+
+      body.has-page-loader {
+        overflow: hidden;
+      }
+
+      .ryk-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 2500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: scale(1);
+        background:
+          radial-gradient(circle at 15% 15%, rgba(37, 99, 235, 0.18), transparent 38%),
+          radial-gradient(circle at 85% 85%, rgba(59, 130, 246, 0.14), transparent 42%),
+          linear-gradient(145deg, #020617, #0b1220 52%, #101827 100%);
+        transition: opacity 0.38s ease, visibility 0.38s ease, transform 0.38s ease;
+        -webkit-backdrop-filter: blur(4px);
+        backdrop-filter: blur(4px);
+      }
+
+      body.has-page-loader .ryk-loader {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+
+      .ryk-loader.is-hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: scale(1.015);
+      }
+
+      .ryk-loader__content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 1.4rem 1.6rem 1.2rem;
+        border-radius: 1.15rem;
+        border: 1px solid rgba(147, 197, 253, 0.2);
+        background: linear-gradient(155deg, rgba(15, 23, 42, 0.72), rgba(15, 23, 42, 0.38));
+        box-shadow:
+          0 18px 60px rgba(2, 6, 23, 0.55),
+          inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      }
+
+      .ryk-loader__wordmark {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 0.12rem;
+        font-size: clamp(2.1rem, 6.3vw, 3.35rem);
+        font-family: "Cormorant Garamond", "Garamond", "Georgia", "Times New Roman", serif;
+        font-weight: 600;
+        line-height: 1;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        color: #dbeafe;
+        text-shadow: 0 10px 26px rgba(2, 6, 23, 0.48);
+        font-feature-settings: "liga" 1, "kern" 1;
+        white-space: nowrap;
+      }
+
+      .ryk-loader__char {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(18px) scale(0.94);
+        filter: blur(4px);
+        animation: ryk-char-in 0.82s cubic-bezier(0.22, 0.9, 0.28, 1) forwards;
+      }
+
+      .ryk-loader__char:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+
+      .ryk-loader__char:nth-child(2) {
+        animation-delay: 0.28s;
+      }
+
+      .ryk-loader__char:nth-child(3) {
+        animation-delay: 0.46s;
+      }
+
+      .ryk-loader__line {
+        position: relative;
+        display: block;
+        width: min(38vw, 180px);
+        height: 3px;
+        border-radius: 999px;
+        background: rgba(148, 163, 184, 0.24);
+        overflow: hidden;
+      }
+
+      .ryk-loader__line-fill {
+        position: absolute;
+        left: -42%;
+        width: 42%;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #38bdf8, #3b82f6);
+        box-shadow: 0 0 18px rgba(59, 130, 246, 0.5);
+        animation: ryk-line-sweep 1.22s ease-in-out infinite;
+      }
+
+      @keyframes ryk-char-in {
+        from {
+          opacity: 0;
+          transform: translateY(18px) scale(0.94);
+          filter: blur(4px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+          filter: blur(0);
+        }
+      }
+
+      @keyframes ryk-line-sweep {
+        0% {
+          left: -42%;
+        }
+
+        50% {
+          left: 100%;
+        }
+
+        100% {
+          left: 100%;
+        }
+      }
+
+      html[data-theme='light'] .ryk-loader {
+        background:
+          radial-gradient(circle at 12% 12%, rgba(37, 99, 235, 0.14), transparent 34%),
+          radial-gradient(circle at 88% 84%, rgba(56, 189, 248, 0.12), transparent 40%),
+          linear-gradient(145deg, #dbeafe, #eff6ff 60%, #f8fafc 100%);
+      }
+
+      html[data-theme='light'] .ryk-loader__content {
+        border-color: rgba(37, 99, 235, 0.2);
+        background: linear-gradient(155deg, rgba(255, 255, 255, 0.84), rgba(239, 246, 255, 0.72));
+        box-shadow: 0 20px 50px rgba(30, 41, 59, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      }
+
+      html[data-theme='light'] .ryk-loader__wordmark {
+        color: #1e3a8a;
+      }
+
+      html[data-theme='light'] .ryk-loader__line {
+        background: rgba(37, 99, 235, 0.2);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .ryk-loader,
+        .ryk-loader * {
+          animation: none !important;
+          transition: none !important;
+        }
+
+        .ryk-loader__char {
+          opacity: 1;
+          transform: none;
+          filter: none;
+        }
+
+        .ryk-loader__line-fill {
+          left: 0;
+          width: 100%;
+        }
+      }
+    </style>
+
+    <div id="ryk-loader" class="ryk-loader" aria-hidden="true">
+      <div class="ryk-loader__content">
+        <div class="ryk-loader__wordmark" aria-label="RYK">
+          <span class="ryk-loader__char">R</span>
+          <span class="ryk-loader__char">Y</span>
+          <span class="ryk-loader__char">K</span>
+        </div>
+        <span class="ryk-loader__line" aria-hidden="true">
+          <span class="ryk-loader__line-fill"></span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Header -->
+    {% include header.liquid %}
+
+    <!-- Content -->
+    <div class="container mt-5{% if page.margin_math and page.toc.sidebar != 'right' %} margin-math{% endif %}" role="main">
+      {% if page.toc and page.toc.sidebar %}
+        {% if page.toc.sidebar == 'right' %}
+          <div class="row">
+            <!-- main content area -->
+            <div class="col-sm-9">{{ content }}</div>
+            <!-- sidebar, which will move to the top on a small screen -->
+            <div class="col-sm-3">
+              <nav id="toc-sidebar" class="sticky-top"></nav>
+            </div>
+          </div>
+        {% else %}
+          <div class="row">
+            <!-- sidebar, which will move to the top on a small screen -->
+            <div class="col-sm-3">
+              <nav id="toc-sidebar" class="sticky-top"></nav>
+            </div>
+            <!-- main content area -->
+            <div class="col-sm-9">{{ content }}</div>
+          </div>
+        {% endif %}
+      {% else %}
+        {{ content }}
+      {% endif %}
+    </div>
+
+    <!-- Footer -->
+    {% comment %}{% include footer.liquid %}{% endcomment %}
+
+    <!-- JavaScripts -->
+    {% include scripts.liquid %}
+  </body>
+</html>

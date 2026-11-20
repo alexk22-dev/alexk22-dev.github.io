@@ -1,0 +1,59 @@
+{
+  "id": "organotropism-abstract",
+  "group": "publication",
+  "name": "ASTRO 2025",
+  "context": "Published abstract and poster",
+  "summary": "Molecular determinants of breast cancer metastatic organotropism",
+  "start": "2025-09",
+  "end": "2025-09",
+  "title": "Molecular Determinants of Breast Cancer Metastatic Organotropism",
+  "org": "International Journal of Radiation Oncology, Biology, Physics 123(1), e458–e459 (2025)",
+  "description": "E. Yang, J. McFadden, Alexander Kim, B. Garomsa, J. Meng, David Gibbes Miller, Anish Kumar Simhal, Tafadzwa Lawrence Chaunzwa.",
+  "bullets": [
+    "Poster presentation, ASTRO Annual Meeting, San Francisco, California, September 2025."
+  ],
+  "logo": "/assets/cool/logos/venues/astro.png",
+  "links": [
+    {
+      "label": "doi:10.1016/j.ijrobp.2025.06.2538",
+      "url": "https://doi.org/10.1016/j.ijrobp.2025.06.2538"
+    }
+  ],
+  "topics": [
+    {
+      "entry": "Oncology",
+      "weight": 1.0,
+      "source": "CV: Breast Cancer Metastatic Organotropism; International Journal of Radiation Oncology, Biology, Physics"
+    },
+    {
+      "entry": "Clinical data",
+      "weight": 1.0,
+      "source": "CV: MSK entry: Conducted statistical analysis of the MSK-CHORD clinicogenomic dataset to identify molecular determinants of breast cancer metastasis."
+    },
+    {
+      "entry": "Statistics",
+      "weight": 1.0,
+      "source": "CV: MSK entry: Conducted statistical analysis of the MSK-CHORD clinicogenomic dataset to identify molecular determinants of breast cancer metastasis."
+    }
+  ],
+  "methods": [
+    {
+      "entry": "Statistical analysis",
+      "weight": 0.8,
+      "source": "CV: MSK entry: Conducted statistical analysis of the MSK-CHORD clinicogenomic dataset to identify molecular determinants of breast cancer metastasis."
+    }
+  ],
+  "tools": [],
+  "output": [
+    {
+      "entry": "Published abstract",
+      "weight": 1.0,
+      "source": "CV: Published abstracts: International Journal of Radiation Oncology, Biology, Physics 123(1), e458–e459 (2025)"
+    },
+    {
+      "entry": "Poster",
+      "weight": 1.0,
+      "source": "CV: Poster presentation, ASTRO Annual Meeting, San Francisco, California, September 2025"
+    }
+  ]
+}

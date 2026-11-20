@@ -1,0 +1,200 @@
+/*******************************************************************************
+ * Publication cards (markup in _layouts/bib.liquid)
+ ******************************************************************************/
+
+.publications {
+  ol.bibliography {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+// Same surface as .project-card so papers sit in the site's card language.
+.pub-card {
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--global-divider-color);
+  border-radius: 6px;
+  background: var(--global-card-bg-color);
+  line-height: 1.5;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &:hover {
+    border-color: var(--global-theme-color);
+    box-shadow: 0 4px 12px rgba(29, 78, 216, 0.08);
+  }
+}
+
+// Inside the CV's own card, drop the nested card chrome and use dividers.
+.card .publications {
+  margin-bottom: 0 !important;
+
+  ol.bibliography {
+    gap: 0;
+  }
+
+  .pub-card {
+    padding: 1rem 0;
+    border: none;
+    border-top: 1px solid var(--global-divider-color);
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+}
+
+.pub-title {
+  font-size: 1.05rem !important;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.4rem 0 !important;
+  color: var(--global-theme-color);
+
+  a {
+    color: inherit !important;
+    text-decoration: none !important;
+
+    &:hover {
+      text-decoration: underline !important;
+    }
+  }
+}
+
+.pub-authors {
+  font-size: 0.88rem;
+  color: var(--global-text-color-light);
+  margin: 0 0 0.6rem 0 !important;
+
+  strong {
+    font-weight: 700;
+    color: var(--global-text-color);
+  }
+}
+
+.pub-venue {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+// Matches .tag / .project-tags on the home page.
+.pub-chip {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: 4px;
+  color: var(--global-theme-color);
+  background: rgba(29, 78, 216, 0.08);
+  border: 1px solid rgba(29, 78, 216, 0.1);
+}
+
+.pub-chip-status {
+  color: #15803d;
+  background: rgba(21, 128, 61, 0.08);
+  border-color: rgba(21, 128, 61, 0.18);
+}
+
+html[data-theme="dark"] .pub-chip-status {
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.1);
+  border-color: rgba(74, 222, 128, 0.22);
+}
+
+.pub-venue-full {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--global-text-color-light);
+  margin: 0.35rem 0 0 0 !important;
+}
+
+.pub-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.8rem;
+}
+
+// Small version of .contact-btn.
+.pub-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.65rem;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.5;
+  border: 1px solid var(--global-divider-color);
+  border-radius: 6px;
+  background: var(--global-card-bg-color);
+  color: var(--global-text-color) !important;
+  text-decoration: none !important;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease;
+
+  &:hover,
+  &[aria-expanded="true"] {
+    border-color: var(--global-theme-color);
+    color: var(--global-theme-color) !important;
+  }
+
+  &.pub-toggle::after {
+    content: "\25BE";
+    margin-left: 0.35rem;
+    font-size: 0.7rem;
+    transition: transform 0.2s ease;
+  }
+
+  &[aria-expanded="true"]::after {
+    transform: rotate(180deg);
+  }
+}
+
+.pub-panel {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border-left: 2px solid var(--global-theme-color);
+  background: rgba(29, 78, 216, 0.03);
+  border-radius: 0 4px 4px 0;
+
+  p {
+    margin: 0 !important;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: var(--global-text-color);
+  }
+
+}
+
+// Rouge already draws its own code box; don't nest it in the panel chrome.
+.pub-panel-bibtex {
+  padding: 0;
+  border: none;
+  background: none;
+
+  figure.highlight {
+    margin: 0;
+  }
+
+  pre,
+  pre code {
+    margin: 0;
+    font-size: 0.75rem;
+    white-space: pre-wrap !important;
+    overflow-wrap: anywhere;
+  }
+}
+
+.citation,
+.citation-number {
+  color: var(--global-theme-color);
+}

@@ -1,0 +1,10 @@
+---
+permalink: /robots.txt
+---
+User-agent: *
+Disallow:
+
+Sitemap: {{ site.baseurl | prepend: site.url }}/sitemap.xml
+
+# RSS feed (jekyll-feed)
+# Feed: {{ site.baseurl | prepend: site.url }}/feed.xml

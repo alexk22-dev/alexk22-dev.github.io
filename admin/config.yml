@@ -1,0 +1,650 @@
+# Sveltia CMS configuration — GitHub backend with an EXTERNAL OAuth provider.
+# This is NOT Netlify-hosted, so we do NOT use git-gateway.
+#
+# Sveltia CMS is a drop-in, config-compatible successor to Decap/Netlify CMS.
+# This config is intentionally Decap-compatible: the same `backend` block and
+# external OAuth provider (base_url + auth_endpoint) keep working unchanged.
+#
+# The site is built by Jekyll and deployed as prebuilt static files to Vercel.
+# Sveltia loads this file from /admin/config.yml at runtime in the browser.
+
+backend:
+  name: github
+  repo: RyanKim17920/RyanKim17920.github.io
+  branch: main
+
+  # --- EXTERNAL OAUTH PROVIDER -------------------------------------------------
+  # base_url is the ORIGIN (scheme + host, no trailing path) of the small OAuth
+  # service you deploy from the sibling `oauth/` folder as its OWN Vercel project.
+  # Sveltia starts the login flow by opening:  <base_url>/<auth_endpoint>
+  # i.e. with the values below:  https://YOUR-OAUTH-SERVICE.vercel.app/auth
+  # (this is the same Decap/Netlify-style handshake, so the OAuth service the
+  #  `oauth/` folder already deploys needs NO changes.)
+  #
+  # TODO(Ryan): replace the placeholder below with your deployed OAuth service
+  # origin (e.g. https://ryankim-cms-oauth.vercel.app). NO trailing slash.
+  base_url: https://ryankimmeoauth.vercel.app # TODO: set to your deployed oauth/ service origin
+  # auth_endpoint defaults to "auth" for the github backend (same default in
+  # Sveltia); stated explicitly here to match the path served by the oauth/
+  # service (/api/auth -> /auth).
+  auth_endpoint: auth
+
+  # --- COMMIT MESSAGE TEMPLATES ------------------------------------------------
+  # Custom commit messages so the repo history reads cleanly instead of using
+  # Sveltia's defaults. Nested under `backend`; per Sveltia these sub-keys are
+  # camelCased (unlike the rest of the config) and Sveltia supports the same six
+  # keys Decap does: create/update/delete/uploadMedia/deleteMedia/openAuthoring.
+  # Available template vars include {{collection}}, {{slug}}, {{path}}.
+  # Docs: https://sveltiacms.app/en/docs/backends  (and Decap parity:
+  #        https://decapcms.org/docs/backends-overview/)
+  commit_messages:
+    create: "{{collection}}: create {{slug}}"
+    update: "{{collection}}: update {{slug}}"
+    delete: "{{collection}}: delete {{slug}}"
+    uploadMedia: "media: upload {{path}}"
+    deleteMedia: "media: delete {{path}}"
+    openAuthoring: "{{message}}"
+
+# --- SITE BRANDING / LINKS -----------------------------------------------------
+# site_url: base URL of the published site; used by the CMS for various
+#   functionality (and to build live-content links). Sveltia supports it and
+#   would otherwise default to location.origin.
+# display_url: the URL the CMS links to from its top bar ("View live site");
+#   defaults to site_url if omitted. Set both for clarity.
+# Docs: https://sveltiacms.app/en/docs/customization  (Decap parity:
+#        https://decapcms.org/docs/configuration-options/)
+site_url: https://ryankim.me
+display_url: https://ryankim.me
+
+# logo: branding shown on the login/entrance page (a square image works best).
+#   Sveltia's preferred form is the `logo` object with `src` (an absolute path
+#   OR full URL is accepted); the older top-level `logo_url` is deprecated in
+#   Sveltia in favor of this. We point at the existing square favicon asset.
+#   Docs: https://sveltiacms.app/en/docs/customization#custom-logo
+logo:
+  src: /assets/img/ryk-favicon-v2.svg
+
+# Uploaded media (drag-drop images) are written to this repo path on commit.
+# This folder lives under assets/img/, which al-folio's jekyll-imagemagick
+# plugin watches to auto-generate responsive WebP variants. See SETUP.md.
+media_folder: "assets/img/blog"
+# public_folder is the URL prefix the CMS writes into Markdown for those images.
+public_folder: "/assets/img/blog"
+
+# --- DRAFT vs PUBLISH ---------------------------------------------------------
+# We do NOT use `publish_mode: editorial_workflow`. Sveltia CMS does not yet
+# support it: the official docs state "This feature from Netlify/Decap CMS is
+# not yet supported in Sveltia CMS. It will be added before the 1.0 release."
+# (https://sveltiacms.app/en/docs/workflows/editorial). Sveltia also targets a
+# single branch and cannot auto-create per-post PR branches, so there is no
+# clean way to keep a "draft" off `main` via the CMS today.
+#
+# Because EVERY commit to `main` auto-deploys, draft-vs-publish is instead done
+# the Jekyll-native way, via the `published` boolean front-matter field below.
+# Jekyll excludes any document with `published: false` from the build output
+# (https://jekyllrb.com/docs/front-matter/ — "published: false" / shown only
+# with the `--unpublished` flag, which CI does NOT pass). So a "draft" is still
+# committed to `main` (and is recoverable/editable in the CMS), but it does NOT
+# render on the live site. New posts default to published: false (draft); the
+# user flips the "Published (live)" toggle ON and saves to make it go live.
+
+collections:
+  - name: "blog"
+    label: "Blog Posts"
+    folder: "_posts"
+    create: true
+    # Filenames must follow Jekyll's YYYY-MM-DD-slug convention.
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    extension: "md"
+    format: "yaml-frontmatter"
+    # --- SORTING: newest first by default; date + title sortable --------------
+    # `sortable_fields` is the Decap key (also used by Sveltia). Sveltia extends
+    # it with an object form: a `fields` list plus a `default` ({field,
+    # direction}) so we can pre-select the default sort. `direction` accepts
+    # `ascending`/`descending`. Newest date first = date / descending.
+    # Docs: https://sveltiacms.app/en/docs/collections/entries  (Decap base key:
+    #        https://decapcms.org/docs/configuration-options/)
+    sortable_fields:
+      fields: [date, title]
+      default:
+        field: date
+        direction: descending
+    # --- DRAFT vs PUBLISHED FILTERS ------------------------------------------
+    # `view_filters` (Decap key, supported by Sveltia) adds quick filters to the
+    # entry list. Each entry is {label, field, pattern}; a YAML boolean pattern
+    # is matched against the `published` boolean (Decap's own docs use an
+    # unquoted boolean pattern for a draft flag). "Drafts" = published:false,
+    # "Published" = published:true.
+    # Docs: https://decapcms.org/docs/configuration-options/  (Sveltia parity +
+    #        extensions: https://sveltiacms.app/en/docs/collections/entries)
+    view_filters:
+      - label: "Drafts"
+        field: published
+        pattern: false
+      - label: "Published"
+        field: published
+        pattern: true
+    # Fields below match the al-folio post front matter inferred from
+    # _layouts/post.liquid and the existing _posts/ entry.
+    fields:
+      # layout is fixed to "post" so every entry renders with post.liquid.
+      - { label: "Layout", name: "layout", widget: "hidden", default: "post" }
+      # DRAFT vs PUBLISH toggle. `published: false` => Jekyll drops the post
+      # from the build, so it is committed to `main` but does NOT go live.
+      # Defaults to false so a brand-new post is a draft until you flip this on.
+      # Flip to true and save to publish (the next auto-deploy makes it live).
+      # `required: true` is CRITICAL: without it, Sveltia/Decap omits a boolean
+      # whose value equals its `default` (false) from the saved front matter.
+      # Jekyll treats a MISSING `published:` key as `true`, so toggling this OFF
+      # would silently leave the post live. `required: true` forces the key to
+      # always serialize (`published: false`), so OFF actually unpublishes.
+      # The mirror image also matters: a post whose front matter OMITS the key
+      # is live in Jekyll but reads as OFF in this widget (a missing value falls
+      # back to `default`). So every entry in _posts/ carries an EXPLICIT
+      # `published:` line — hand-written posts must include it too, or the CMS
+      # will show them as drafts and unpublish them on the next save.
+      - {
+          label: "Published (live)",
+          name: "published",
+          widget: "boolean",
+          default: false,
+          required: true,
+          hint: "OFF = draft (saved to the repo but NOT shown on the live site). Turn ON and save to publish.",
+        }
+      - { label: "Title", name: "title", widget: "string" }
+      # al-folio dates are written as "YYYY-MM-DD HH:MM:SS" with no timezone.
+      - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: "HH:mm:ss", format: "YYYY-MM-DD HH:mm:ss" }
+      - { label: "Description", name: "description", widget: "string", required: false }
+      # THUMBNAIL — and the only image UPLOAD BUTTON on this collection.
+      # _pages/blog.md renders `post.thumbnail` as the card image beside the
+      # post in the /blog listing, so this is a real theme feature, not a
+      # workaround. It doubles as the upload affordance the body field cannot
+      # offer: the body is raw-only (see the note on it below) and Sveltia
+      # disables the editor toolbar in raw mode, so this widget's
+      # "Select/Upload" button is the one place inside the post editor that can
+      # put a file into the repo. Upload here, then copy the resulting path
+      # into the body as ![alt](/assets/img/blog/name.png) if you also want the
+      # image inline. Uploads land in `media_folder` (assets/img/blog) and the
+      # stored value uses `public_folder` (/assets/img/blog), which is exactly
+      # what `{{ post.thumbnail | relative_url }}` needs.
+      - {
+          label: "Thumbnail",
+          name: "thumbnail",
+          widget: "image",
+          required: false,
+          hint: "Optional card image for the /blog list. Also the upload button: files added here land in assets/img/blog and can be referenced in the body as ![alt](/assets/img/blog/name.png).",
+        }
+      - { label: "Tags", name: "tags", widget: "list", required: false, hint: "Optional. Each tag links to /blog/tag/<tag>." }
+      - {
+          label: "Categories",
+          name: "categories",
+          widget: "list",
+          required: false,
+          hint: "Optional. Each category links to /blog/category/<category>.",
+        }
+      - {
+          label: "Show related posts",
+          name: "related_posts",
+          widget: "boolean",
+          required: false,
+          default: false,
+          hint: "Leave off to hide the related-posts section at the bottom.",
+        }
+      # Links this post to homepage items (stored as item ids; scripts/build_cool.py
+      # checks each id exists). Optional: an empty pick saves `related_items: []`.
+      - {
+          label: "Related homepage items",
+          name: "related_items",
+          widget: "relation",
+          collection: "homepage_items",
+          value_field: "id",
+          display_fields: ["name"],
+          search_fields: ["name", "title"],
+          multiple: true,
+          required: false,
+        }
+      # MATH: this site has `enable_math: false` globally in _config.yml and
+      # turns MathJax on per-post via `enable_math: true` in front matter.
+      # `_includes/scripts.liquid` also auto-detects math in the rendered HTML,
+      # so a post is no longer silently broken when this is forgotten — but
+      # leave it ON for math posts anyway, it is the explicit signal.
+      # The CMS preview pane DOES render equations (admin/preview.js).
+      - {
+          label: "Enable math (MathJax)",
+          name: "enable_math",
+          widget: "boolean",
+          required: false,
+          default: false,
+          hint: "Turn ON if this post uses LaTeX ($$...$$). The preview pane renders equations as you type.",
+        }
+      # Body uses Sveltia's enhanced editor. The `markdown` widget is a
+      # backward-compatible ALIAS of Sveltia's Lexical-based `richtext` widget,
+      # so keeping `markdown` here works.
+      #
+      # modes: ["raw"] — RAW ONLY, DELIBERATELY. This is the math-safe setting.
+      # The rich_text mode is Lexical-backed: it parses the Markdown into a node
+      # tree and re-serialises it on every save, which MANGLES the backslashes
+      # and braces in LaTeX (\text{...}, \\, {} all get escaped or dropped).
+      # Ordering the array ["raw", "rich_text"] only changed which mode opens
+      # FIRST — one click on the mode selector still silently corrupted every
+      # equation in the post. A single-element array removes the selector
+      # entirely, so the corruption is now unreachable rather than merely
+      # deprioritised. Sveltia documents [raw] as a supported value:
+      # https://sveltiacms.app/en/docs/fields/richtext
+      #
+      # TRADE-OFF — IMAGES. Sveltia's docs state the toolbar buttons "are
+      # disabled when `raw` mode is active", so the code-block and image INSERT
+      # BUTTONS are gone here. Fenced ``` blocks are just typed by hand.
+      #
+      # Paste/drop upload is ALSO gone, which an earlier version of this note
+      # left open as "UNVERIFIED". It is now verified, from Sveltia's source
+      # rather than by guessing: rich-text-editor.svelte wires `onpastecapture`
+      # and `ondrop` to the editor in BOTH modes, but the handler they call
+      # (`insertImages`) returns early unless the drop target
+      # `.matches('.lexical-root')` — and in raw mode the editor is a plain
+      # <textarea>, never `.lexical-root`. So dropping an image into the raw
+      # editor does nothing at all. Do NOT re-enable rich_text to get it back;
+      # the Lexical round-trip is what corrupts LaTeX. Use either the
+      # "Thumbnail" field above or the Assets tab — see admin/SETUP.md,
+      # "Adding images to a post", for the click-by-click steps.
+      #
+      # editor_components is intentionally NOT set here: it only configures
+      # toolbar buttons, which raw mode disables anyway.
+      - { label: "Body", name: "body", widget: "markdown", modes: ["raw"] }
+
+  # --- HOMEPAGE (cool view) -------------------------------------------------------
+  # The homepage is built from _cool/ by scripts/build_cool.py (its check_* methods
+  # are the schema). CI runs it on every save and refuses to deploy bad content,
+  # so a mistake here fails the build instead of breaking the live page.
+  # Sveltia saves cleared optional fields as "" (text), null (number) or [] (lists);
+  # build_cool.py treats all of those as "not set".
+  - name: "homepage_items"
+    label: "Homepage items"
+    label_singular: "Homepage item"
+    folder: "_cool/items"
+    format: "json"
+    extension: "json"
+    create: true
+    delete: true
+    # File name == id (build_cool.py requires it).
+    identifier_field: "id"
+    slug: "{{id}}"
+    summary: "{{name}} · {{start}}"
+    editor: { preview: false }
+    sortable_fields:
+      fields: [start, name, group]
+      default:
+        field: start
+        direction: descending
+    view_groups:
+      groups:
+        - { name: "section", label: "Section", field: "group" }
+      default: "section"
+    fields:
+      - label: "ID"
+        name: "id"
+        widget: "string"
+        hint: "The page link (#id) and the file name. Set it once; don't change it later."
+        pattern: ['^(?!(experience|research|project)$)[a-z0-9][a-z0-9-]*$', "Lowercase letters, digits and - only (and not experience, research or project)"]
+      - label: "Section"
+        name: "group"
+        widget: "select"
+        options:
+          - { label: "Experience", value: "experience" }
+          - { label: "Research", value: "research" }
+          - { label: "Projects", value: "project" }
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "Context (one line in the list)", name: "context", widget: "string" }
+      - { label: "Summary (hover card)", name: "summary", widget: "string" }
+      - label: "Start"
+        name: "start"
+        widget: "string"
+        hint: "YYYY-MM"
+        pattern: ['^\d{4}-(0[1-9]|1[0-2])$', "Use YYYY-MM, e.g. 2026-08"]
+      - label: "End"
+        name: "end"
+        widget: "string"
+        required: false
+        hint: "YYYY-MM, or present. Leave empty for a single date."
+        pattern: ['^(\d{4}-(0[1-9]|1[0-2])|present)$', "Use YYYY-MM (e.g. 2026-09) or present"]
+      - { label: "Panel heading", name: "title", widget: "string" }
+      - { label: "Organization line", name: "org", widget: "string" }
+      - label: "Roles (shown instead of the organization line)"
+        name: "roles"
+        widget: "list"
+        required: false
+        label_singular: "role"
+        summary: "{{title}}"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Start", name: "start", widget: "string", pattern: ['^\d{4}-(0[1-9]|1[0-2])$', "Use YYYY-MM, e.g. 2026-08"] }
+          - { label: "End", name: "end", widget: "string", required: false, pattern: ['^(\d{4}-(0[1-9]|1[0-2])|present)$', "Use YYYY-MM (e.g. 2026-09) or present"] }
+      - label: "Logo"
+        name: "logo"
+        widget: "image"
+        required: false
+        media_folder: "/assets/cool/logos"
+        public_folder: "/assets/cool/logos"
+      - { label: "Logo caption", name: "logo_note", widget: "string", required: false }
+      - { label: "Description", name: "description", widget: "text", required: false }
+      - label: "Bullets"
+        name: "bullets"
+        widget: "list"
+        required: false
+        label_singular: "bullet"
+        field: { label: "Bullet", name: "bullet", widget: "text" }
+      - label: "Links"
+        name: "links"
+        widget: "list"
+        required: false
+        label_singular: "link"
+        summary: "{{label}}"
+        fields:
+          - { label: "Label", name: "label", widget: "string" }
+          - { label: "URL", name: "url", widget: "string", pattern: ['^(https?://\S+|mailto:\S+@\S+|/\S*)$', "Start with https://, mailto: or /"] }
+      - label: "Card image (small)"
+        name: "thumb"
+        widget: "image"
+        required: false
+        media_folder: "/assets/cool"
+        public_folder: "/assets/cool"
+      - label: "Full image"
+        name: "image"
+        widget: "image"
+        required: false
+        media_folder: "/assets/cool"
+        public_folder: "/assets/cool"
+      - label: "Table"
+        name: "table"
+        widget: "text"
+        required: false
+        hint: "One row per line, cells split by |. The first line is the header."
+      - label: "Tie-break order"
+        name: "order"
+        widget: "number"
+        value_type: "int"
+        required: false
+        hint: "Only for items with the same dates: lower comes first."
+      # The four weight lists. Each row's entry is a dropdown of that axis's
+      # entries in Homepage → Axes.
+      - label: "Topics"
+        name: "topics"
+        widget: "list"
+        min: 1
+        label_singular: "topic"
+        collapsed: true
+        summary: "{{entry}}: {{weight}}"
+        fields:
+          - { label: "Topic", name: "entry", widget: "relation", collection: "homepage", file: "axes", value_field: "topics.entries.*.label" }
+          - &weight { label: "Weight", name: "weight", widget: "number", value_type: "float", min: 0, max: 1, step: 0.1, default: 1, hint: "0 to 1 (1 = central)" }
+          - &source { label: "Evidence (private)", name: "source", widget: "string", required: false }
+      - label: "Methods"
+        name: "methods"
+        widget: "list"
+        required: false
+        label_singular: "method"
+        collapsed: true
+        summary: "{{entry}}: {{weight}}"
+        fields:
+          - { label: "Method", name: "entry", widget: "relation", collection: "homepage", file: "axes", value_field: "methods.entries.*.label" }
+          - *weight
+          - *source
+      - label: "Tools"
+        name: "tools"
+        widget: "list"
+        required: false
+        label_singular: "tool"
+        collapsed: true
+        summary: "{{entry}}: {{weight}}"
+        fields:
+          - { label: "Tool", name: "entry", widget: "relation", collection: "homepage", file: "axes", value_field: "tools.entries.*.label" }
+          - *weight
+          - *source
+      - label: "Output"
+        name: "output"
+        widget: "list"
+        required: false
+        label_singular: "output"
+        collapsed: true
+        summary: "{{entry}}: {{weight}}"
+        fields:
+          - { label: "Output", name: "entry", widget: "relation", collection: "homepage", file: "axes", value_field: "output.entries.*.label" }
+          - *weight
+          - *source
+      - { label: "Private notes (never shown)", name: "notes", widget: "text", required: false }
+
+  - name: "homepage"
+    label: "Homepage"
+    editor: { preview: false }
+    files:
+      - name: "site"
+        label: "Site settings"
+        file: "_cool/site.json"
+        format: "json"
+        fields:
+          - { label: "Name", name: "name", widget: "string" }
+          - { label: "Tagline", name: "tagline", widget: "string" }
+          - { label: "Standard view link", name: "standard_view", widget: "string" }
+          - label: "Section order"
+            name: "group_order"
+            widget: "list"
+            min: 3
+            max: 3
+            allow_add: false
+            hint: "Drag to reorder."
+            field:
+              label: "Section"
+              name: "group"
+              widget: "select"
+              options:
+                - { label: "Experience", value: "experience" }
+                - { label: "Research", value: "research" }
+                - { label: "Projects", value: "project" }
+          - label: "Never mention"
+            name: "never_mention"
+            widget: "list"
+            required: false
+            hint: "Words the build refuses anywhere on the homepage."
+            field: { label: "Word", name: "word", widget: "string" }
+          - label: "Links"
+            name: "links"
+            widget: "list"
+            min: 1
+            label_singular: "link"
+            summary: "{{label}}"
+            fields:
+              - { label: "Label", name: "label", widget: "string" }
+              - { label: "URL", name: "url", widget: "string", pattern: ['^(https?://\S+|mailto:\S+@\S+|/\S*)$', "Start with https://, mailto: or /"] }
+              - label: "Icon"
+                name: "icon"
+                widget: "select"
+                options:
+                  - { label: "GitHub", value: "github" }
+                  - { label: "LinkedIn", value: "linkedin" }
+                  - { label: "CV", value: "cv" }
+                  - { label: "Email", value: "email" }
+                  - { label: "ORCID", value: "orcid" }
+          - { label: "Private notes", name: "notes", widget: "text", required: false }
+
+      - name: "axes"
+        label: "Axes"
+        file: "_cool/axes.json"
+        format: "json"
+        fields:
+          - label: "Topics"
+            name: "topics"
+            widget: "object"
+            collapsed: true
+            fields: &axis_fields
+              - { label: "Column heading", name: "label", widget: "string" }
+              - label: "Entries"
+                name: "entries"
+                widget: "list"
+                min: 1
+                label_singular: "entry"
+                collapsed: true
+                summary: "{{label}}"
+                fields:
+                  - { label: "Name", name: "label", widget: "string" }
+                  - { label: "Short name (column header)", name: "head", widget: "string", required: false }
+          - label: "Methods"
+            name: "methods"
+            widget: "object"
+            collapsed: true
+            fields: *axis_fields
+          - label: "Tools"
+            name: "tools"
+            widget: "object"
+            collapsed: true
+            fields: *axis_fields
+          - label: "Output"
+            name: "output"
+            widget: "object"
+            collapsed: true
+            fields: *axis_fields
+
+      - name: "skills"
+        label: "Skills"
+        file: "_cool/skills.json"
+        format: "json"
+        fields:
+          - label: "Stages (bottom row first)"
+            name: "stages"
+            widget: "list"
+            min: 1
+            label_singular: "stage"
+            collapsed: true
+            summary: "{{label}}"
+            fields:
+              - { label: "Name", name: "label", widget: "string" }
+              - { label: "Base row (exactly one)", name: "base", widget: "boolean", required: false, default: false }
+          - label: "Skills"
+            name: "skills"
+            widget: "list"
+            min: 1
+            label_singular: "skill"
+            collapsed: true
+            summary: "{{name}} ({{stage}})"
+            fields:
+              - { label: "Name", name: "name", widget: "string" }
+              - { label: "Stage", name: "stage", widget: "relation", collection: "homepage", file: "skills", value_field: "stages.*.label" }
+          - label: "Used in"
+            name: "used"
+            widget: "list"
+            collapsed: true
+            required: false
+            label_singular: "row"
+            summary: "{{skill}}"
+            fields:
+              - { label: "Skill", name: "skill", widget: "relation", collection: "homepage", file: "skills", value_field: "skills.*.name" }
+              - { label: "Items", name: "items", widget: "relation", collection: "homepage_items", value_field: "id", display_fields: ["name"], multiple: true, min: 1 }
+              - { label: "Evidence (private)", name: "note", widget: "text", required: false }
+          - label: "Feeds into"
+            name: "edges"
+            widget: "list"
+            collapsed: true
+            required: false
+            label_singular: "row"
+            summary: "{{from}}"
+            fields:
+              - { label: "From skill", name: "from", widget: "relation", collection: "homepage", file: "skills", value_field: "skills.*.name" }
+              - { label: "To skills", name: "to", widget: "relation", collection: "homepage", file: "skills", value_field: "skills.*.name", multiple: true, min: 1 }
+              - { label: "Evidence (private)", name: "note", widget: "text", required: false }
+
+      - name: "logos"
+        label: "Logo variants"
+        file: "_cool/logos.json"
+        format: "json"
+        fields:
+          - label: "Logos"
+            name: "logos"
+            widget: "list"
+            required: false
+            label_singular: "logo"
+            collapsed: true
+            summary: "{{file}}"
+            fields:
+              - { label: "Logo (as used on items)", name: "file", widget: "image", media_folder: "/assets/cool/logos", public_folder: "/assets/cool/logos" }
+              - { label: "Dark-mode version", name: "dark", widget: "image", required: false, media_folder: "/assets/cool/logos", public_folder: "/assets/cool/logos" }
+              - { label: "Small version", name: "small", widget: "image", required: false, media_folder: "/assets/cool/logos", public_folder: "/assets/cool/logos" }
+              - { label: "Small dark-mode version", name: "small_dark", widget: "image", required: false, media_folder: "/assets/cool/logos", public_folder: "/assets/cool/logos" }
+              - { label: "Light plate behind it in dark mode", name: "plate", widget: "boolean", required: false, default: false }
+              - { label: "Size", name: "scale", widget: "number", value_type: "float", required: false, min: 0.25, max: 4, step: 0.05, hint: "1 = normal" }
+              - { label: "Private note", name: "note", widget: "string", required: false }
+
+  # --- NEWS / ANNOUNCEMENTS -----------------------------------------------------
+  # al-folio's `_news/` collection holds short announcements shown on the about
+  # page (and the standalone /news page). Fields below match EXACTLY what
+  # _includes/news.liquid reads and the _config.yml `news` collection config:
+  #   - the collection has `output: true` and a `defaults: { layout: post }`, so
+  #     every item is given `layout: post` automatically; we set it here as a
+  #     hidden field anyway (harmless, and matches the theme's shipped samples).
+  #   - news.liquid reads `inline`, `date`, the body `content`, and (only when
+  #     NOT inline) `title` + the generated `url`. It reads NO other fields, so
+  #     we deliberately add nothing al-folio won't use.
+  # INLINE (inline: true)  => the Markdown body is rendered directly inline in
+  #   the news list; `title` is ignored. Use for short blurbs.
+  # NOT INLINE (inline: false) => `title` is rendered as a link to the item's own
+  #   generated page (built from the body via layout: post). `title` is required.
+  # NOTE: to actually DISPLAY news on the about page, _pages/about.md front
+  #   matter `announcements: enabled:` must be `true` (handled outside admin/).
+  - name: "news"
+    label: "News / Announcements"
+    folder: "_news"
+    create: true
+    # Hidden from the CMS sidebar while no page renders news; remove to bring it back.
+    hide: true
+    # al-folio sorts news by date (newest first); keep filenames date-prefixed.
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    extension: "md"
+    format: "yaml-frontmatter"
+    # Newest first by default (mirrors how the about/news page reverses by date).
+    sortable_fields:
+      fields: [date, title]
+      default:
+        field: date
+        direction: descending
+    fields:
+      # layout is fixed to "post" (also the _config.yml collection default).
+      - { label: "Layout", name: "layout", widget: "hidden", default: "post" }
+      # al-folio news dates carry a time + timezone offset in the shipped
+      # samples (e.g. 2026-01-01 00:00:00-0500). Mirror that exact shape.
+      - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: "HH:mm:ss", format: "YYYY-MM-DD HH:mm:ssZZ" }
+      # INLINE toggle. ON = short blurb rendered inline (title ignored).
+      # OFF = a titled item that gets its own linked page.
+      - {
+          label: "Inline (short blurb)",
+          name: "inline",
+          widget: "boolean",
+          default: true,
+          hint: "ON = short announcement shown inline (no separate page; Title is ignored). OFF = a Title that links to its own page.",
+        }
+      # Title is only used for NON-inline items (it's the link text + page <h1>).
+      # Optional here because inline items don't use it.
+      - {
+          label: "Title",
+          name: "title",
+          widget: "string",
+          required: false,
+          hint: "Required only when Inline is OFF (used as the link text and page heading).",
+        }
+      # related_posts: optional; suppresses the related-posts block on the
+      # (still-generated) item page. The theme's shipped samples set it false.
+      - {
+          label: "Show related posts",
+          name: "related_posts",
+          widget: "boolean",
+          required: false,
+          default: false,
+          hint: "Leave off to hide the related-posts section on the generated item page.",
+        }
+      # Body: the announcement text. For inline items this IS the announcement;
+      # for non-inline items this becomes the item's own page content.
+      #
+      # NOTE: unlike Blog Posts above, this collection KEEPS rich_text. News
+      # items are short announcements that don't carry LaTeX, so the Lexical
+      # round-trip corruption doesn't apply, and this is where the toolbar
+      # (code-block + image insert buttons, drag/drop/paste upload) stays
+      # available. If you ever DO put an equation in a news item, switch to
+      # raw mode before typing it and don't switch back.
+      - { label: "Body", name: "body", widget: "markdown", modes: ["raw", "rich_text"], editor_components: ["code-block", "image"] }

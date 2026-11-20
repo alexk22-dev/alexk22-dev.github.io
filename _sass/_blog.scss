@@ -1,0 +1,289 @@
+/*******************************************************************************
+ * Blog post and listing styles
+ ******************************************************************************/
+
+.header-bar {
+  border-bottom: 1px solid var(--global-divider-color);
+  text-align: center;
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+
+  h1 {
+    color: var(--global-theme-color);
+    font-size: 1.75rem;
+  }
+}
+
+.tag-category-list {
+  border-bottom: 1px solid var(--global-divider-color);
+  text-align: center;
+  padding-top: 1rem;
+
+  ul {
+    justify-content: center;
+    display: flow-root;
+
+    p,
+    li {
+      list-style: none;
+      display: inline-block;
+      padding: 1rem 0.5rem;
+      color: var(--global-text-color-light);
+    }
+  }
+}
+
+.post-title {
+  mjx-container[jax="CHTML"][display="true"] {
+    display: unset;
+  }
+}
+
+.post-list {
+  margin: 0;
+  margin-bottom: 40px;
+  padding: 0;
+
+  li {
+    border-bottom: 1px solid var(--global-divider-color);
+    list-style: none;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+
+    .post-meta {
+      color: var(--global-text-color-light);
+      font-size: 0.875rem;
+      margin-bottom: 0;
+    }
+
+    .post-tags {
+      color: var(--global-text-color-light);
+      font-size: 0.875rem;
+      padding-top: 0.25rem;
+      padding-bottom: 0;
+    }
+
+    a {
+      color: var(--global-text-color);
+      text-decoration: none;
+
+      &:hover {
+        color: var(--global-theme-color);
+      }
+    }
+
+    mjx-container[jax="CHTML"][display="true"] {
+      display: unset;
+    }
+  }
+}
+
+.pagination {
+  .page-item {
+    .page-link {
+      color: var(--global-text-color);
+      padding: 0.75rem 1.15rem;
+
+      &:hover {
+        color: #000;
+      }
+    }
+
+    &.active .page-link {
+      color: #fff;
+      background-color: var(--global-theme-color);
+
+      &:hover {
+        background-color: var(--global-theme-color);
+      }
+    }
+  }
+}
+
+.post {
+  .post-meta {
+    color: var(--global-text-color-light);
+    font-size: 0.875rem;
+    margin-bottom: 0;
+  }
+
+  .post-tags {
+    color: var(--global-text-color-light);
+    font-size: 0.875rem;
+    padding-top: 0.25rem;
+    padding-bottom: 1rem;
+
+    a {
+      color: var(--global-text-color-light);
+      text-decoration: none;
+
+      &:hover {
+        color: var(--global-theme-color);
+      }
+    }
+  }
+}
+
+.featured-posts {
+  a {
+    color: var(--global-text-color-light);
+    text-decoration: none;
+
+    .card-text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &:hover {
+      color: var(--global-theme-color);
+
+      .card-title {
+        color: var(--global-theme-color);
+      }
+    }
+  }
+
+  .post-meta {
+    color: var(--global-text-color-light);
+    font-size: 0.875rem;
+    margin-bottom: 0;
+    padding-top: 0.5rem;
+  }
+}
+
+.post-description {
+  margin-bottom: 2rem;
+  font-size: 0.875rem;
+
+  a {
+    color: inherit;
+
+    &:hover {
+      color: var(--global-theme-color);
+      text-decoration: none;
+    }
+  }
+}
+
+/*******************************************************************************
+ * Collapsible <details>/<summary> dropdowns inside post content
+ ******************************************************************************/
+
+.post .post-content {
+  details {
+    border: 1px solid var(--global-divider-color);
+    border-radius: 8px;
+    padding: 0 1rem;
+    margin: 1.5rem 0;
+    background-color: var(--global-card-bg-color);
+
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+      padding: 0.75rem 0;
+      margin: 0 -1rem;
+      padding-left: 2.25rem;
+      list-style: none; // hide default marker (Firefox/standards)
+      position: relative;
+      color: var(--global-text-color);
+      user-select: none;
+      transition: color 0.2s ease;
+
+      // Hide the default disclosure triangle in WebKit/Blink
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      // Custom rotating caret
+      &::before {
+        content: "▶";
+        position: absolute;
+        left: 1rem;
+        font-size: 0.7rem;
+        line-height: 1.6;
+        color: var(--global-theme-color);
+        transition: transform 0.2s ease;
+      }
+
+      &:hover {
+        color: var(--global-theme-color);
+      }
+    }
+
+    &[open] > summary {
+      border-bottom: 1px solid var(--global-divider-color);
+      margin-bottom: 1rem;
+
+      &::before {
+        transform: rotate(90deg);
+      }
+    }
+
+    // Tidy spacing for the revealed content
+    > *:not(summary) {
+      margin-bottom: 0.75rem;
+    }
+
+    > *:last-child {
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+/*******************************************************************************
+ * Margin notes ({% marginnote %} — see _plugins/marginnote.rb)
+ *
+ * A note is set apart from the body text at EVERY width — hairline rule,
+ * slightly smaller type, its own breathing room — so that when it does not
+ * float it still reads as an aside rather than as an oddly wrapped paragraph.
+ * Moving it into the margin is the only opt-in behaviour, and it is gated on
+ * both the `margin_math` front-matter flag (which _layouts/default.liquid
+ * refuses to set when the TOC already owns the right column) and a viewport
+ * wide enough to have a margin to write in.
+ ******************************************************************************/
+
+.marginnote {
+  // Explicit reset so a future container change can't leak the float down to
+  // narrow screens, where there is no room for a margin.
+  float: none;
+  width: 100%;
+  // Thinner than a blockquote's 5px rule on purpose: a note is quieter than a
+  // quotation, and the two must not read as the same thing.
+  border-left: 2px solid var(--global-theme-color);
+  margin: 1.5rem 0;
+  padding: 0.25rem 0 0.25rem 1rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+
+  > *:first-child {
+    margin-top: 0;
+  }
+
+  > *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+@media (min-width: 992px) {
+  .container.margin-math {
+    max-width: 1200px;
+
+    .marginnote {
+      float: right;
+      clear: right;
+      width: 38%;
+      // Zero top margin keeps the note's first line level with the sentence it
+      // follows, rather than drifting down the page away from its referent.
+      // The bottom margin also keeps whatever follows off the note's last line.
+      margin: 0 0 1.5rem 2rem;
+
+      // A long equation scrolls inside the narrow column instead of forcing
+      // the whole page sideways.
+      mjx-container[jax="CHTML"][display="true"] {
+        overflow-x: auto;
+        margin: 0;
+      }
+    }
+  }
+}

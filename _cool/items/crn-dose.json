@@ -1,0 +1,82 @@
+{
+  "id": "crn-dose",
+  "group": "project",
+  "name": "CRNDose",
+  "context": "In progress",
+  "summary": "Dose-response monotonicity analysis for general reaction networks",
+  "start": "2026-11",
+  "end": "present",
+  "title": "CRNDose",
+  "org": "Dose-response monotonicity for general mass-action reaction networks",
+  "bullets": [
+    "Aims to generalize the analysis in “Structural constraints on non-monotonic dose response in targeted protein degradation networks” from the degrader network to an arbitrary mass-action reaction network, given a dose and an output species.",
+    "Being built to return a steady-state verdict (monotone, monotone under stated conditions, or non-monotonicity permissible) with a machine-checkable certificate; the symbolic steady-state analysis is sound but incomplete, and transients are treated numerically.",
+    "Planned stack: Python with SymPy, NumPy/SciPy and Tellurium, with regression tests against the manuscript's results."
+  ],
+  "links": [],
+  "order": 2,
+  "notes": "DRAFT for the owner's approval. Work in progress: the source document is an implementation spec, so every bullet is worded as design, not result. Named CRNDose by the owner (2026-11-18); the spec's package name is crn_dose/. Start Nov 2026 given by the owner (2026-11-17); end present because it is in progress. Fact-check 2026-11-17: the CoNtRol clause was removed from the bullets because the spec says its list of CoNtRol capabilities is from memory and unverified. Tools and the MILP method are a PLANNED stack (spec only); the Skills view therefore does not list this item under any tool.",
+  "topics": [
+    {
+      "entry": "Math modeling",
+      "weight": 1.0,
+      "source": "crn_dose_response_implementation.md: Dose-response monotonicity for general CRNs: implementation spec ... Steady state: structural (symbolic), sound but incomplete. Transient: numerical."
+    },
+    {
+      "entry": "Software",
+      "weight": 0.6,
+      "source": "crn_dose_response_implementation.md: Stack: Python, sympy (symbolics), numpy/scipy (linear algebra, scipy.optimize.milp), tellurium/libroadrunner (CVODE, as in the paper)."
+    }
+  ],
+  "methods": [
+    {
+      "entry": "Chemical reaction network theory",
+      "weight": 1.0,
+      "source": "crn_dose_response_implementation.md: from the degrader network to an arbitrary mass-action CRN ... conservation laws, siphons, boundedness, deficiency (CoNtRol-derived)"
+    },
+    {
+      "entry": "Structural sensitivity analysis",
+      "weight": 0.8,
+      "source": "crn_dose_response_implementation.md: Steady state: structural (symbolic) ... Sensitivity of output i: d x_i* / d dose = (-1)^(r+i) * minor(M; r, i) / det(M)"
+    },
+    {
+      "entry": "Symbolic and numerical simulation",
+      "weight": 0.8,
+      "source": "crn_dose_response_implementation.md: Steady state: structural (symbolic), sound but incomplete. Transient: numerical."
+    },
+    {
+      "entry": "Mixed-integer programming",
+      "weight": 0.6,
+      "source": "crn_dose_response_implementation.md: Encode as a MILP with two binaries per reversible pair and big-M constraints"
+    }
+  ],
+  "tools": [
+    {
+      "entry": "Python",
+      "weight": 1.0,
+      "source": "crn_dose_response_implementation.md: Stack: Python"
+    },
+    {
+      "entry": "SymPy",
+      "weight": 1.0,
+      "source": "crn_dose_response_implementation.md: sympy (symbolics)"
+    },
+    {
+      "entry": "SciPy",
+      "weight": 0.8,
+      "source": "crn_dose_response_implementation.md: numpy/scipy (linear algebra, scipy.optimize.milp)"
+    },
+    {
+      "entry": "Tellurium",
+      "weight": 0.8,
+      "source": "crn_dose_response_implementation.md: tellurium/libroadrunner (CVODE, as in the paper)"
+    }
+  ],
+  "output": [
+    {
+      "entry": "In development",
+      "weight": 1.0,
+      "source": "Owner, 2026-11-17: “These are still works-in-progress”. crn_dose_response_implementation.md: implementation spec ... 13. Milestones"
+    }
+  ]
+}
