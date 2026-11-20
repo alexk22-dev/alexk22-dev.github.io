@@ -1,0 +1,7 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://ryankim.me/sitemap.xml
+
+# RSS feed (jekyll-feed)
+# Feed: https://ryankim.me/feed.xml
