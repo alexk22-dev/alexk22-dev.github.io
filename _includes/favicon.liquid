@@ -1,6 +1,12 @@
 {% if site.icon != blank %}
   {% assign icon_lower = site.icon | downcase %}
-  {% if icon_lower contains '.svg' or icon_lower contains '.png' or icon_lower contains '.jpg' or icon_lower contains '.jpeg' or icon_lower contains '.webp' or icon_lower contains '.ico' %}
+  {% if icon_lower contains '.svg'
+    or icon_lower contains '.png'
+    or icon_lower contains '.jpg'
+    or icon_lower contains '.jpeg'
+    or icon_lower contains '.webp'
+    or icon_lower contains '.ico'
+  %}
     {% assign icon_path = site.icon | prepend: '/assets/img/' | relative_url | bust_file_cache %}
     <link rel="icon" type="image/svg+xml" href="{{ icon_path }}" sizes="any">
     <link rel="shortcut icon" href="{{ icon_path }}">

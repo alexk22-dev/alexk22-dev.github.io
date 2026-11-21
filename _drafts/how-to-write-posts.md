@@ -47,7 +47,7 @@ def greet(name: str) -> str:
 ```
 ````
 
-Common hints: `python`, `bash`, `js`, `ts`, `json`, `yaml`, `markdown`. Plain ``` ``` ``` with no hint also works for unstyled blocks.
+Common hints: `python`, `bash`, `js`, `ts`, `json`, `yaml`, `markdown`. Plain ` ` ``` with no hint also works for unstyled blocks.
 
 ## Images
 

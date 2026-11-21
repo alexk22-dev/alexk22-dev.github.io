@@ -71,7 +71,9 @@
           {% endcapture %}
           {% if company_name != '' %}
             {% if entry.company_url %}
-              <h6 class="ml-1 ml-md-4" style="font-size: 0.95rem"><a href="{{ entry.company_url }}" target="_blank" rel="noopener">{{ company_name }}</a></h6>
+              <h6 class="ml-1 ml-md-4" style="font-size: 0.95rem">
+                <a href="{{ entry.company_url }}" target="_blank" rel="noopener">{{ company_name }}</a>
+              </h6>
             {% else %}
               <h6 class="ml-1 ml-md-4" style="font-size: 0.95rem">{{ company_name }}</h6>
             {% endif %}

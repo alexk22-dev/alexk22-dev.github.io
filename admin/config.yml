@@ -285,7 +285,8 @@ collections:
         name: "id"
         widget: "string"
         hint: "The page link (#id) and the file name. Set it once; don't change it later."
-        pattern: ['^(?!(experience|research|project)$)[a-z0-9][a-z0-9-]*$', "Lowercase letters, digits and - only (and not experience, research or project)"]
+        pattern:
+          ["^(?!(experience|research|project)$)[a-z0-9][a-z0-9-]*$", "Lowercase letters, digits and - only (and not experience, research or project)"]
       - label: "Section"
         name: "group"
         widget: "select"
@@ -318,7 +319,13 @@ collections:
         fields:
           - { label: "Title", name: "title", widget: "string" }
           - { label: "Start", name: "start", widget: "string", pattern: ['^\d{4}-(0[1-9]|1[0-2])$', "Use YYYY-MM, e.g. 2026-08"] }
-          - { label: "End", name: "end", widget: "string", required: false, pattern: ['^(\d{4}-(0[1-9]|1[0-2])|present)$', "Use YYYY-MM (e.g. 2026-09) or present"] }
+          - {
+              label: "End",
+              name: "end",
+              widget: "string",
+              required: false,
+              pattern: ['^(\d{4}-(0[1-9]|1[0-2])|present)$', "Use YYYY-MM (e.g. 2026-09) or present"],
+            }
       - label: "Logo"
         name: "logo"
         widget: "image"
@@ -376,7 +383,17 @@ collections:
         summary: "{{entry}}: {{weight}}"
         fields:
           - { label: "Topic", name: "entry", widget: "relation", collection: "homepage", file: "axes", value_field: "topics.entries.*.label" }
-          - &weight { label: "Weight", name: "weight", widget: "number", value_type: "float", min: 0, max: 1, step: 0.1, default: 1, hint: "0 to 1 (1 = central)" }
+          - &weight {
+              label: "Weight",
+              name: "weight",
+              widget: "number",
+              value_type: "float",
+              min: 0,
+              max: 1,
+              step: 0.1,
+              default: 1,
+              hint: "0 to 1 (1 = central)",
+            }
           - &source { label: "Evidence (private)", name: "source", widget: "string", required: false }
       - label: "Methods"
         name: "methods"
@@ -454,7 +471,12 @@ collections:
             summary: "{{label}}"
             fields:
               - { label: "Label", name: "label", widget: "string" }
-              - { label: "URL", name: "url", widget: "string", pattern: ['^(https?://\S+|mailto:\S+@\S+|/\S*)$', "Start with https://, mailto: or /"] }
+              - {
+                  label: "URL",
+                  name: "url",
+                  widget: "string",
+                  pattern: ['^(https?://\S+|mailto:\S+@\S+|/\S*)$', "Start with https://, mailto: or /"],
+                }
               - label: "Icon"
                 name: "icon"
                 widget: "select"
@@ -537,7 +559,16 @@ collections:
             summary: "{{skill}}"
             fields:
               - { label: "Skill", name: "skill", widget: "relation", collection: "homepage", file: "skills", value_field: "skills.*.name" }
-              - { label: "Items", name: "items", widget: "relation", collection: "homepage_items", value_field: "id", display_fields: ["name"], multiple: true, min: 1 }
+              - {
+                  label: "Items",
+                  name: "items",
+                  widget: "relation",
+                  collection: "homepage_items",
+                  value_field: "id",
+                  display_fields: ["name"],
+                  multiple: true,
+                  min: 1,
+                }
               - { label: "Evidence (private)", name: "note", widget: "text", required: false }
           - label: "Feeds into"
             name: "edges"
@@ -548,7 +579,16 @@ collections:
             summary: "{{from}}"
             fields:
               - { label: "From skill", name: "from", widget: "relation", collection: "homepage", file: "skills", value_field: "skills.*.name" }
-              - { label: "To skills", name: "to", widget: "relation", collection: "homepage", file: "skills", value_field: "skills.*.name", multiple: true, min: 1 }
+              - {
+                  label: "To skills",
+                  name: "to",
+                  widget: "relation",
+                  collection: "homepage",
+                  file: "skills",
+                  value_field: "skills.*.name",
+                  multiple: true,
+                  min: 1,
+                }
               - { label: "Evidence (private)", name: "note", widget: "text", required: false }
 
       - name: "logos"
@@ -564,12 +604,49 @@ collections:
             collapsed: true
             summary: "{{file}}"
             fields:
-              - { label: "Logo (as used on items)", name: "file", widget: "image", media_folder: "/assets/cool/logos", public_folder: "/assets/cool/logos" }
-              - { label: "Dark-mode version", name: "dark", widget: "image", required: false, media_folder: "/assets/cool/logos", public_folder: "/assets/cool/logos" }
-              - { label: "Small version", name: "small", widget: "image", required: false, media_folder: "/assets/cool/logos", public_folder: "/assets/cool/logos" }
-              - { label: "Small dark-mode version", name: "small_dark", widget: "image", required: false, media_folder: "/assets/cool/logos", public_folder: "/assets/cool/logos" }
+              - {
+                  label: "Logo (as used on items)",
+                  name: "file",
+                  widget: "image",
+                  media_folder: "/assets/cool/logos",
+                  public_folder: "/assets/cool/logos",
+                }
+              - {
+                  label: "Dark-mode version",
+                  name: "dark",
+                  widget: "image",
+                  required: false,
+                  media_folder: "/assets/cool/logos",
+                  public_folder: "/assets/cool/logos",
+                }
+              - {
+                  label: "Small version",
+                  name: "small",
+                  widget: "image",
+                  required: false,
+                  media_folder: "/assets/cool/logos",
+                  public_folder: "/assets/cool/logos",
+                }
+              - {
+                  label: "Small dark-mode version",
+                  name: "small_dark",
+                  widget: "image",
+                  required: false,
+                  media_folder: "/assets/cool/logos",
+                  public_folder: "/assets/cool/logos",
+                }
               - { label: "Light plate behind it in dark mode", name: "plate", widget: "boolean", required: false, default: false }
-              - { label: "Size", name: "scale", widget: "number", value_type: "float", required: false, min: 0.25, max: 4, step: 0.05, hint: "1 = normal" }
+              - {
+                  label: "Size",
+                  name: "scale",
+                  widget: "number",
+                  value_type: "float",
+                  required: false,
+                  min: 0.25,
+                  max: 4,
+                  step: 0.05,
+                  hint: "1 = normal",
+                }
               - { label: "Private note", name: "note", widget: "string", required: false }
 
   # --- NEWS / ANNOUNCEMENTS -----------------------------------------------------

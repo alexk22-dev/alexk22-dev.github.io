@@ -47,7 +47,7 @@ $(document).ready(function () {
         () => {
           window.requestAnimationFrame(() => dismissLoader());
         },
-        { once: true },
+        { once: true }
       );
     }
 

@@ -47,9 +47,7 @@ module.exports = (req, res) => {
     }).toString();
 
   // Store state in a short-lived, HttpOnly cookie to verify on callback.
-  res.setHeader("Set-Cookie", [
-    `decap_oauth_state=${state}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=600`,
-  ]);
+  res.setHeader("Set-Cookie", [`decap_oauth_state=${state}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=600`]);
   res.statusCode = 302;
   res.setHeader("Location", authorizeUrl);
   res.end();

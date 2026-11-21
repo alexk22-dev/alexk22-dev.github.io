@@ -55,8 +55,8 @@ That `_site` directory is Jekyll's default output, and `buildCommand: null` is t
 
 1. I push a commit (or merge a PR) to the source repository on GitHub.
 2. GitHub Actions checks out the code, installs Ruby + Node, and restores caches.
-3. Jekyll builds the site into <code>_site/</code>, generating responsive images along the way.
-4. The workflow hands the prebuilt <code>_site/</code> to Vercel.
+3. Jekyll builds the site into <code>\_site/</code>, generating responsive images along the way.
+4. The workflow hands the prebuilt <code>\_site/</code> to Vercel.
 5. Vercel skips its own build (per the config above) and publishes the files to its CDN.
 6. The apex domain serves the new version; the redirects below make sure everyone lands there.
 
@@ -85,7 +85,7 @@ $$ W = \lbrace 480,\ 800,\ 1400 \rbrace \text{ pixels} $$
 {% marginnote %}
 The overdraw factor — how much wider the chosen file is than the slot actually needs:
 
-$$ \rho = \frac{W_\text{chosen}}{{w \cdot \text{dpr}}} \ge 1 $$
+$$ \rho = \frac{W\_\text{chosen}}{{w \cdot \text{dpr}}} \ge 1 $$
 
 Three breakpoints keep $$ \rho $$ small without shipping a variant for every possible width.
 {% endmarginnote %}

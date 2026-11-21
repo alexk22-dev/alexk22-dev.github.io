@@ -23,7 +23,7 @@
         // Returning visitors (and all subsequent page navigations) skip it.
         var seen = null;
         try {
-          seen = window.localStorage.getItem("ryk-loader-seen");
+          seen = window.localStorage.getItem('ryk-loader-seen');
         } catch (e) {
           seen = null;
         }
@@ -31,7 +31,7 @@
         if (seen) {
           // Already seen — never add the loader class, and drop the element so
           // there is zero chance of a flash before content paints.
-          var skipLoader = document.getElementById("ryk-loader");
+          var skipLoader = document.getElementById('ryk-loader');
           if (skipLoader && skipLoader.parentNode) {
             skipLoader.parentNode.removeChild(skipLoader);
           }
@@ -39,17 +39,17 @@
         }
 
         try {
-          window.localStorage.setItem("ryk-loader-seen", "1");
+          window.localStorage.setItem('ryk-loader-seen', '1');
         } catch (e) {}
 
-        document.body.classList.add("has-page-loader");
+        document.body.classList.add('has-page-loader');
         window.__rykLoaderStartedAt = Date.now();
         window.__rykLoaderMinDuration = 1470;
         window.setTimeout(function () {
-          document.body.classList.remove("has-page-loader");
-          var staleLoader = document.getElementById("ryk-loader");
+          document.body.classList.remove('has-page-loader');
+          var staleLoader = document.getElementById('ryk-loader');
           if (staleLoader) {
-            staleLoader.classList.add("is-hidden");
+            staleLoader.classList.add('is-hidden');
             window.setTimeout(function () {
               staleLoader.remove();
             }, 460);
@@ -82,9 +82,11 @@
         transform: scale(1);
         background:
           radial-gradient(circle at 15% 15%, rgba(37, 99, 235, 0.18), transparent 38%),
-          radial-gradient(circle at 85% 85%, rgba(59, 130, 246, 0.14), transparent 42%),
-          linear-gradient(145deg, #020617, #0b1220 52%, #101827 100%);
-        transition: opacity 0.38s ease, visibility 0.38s ease, transform 0.38s ease;
+          radial-gradient(circle at 85% 85%, rgba(59, 130, 246, 0.14), transparent 42%), linear-gradient(145deg, #020617, #0b1220 52%, #101827 100%);
+        transition:
+          opacity 0.38s ease,
+          visibility 0.38s ease,
+          transform 0.38s ease;
         -webkit-backdrop-filter: blur(4px);
         backdrop-filter: blur(4px);
       }
@@ -122,14 +124,16 @@
         align-items: baseline;
         gap: 0.12rem;
         font-size: clamp(2.1rem, 6.3vw, 3.35rem);
-        font-family: "Cormorant Garamond", "Garamond", "Georgia", "Times New Roman", serif;
+        font-family: 'Cormorant Garamond', 'Garamond', 'Georgia', 'Times New Roman', serif;
         font-weight: 600;
         line-height: 1;
         letter-spacing: 0.03em;
         text-transform: uppercase;
         color: #dbeafe;
         text-shadow: 0 10px 26px rgba(2, 6, 23, 0.48);
-        font-feature-settings: "liga" 1, "kern" 1;
+        font-feature-settings:
+          'liga' 1,
+          'kern' 1;
         white-space: nowrap;
       }
 
@@ -205,14 +209,15 @@
       html[data-theme='light'] .ryk-loader {
         background:
           radial-gradient(circle at 12% 12%, rgba(37, 99, 235, 0.14), transparent 34%),
-          radial-gradient(circle at 88% 84%, rgba(56, 189, 248, 0.12), transparent 40%),
-          linear-gradient(145deg, #dbeafe, #eff6ff 60%, #f8fafc 100%);
+          radial-gradient(circle at 88% 84%, rgba(56, 189, 248, 0.12), transparent 40%), linear-gradient(145deg, #dbeafe, #eff6ff 60%, #f8fafc 100%);
       }
 
       html[data-theme='light'] .ryk-loader__content {
         border-color: rgba(37, 99, 235, 0.2);
         background: linear-gradient(155deg, rgba(255, 255, 255, 0.84), rgba(239, 246, 255, 0.72));
-        box-shadow: 0 20px 50px rgba(30, 41, 59, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        box-shadow:
+          0 20px 50px rgba(30, 41, 59, 0.18),
+          inset 0 1px 0 rgba(255, 255, 255, 0.7);
       }
 
       html[data-theme='light'] .ryk-loader__wordmark {

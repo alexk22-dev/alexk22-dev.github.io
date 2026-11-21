@@ -2,15 +2,8 @@
   "name": "Alexander Kim",
   "tagline": "Protein engineering, mathematical modeling, and oncology",
   "standard_view": "/standard/",
-  "group_order": [
-    "research",
-    "publication",
-    "venture",
-    "project"
-  ],
-  "never_mention": [
-    "GPA"
-  ],
+  "group_order": ["research", "publication", "venture", "project"],
+  "never_mention": ["GPA"],
   "links": [
     {
       "label": "Email",

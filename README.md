@@ -8,13 +8,13 @@ The homepage has three views (Gel, Timeline, Skills), category filters, three ge
 
 All homepage content lives in `_cool/`:
 
-| File | What it holds |
-| --- | --- |
-| `_cool/site.json` | Name, tagline and header links |
+| File                 | What it holds                                                        |
+| -------------------- | -------------------------------------------------------------------- |
+| `_cool/site.json`    | Name, tagline and header links                                       |
 | `_cool/items/*.json` | One file per entry: dates, panel text, links and topic weights (0–1) |
-| `_cool/axes.json` | The topic rows and their order |
-| `_cool/skills.json` | The Skills view: stages, skills and which entries used them |
-| `_cool/logos.json` | Logos shown beside lane names |
+| `_cool/axes.json`    | The topic rows and their order                                       |
+| `_cool/skills.json`  | The Skills view: stages, skills and which entries used them          |
+| `_cool/logos.json`   | Logos shown beside lane names                                        |
 
 `scripts/build_cool.py` validates these files and compiles them into `assets/cool/data/work.json` (generated, not committed).
 

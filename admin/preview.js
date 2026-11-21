@@ -325,40 +325,38 @@
    * published page about what is on it.
    */
   const flagUnrenderedLiquid = (root, doc) => {
-    collectTextNodes(root, doc, (node) => node.nodeValue.includes("{%") && !isLiteralContext(node)).forEach(
-      (node) => {
-        const text = node.nodeValue;
-        const fragment = doc.createDocumentFragment();
-        let cursor = 0;
-        let matched = false;
+    collectTextNodes(root, doc, (node) => node.nodeValue.includes("{%") && !isLiteralContext(node)).forEach((node) => {
+      const text = node.nodeValue;
+      const fragment = doc.createDocumentFragment();
+      let cursor = 0;
+      let matched = false;
 
-        for (const match of text.matchAll(LEFTOVER_LIQUID_PATTERN)) {
-          matched = true;
+      for (const match of text.matchAll(LEFTOVER_LIQUID_PATTERN)) {
+        matched = true;
 
-          if (match.index > cursor) {
-            fragment.append(doc.createTextNode(text.slice(cursor, match.index)));
-          }
-
-          const marker = doc.createElement("code");
-
-          marker.className = "cms-unrendered-liquid";
-          marker.title = "Liquid tag — rendered by Jekyll on the live site, not in this preview.";
-          marker.textContent = match[0];
-          fragment.append(marker);
-          cursor = match.index + match[0].length;
+        if (match.index > cursor) {
+          fragment.append(doc.createTextNode(text.slice(cursor, match.index)));
         }
 
-        if (!matched) {
-          return;
-        }
+        const marker = doc.createElement("code");
 
-        if (cursor < text.length) {
-          fragment.append(doc.createTextNode(text.slice(cursor)));
-        }
+        marker.className = "cms-unrendered-liquid";
+        marker.title = "Liquid tag — rendered by Jekyll on the live site, not in this preview.";
+        marker.textContent = match[0];
+        fragment.append(marker);
+        cursor = match.index + match[0].length;
+      }
 
-        node.replaceWith(fragment);
-      },
-    );
+      if (!matched) {
+        return;
+      }
+
+      if (cursor < text.length) {
+        fragment.append(doc.createTextNode(text.slice(cursor)));
+      }
+
+      node.replaceWith(fragment);
+    });
   };
 
   /* ----------------------------------------------------------------- math */
@@ -591,10 +589,7 @@
       // The datetime widget hands back either the "YYYY-MM-DD HH:mm:ss" string
       // from the front matter or a Date, depending on how it was last touched.
       const rawDate = readField(entry, "date");
-      const date =
-        rawDate instanceof Date
-          ? rawDate.toISOString().slice(0, 10)
-          : String(rawDate || "").slice(0, 10);
+      const date = rawDate instanceof Date ? rawDate.toISOString().slice(0, 10) : String(rawDate || "").slice(0, 10);
 
       // This mirrors _layouts/post.liquid's structure, which is what the
       // `.post`, `.post-title` and `.post .post-content` rules in main.css are
@@ -607,7 +602,7 @@
           "header",
           { className: "post-header" },
           window.h("h1", { className: "post-title" }, title),
-          date ? window.h("p", { className: "post-meta" }, `Created on ${date}`) : null,
+          date ? window.h("p", { className: "post-meta" }, `Created on ${date}`) : null
         ),
         // Rendered by React, read by us, never shown.
         window.h("div", {
@@ -627,8 +622,8 @@
             ref: (node) => {
               this.previewRoot = node;
             },
-          }),
-        ),
+          })
+        )
       );
     },
   });
@@ -679,6 +674,6 @@
         math scroll rather than overflow the pane. */
      .mjx-container { color: inherit; }
      mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; }`,
-    { raw: true },
+    { raw: true }
   );
 })();

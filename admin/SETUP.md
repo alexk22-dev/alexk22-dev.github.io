@@ -122,8 +122,8 @@ Commit and let the **site** redeploy so the updated `/admin/config.yml` ships.
 
 **Why it works this way.** Every commit to `main` auto-deploys, and Sveltia CMS
 does **not** yet support an editorial/PR workflow that would keep drafts off
-`main`: the official docs say *"This feature from Netlify/Decap CMS is not yet
-supported in Sveltia CMS. It will be added before the 1.0 release."*
+`main`: the official docs say _"This feature from Netlify/Decap CMS is not yet
+supported in Sveltia CMS. It will be added before the 1.0 release."_
 (<https://sveltiacms.app/en/docs/workflows/editorial>). So we use the
 **Jekyll-native** draft mechanism instead — the **Published (live)** toggle,
 which writes the `published:` front-matter field. Jekyll **excludes any document
@@ -218,12 +218,12 @@ The Blog Posts collection now has quick **view filters** and **sorting** in the
 entry list:
 
 - **Filters** (`view_filters`): "Drafts" shows only posts with `published:
-  false`; "Published" shows only `published: true`. (Decap key, supported by
+false`; "Published" shows only `published: true`. (Decap key, supported by
   Sveltia — <https://decapcms.org/docs/configuration-options/> /
   <https://sveltiacms.app/en/docs/collections/entries>.)
 - **Sorting** (`sortable_fields`): you can sort by **date** or **title**, and the
   default sort is **newest date first** (`default: { field: date, direction:
-  descending }` — Sveltia's extended object form of the Decap key).
+descending }` — Sveltia's extended object form of the Decap key).
 
 ## News / announcements collection
 
@@ -250,8 +250,8 @@ The standalone `/news` page shows all items regardless of that toggle.
 Two collections edit `_cool/`, the source of the homepage:
 
 - **Homepage items**: one entry per piece of work (`_cool/items/<id>.json`),
-  grouped by section. Weights are rows of *entry* (a dropdown of that axis's
-  entries) and *weight* (0 to 1). Pick the **ID** once when creating an item:
+  grouped by section. Weights are rows of _entry_ (a dropdown of that axis's
+  entries) and _weight_ (0 to 1). Pick the **ID** once when creating an item:
   it is the file name and the page's `#id` link.
 - **Homepage**: Site settings, Axes (add an entry here first, then it shows in
   the item dropdowns), Skills, Logo variants.
@@ -279,7 +279,7 @@ Sveltia's nice editor behaviors are **on by default** — we intentionally did n
 add config for them (adding undocumented keys would only risk breaking the CMS):
 
 - **Preview pane is enabled by default** and toggled per-user from the editor's
-  top-right menu — *"Previews are enabled by default."*
+  top-right menu — _"Previews are enabled by default."_
   (<https://sveltiacms.app/en/docs/ui/content-editor>). The Decap collection key
   `editor: { preview: false }` is supported if you ever want to hide it, but the
   default (`true`) is what we want.
@@ -314,8 +314,8 @@ The Blog Posts body is `modes: ["raw"]` so that rich text cannot corrupt LaTeX
 (see "Writing math in the CMS"). Two consequences, both verified rather than
 assumed:
 
-- **The toolbar is gone.** Sveltia's docs: the toolbar buttons *"are disabled
-  when `raw` mode is active"* (<https://sveltiacms.app/en/docs/fields/richtext>).
+- **The toolbar is gone.** Sveltia's docs: the toolbar buttons _"are disabled
+  when `raw` mode is active"_ (<https://sveltiacms.app/en/docs/fields/richtext>).
   So there is no image-insert button.
 - **Drag-and-drop and paste are also dead**, even though they are not toolbar
   features. Sveltia's `rich-text-editor.svelte` does attach `onpastecapture` and
@@ -324,7 +324,7 @@ assumed:
   the editor is a plain `<textarea>`, so that check never passes and nothing
   happens. **Don't wait for an upload that isn't coming.**
 
-The fix is *not* to turn rich text back on. Use one of the two routes below.
+The fix is _not_ to turn rich text back on. Use one of the two routes below.
 
 ### Route A — the Thumbnail field (fastest, stays inside the post)
 
@@ -441,8 +441,8 @@ the real page after publishing if a layout detail matters.
 ## Troubleshooting
 
 - **Popup says "error" / nothing happens after authorizing:** the most common
-  cause is a **callback URL mismatch**. The GitHub OAuth App's *Authorization
-  callback URL* must be exactly `<base_url>/callback`, and `base_url` in
+  cause is a **callback URL mismatch**. The GitHub OAuth App's _Authorization
+  callback URL_ must be exactly `<base_url>/callback`, and `base_url` in
   `admin/config.yml` must be the OAuth service origin with **no trailing slash**.
 - **"Missing OAUTH_GITHUB_CLIENT_ID / SECRET":** the env vars aren't set on the
   OAuth Vercel project (check `/` health JSON — both should say `"set"`).

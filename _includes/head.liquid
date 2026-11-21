@@ -28,7 +28,12 @@
 {% else %}
   {% capture feed_title %}{{ site.title }}{% endcapture %}
 {% endif %}
-<link rel="alternate" type="application/rss+xml" title="{{ feed_title | strip }}" href="{{ '/feed.xml' | prepend: site.baseurl | prepend: site.url }}">
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title="{{ feed_title | strip }}"
+  href="{{ '/feed.xml' | prepend: site.baseurl | prepend: site.url }}"
+>
 
 <!-- Security: Content Security Policy -->
 <!-- Permissive CSP suitable for academic websites. Allows external images, videos, and common embed services. -->
@@ -96,12 +101,14 @@
 {% endif %}
 
 {% include favicon.liquid %}
-<!-- The build timestamp, NOT `bust_css_cache`. That filter hashes a source file
-     called main.css, but the stylesheet is compiled from main.scss, so it
-     hashes nothing and emits md5("") = d41d8cd9... on every build forever.
-     A constant query string is fatal here: vercel.json serves /assets/* as
-     `max-age=31536000, immutable`, so a browser (or CDN edge) that once cached
-     main.css keeps it for a year and never sees another CSS change. -->
+<!--
+  The build timestamp, NOT `bust_css_cache`. That filter hashes a source file
+  called main.css, but the stylesheet is compiled from main.scss, so it
+  hashes nothing and emits md5("") = d41d8cd9... on every build forever.
+  A constant query string is fatal here: vercel.json serves /assets/* as
+  `max-age=31536000, immutable`, so a browser (or CDN edge) that once cached
+  main.css keeps it for a year and never sees another CSS change.
+-->
 <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}?v={{ site.time | date: '%s' }}">
 <link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">
 

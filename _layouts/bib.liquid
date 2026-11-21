@@ -20,8 +20,8 @@
   {%- assign short_venue = entry.abbr | append: ' ' | append: entry.year -%}
 {%- elsif full_venue -%}
   {%- assign short_venue = full_venue | append: ' ' | append: entry.year -%}
-  {%- assign full_venue = nil -%}
-{%- elsif entry.status == nil -%}
+  {%- assign full_venue = null -%}
+{%- elsif entry.status == null -%}
   {%- assign short_venue = entry.year -%}
 {%- endif -%}
 
@@ -50,9 +50,13 @@
     {%- for author in entry.author_array -%}
       {%- assign author_last = author.last | regex_replace: '[*∗†‡§¶‖&^]', '' -%}
       {%- if site.scholar.last_name contains author_last and site.scholar.first_name contains author.first -%}
-        <strong>{{ author.first }} {{ author.last }}</strong>
+        <strong>
+          {{- author.first }}
+          {{ author.last -}}
+        </strong>
       {%- else -%}
-        {{ author.first }} {{ author.last }}
+        {{ author.first }}
+        {{ author.last }}
       {%- endif -%}
       {%- unless forloop.last %}, {% endunless -%}
     {%- endfor -%}
@@ -60,7 +64,14 @@
 
   <div class="pub-venue">
     {%- if short_venue %}
-      <span class="pub-chip"{% if full_venue %} title="{{ full_venue | strip_html | escape }}"{% endif %}>{{ short_venue }}</span>
+      <span
+        class="pub-chip"
+        {% if full_venue %}
+          title="{{ full_venue | strip_html | escape }}"
+        {% endif %}
+      >
+        {{- short_venue -}}
+      </span>
     {%- endif %}
     {%- if entry.status %}
       <span class="pub-chip pub-chip-status">{{ entry.status }}</span>

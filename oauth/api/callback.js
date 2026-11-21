@@ -113,10 +113,7 @@ function renderHandshake(status, content) {
 // shows which branch a failed sign-in hit.
 function sendError(res, message) {
   console.log("callback error: " + message);
-  sendHtml(
-    res,
-    renderHandshake("error", { provider: PROVIDER, error: message, message })
-  );
+  sendHtml(res, renderHandshake("error", { provider: PROVIDER, error: message, message }));
 }
 
 function sendHtml(res, html) {
@@ -131,10 +128,7 @@ module.exports = async (req, res) => {
   const clientSecret = process.env.OAUTH_GITHUB_CLIENT_SECRET;
 
   if (!clientId || !clientSecret) {
-    sendError(
-      res,
-      "Server is missing OAUTH_GITHUB_CLIENT_ID / OAUTH_GITHUB_CLIENT_SECRET."
-    );
+    sendError(res, "Server is missing OAUTH_GITHUB_CLIENT_ID / OAUTH_GITHUB_CLIENT_SECRET.");
     return;
   }
 
@@ -143,10 +137,7 @@ module.exports = async (req, res) => {
   const returnedState = url.searchParams.get("state");
 
   if (!code) {
-    sendError(
-      res,
-      "Missing ?code in OAuth callback."
-    );
+    sendError(res, "Missing ?code in OAuth callback.");
     return;
   }
 
@@ -154,10 +145,7 @@ module.exports = async (req, res) => {
   const cookies = parseCookies(req.headers.cookie);
   const expectedState = cookies.decap_oauth_state;
   if (!expectedState || expectedState !== returnedState) {
-    sendError(
-      res,
-      "OAuth state mismatch (possible CSRF). Please try logging in again."
-    );
+    sendError(res, "OAuth state mismatch (possible CSRF). Please try logging in again.");
     return;
   }
 
@@ -178,17 +166,12 @@ module.exports = async (req, res) => {
     const data = await tokenRes.json();
 
     if (data.error || !data.access_token) {
-      sendError(
-      res,
-      data.error_description || data.error || "Failed to obtain access token."
-    );
+      sendError(res, data.error_description || data.error || "Failed to obtain access token.");
       return;
     }
 
     // Clear the state cookie now that it has been used.
-    res.setHeader("Set-Cookie", [
-      "decap_oauth_state=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0",
-    ]);
+    res.setHeader("Set-Cookie", ["decap_oauth_state=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0"]);
 
     console.log("callback success: token issued");
     // The exact success payload Decap expects: { token, provider }.
@@ -200,9 +183,6 @@ module.exports = async (req, res) => {
       })
     );
   } catch (err) {
-    sendError(
-      res,
-      "Token exchange request failed: " + (err && err.message)
-    );
+    sendError(res, "Token exchange request failed: " + (err && err.message));
   }
 };
