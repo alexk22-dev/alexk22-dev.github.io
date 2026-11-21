@@ -20,38 +20,77 @@ export class JSONError extends Error {
 
 export function parse(text) {
   let i = 0;
-  const ws = () => { while (" \t\n\r".includes(text[i]) && i < text.length) i++; };
-  const fail = msg => { throw new JSONError(msg, text, i); };
+  const ws = () => {
+    while (" \t\n\r".includes(text[i]) && i < text.length) i++;
+  };
+  const fail = (msg) => {
+    throw new JSONError(msg, text, i);
+  };
   const NUM = /-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?/y;
   const STR = /"((?:[^"\\\u0000-\u001f]|\\["\\/bfnrt]|\\u[0-9a-fA-F]{4})*)"/y;
   function value(box, key) {
     ws();
     const c = text[i];
     if (c === "{") {
-      i++; const o = {}; ws();
-      if (text[i] === "}") { i++; return o; }
+      i++;
+      const o = {};
+      ws();
+      if (text[i] === "}") {
+        i++;
+        return o;
+      }
       for (;;) {
-        ws(); if (text[i] !== '"') fail("Expecting property name enclosed in double quotes");
-        const k = string(); ws();
-        if (text[i] !== ":") fail("Expecting ':' delimiter"); i++;
-        o[k] = value(o, k); ws();
-        if (text[i] === ",") { i++; continue; }
-        if (text[i] === "}") { i++; return o; }
+        ws();
+        if (text[i] !== '"') fail("Expecting property name enclosed in double quotes");
+        const k = string();
+        ws();
+        if (text[i] !== ":") fail("Expecting ':' delimiter");
+        i++;
+        o[k] = value(o, k);
+        ws();
+        if (text[i] === ",") {
+          i++;
+          continue;
+        }
+        if (text[i] === "}") {
+          i++;
+          return o;
+        }
         fail("Expecting ',' delimiter");
       }
     }
     if (c === "[") {
-      i++; const a = []; ws();
-      if (text[i] === "]") { i++; return a; }
+      i++;
+      const a = [];
+      ws();
+      if (text[i] === "]") {
+        i++;
+        return a;
+      }
       for (;;) {
-        a.push(value(a, a.length)); ws();
-        if (text[i] === ",") { i++; continue; }
-        if (text[i] === "]") { i++; return a; }
+        a.push(value(a, a.length));
+        ws();
+        if (text[i] === ",") {
+          i++;
+          continue;
+        }
+        if (text[i] === "]") {
+          i++;
+          return a;
+        }
         fail("Expecting ',' delimiter");
       }
     }
     if (c === '"') return string();
-    for (const [w, v] of [["true", true], ["false", false], ["null", null]]) if (text.startsWith(w, i)) { i += w.length; return v; }
+    for (const [w, v] of [
+      ["true", true],
+      ["false", false],
+      ["null", null],
+    ])
+      if (text.startsWith(w, i)) {
+        i += w.length;
+        return v;
+      }
     NUM.lastIndex = i;
     const m = NUM.exec(text);
     if (!m) fail("Expecting value");
@@ -67,7 +106,8 @@ export function parse(text) {
     return JSON.parse(m[0]);
   }
   const root = { v: undefined };
-  const v = value(root, "v"); ws();
+  const v = value(root, "v");
+  ws();
   if (i < text.length) fail("Extra data");
   return v;
 }
@@ -100,7 +140,7 @@ export function stringify(v) {
     }
     const ks = Object.keys(v);
     if (!ks.length) return "{}";
-    return "{\n" + ks.map(k => inner + JSON.stringify(k) + ": " + out(v[k], v, k, inner)).join(",\n") + "\n" + pad + "}";
+    return "{\n" + ks.map((k) => inner + JSON.stringify(k) + ": " + out(v[k], v, k, inner)).join(",\n") + "\n" + pad + "}";
   };
   return out(v, null, null, "") + "\n";
 }
@@ -127,7 +167,13 @@ export function pyRepr(v, float = false) {
     return q + s + q;
   }
   if (Array.isArray(v)) return "[" + v.map((x, n) => pyRepr(x, isFloat(v, n))).join(", ") + "]";
-  return "{" + Object.keys(v).map(k => pyRepr(k) + ": " + pyRepr(v[k], isFloat(v, k))).join(", ") + "}";
+  return (
+    "{" +
+    Object.keys(v)
+      .map((k) => pyRepr(k) + ": " + pyRepr(v[k], isFloat(v, k)))
+      .join(", ") +
+    "}"
+  );
 }
 
 // Python's str(): like repr() except that text is printed bare.
