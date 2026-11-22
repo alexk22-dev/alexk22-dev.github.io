@@ -1,7 +1,7 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://ryankim.me/sitemap.xml
+Sitemap: https://alexk22-dev.github.io/sitemap.xml
 
 # RSS feed (jekyll-feed)
-# Feed: https://ryankim.me/feed.xml
+# Feed: https://alexk22-dev.github.io/feed.xml
