@@ -102,7 +102,7 @@ jobs:
           valueFile: "_config.yml"
           propertyPath: "giscus.repo"
           value: ${{ github.repository }}
-      # The homepage data is built from _cool/ (what /admin/ → Homepage edits). This step also checks it:
+      # The homepage data is built from _cool/. This step also checks it:
       # a bad edit stops here, before anything is deployed, and the live site keeps its last good build.
       - name: Check and build homepage data 🧮
         run: |
@@ -118,45 +118,8 @@ jobs:
         run: |
           npm install -g purgecss
           purgecss -c purgecss.config.js
-      - name: Deploy to Vercel 🔺
-        if: github.event_name != 'pull_request'
-        run: |
-          if [ -z "$VERCEL_TOKEN" ]; then
-            echo "VERCEL_TOKEN not set — skipping Vercel deploy"
-            exit 0
-          fi
-          npm install -g vercel@latest
-          # Deploy the already-built _site as a static site. Override the project's
-          # Jekyll preset so Vercel serves these files instead of trying to rebuild.
-          rm -f _site/requirements.txt
-          printf '%s' '{"framework":null,"buildCommand":"echo skip","installCommand":"echo skip","outputDirectory":".","headers":[{"source":"/(.*)","headers":[{"key":"X-Content-Type-Options","value":"nosniff"},{"key":"X-Frame-Options","value":"SAMEORIGIN"},{"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"}]},{"source":"/admin/(.*)","headers":[{"key":"X-Robots-Tag","value":"noindex, nofollow"}]},{"source":"/assets/(.*)","headers":[{"key":"Cache-Control","value":"public, max-age=31536000, immutable"}]}]}' > _site/vercel.json
-          cd _site && vercel deploy --prod --yes --token "$VERCEL_TOKEN"
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       - name: Deploy 🚀
         if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: _site
-      - name: Deploy draft preview to Vercel 🔍
-        if: github.event_name != 'pull_request'
-        run: |
-          if [ -z "$VERCEL_TOKEN" ]; then
-            echo "VERCEL_TOKEN not set — skipping draft preview deploy"
-            exit 0
-          fi
-          # Build a SEPARATE copy that INCLUDES drafts (published:false + _drafts/),
-          # so preview.ryankim.me shows in-progress posts in the real theme.
-          # The public site (built above, drafts excluded) is unaffected.
-          export JEKYLL_ENV=production
-          bundle exec jekyll build --unpublished --drafts -d _site_preview
-          rm -f _site_preview/requirements.txt
-          # noindex the ENTIRE preview site so drafts never get indexed.
-          printf '%s' '{"framework":null,"buildCommand":"echo skip","installCommand":"echo skip","outputDirectory":".","headers":[{"source":"/(.*)","headers":[{"key":"X-Robots-Tag","value":"noindex, nofollow"}]}]}' > _site_preview/vercel.json
-          cd _site_preview && vercel deploy --prod --yes --token "$VERCEL_TOKEN"
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PREVIEW_PROJECT_ID }}

@@ -3,22 +3,22 @@
 # -----------------------------------------------------------------------------
 
 title: blank # the website title (if blank, full name will be used instead)
-first_name: Ryan
+first_name: Alexander
 middle_name:
 last_name: Kim
 contact_note:
 description: >
-  Ryan Kim — CS at UIUC (Class of 2029). Creating SOTA models by breaking assumptions. First-author paper at a NeurIPS 2026 workshop · Sole-author paper under review · Founding team, a16z AI startup.
+  Alexander Kim — Chemistry and Molecular & Cellular Biology at UIUC. Protein engineering, mathematical modeling, and oncology.
 footer_text: >
   Powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme.
-  Hosted on <a href="https://vercel.com" target="_blank">Vercel</a>.
-keywords: Ryan Kim, Ryan Kim UIUC, machine learning, LLMs, LLM architecture, mechanistic interpretability, efficient inference, speculative decoding, LLM post-training, GRPO, reinforcement learning, RL environments, LLM agents, robustness, pathology foundation models, energy-based models, UIUC, Sophont, MedARC, PyTorch
+  Hosted on <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
+keywords: Alexander Kim, UIUC, chemistry, molecular and cellular biology, protein engineering, mathematical modeling, reaction network theory, oncology, clinical NLP, large language models
 lang: en # the language of your site (for example: en, fr, cn, ru, etc.)
-icon: ryk-favicon-v2.svg # favicon image name in /assets/img/
+icon: # favicon image name in /assets/img/
 
-url: https://ryankim.me # the base hostname & protocol for your site
+url: https://alexk22-dev.github.io # the base hostname & protocol for your site
 baseurl: # the subpath of your site, e.g. /blog/. Leave blank for root
-about_permalink: /standard/ # the al-folio about page; / is the standalone cool view (_pages/cool-home.html)
+about_permalink: / # the homepage (_pages/cool-home.html)
 last_updated: false # set to true if you want to display last updated in the footer
 impressum_path: # set to path to include impressum link in the footer, use the same path as permalink in a page, helps to conform with EU GDPR
 back_to_top: true # set to false to disable the back to top button
@@ -69,7 +69,7 @@ max_width: 930px
 # see https://schema.org/docs/faq.html for more information
 serve_og_meta: true # Include Open Graph meta tags in the HTML head
 serve_schema_org: true # Include Schema.org in the HTML head
-og_image: https://ryankim.me/assets/img/og-image.jpg?v=2 # The site-wide (default for all links) Open Graph preview image
+og_image: https://alexk22-dev.github.io/assets/img/og-image.jpg # The site-wide (default for all links) Open Graph preview image
 
 # -----------------------------------------------------------------------------
 # Analytics and search engine verification
@@ -83,8 +83,8 @@ pirsch_analytics: # your Pirsch analytics site ID (length 32 characters)
 openpanel_analytics: # your Openpanel analytics client ID (format: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX)
 
 # For Google Search Console, see https://support.google.com/webmasters/answer/9008080?hl=en#meta_tag_verification&zippy=%2Chtml-tag
-# TODO(Ryan): paste verification IDs below and set enable_*_verification: true to emit the meta tags.
-#   1. Google Search Console -> verify https://ryankim.me -> "HTML tag" method -> copy the content value.
+# Paste verification IDs below and set enable_*_verification: true to emit the meta tags.
+#   1. Google Search Console -> verify https://alexk22-dev.github.io -> "HTML tag" method -> copy the content value.
 #   2. Bing Webmaster Tools -> add site -> "Meta tag" option -> copy the content value.
 google_site_verification: # your google-site-verification ID (Google Search Console)
 bing_site_verification: # out your bing-site-verification ID (Bing Webmaster)
@@ -93,8 +93,8 @@ bing_site_verification: # out your bing-site-verification ID (Bing Webmaster)
 # Blog
 # -----------------------------------------------------------------------------
 
-blog_name: "Ryan's Blog" # blog_name will be displayed in your blog page
-blog_description: Notes on machine learning, systems, and the things I'm building.
+blog_name: "Blog" # blog_name will be displayed in your blog page
+blog_description:
 permalink: /blog/:year/:title/
 lsi: false # produce an index for related posts
 
@@ -123,14 +123,14 @@ giscus:
   lang: en
 
 # Disqus comments (DEPRECATED)
-# disqus_shortname: "" # TODO: Ryan, fill in your Disqus shortname if you use it; left blank to disable demo value
+# disqus_shortname: ""
 # https://help.disqus.com/en/articles/1717111-what-s-a-shortname
 
 # External sources.
 # If you have blog posts published on medium.com or other external sources,
 # you can display them in your blog by adding a link to the RSS feed.
 # Optional: Set default categories and tags for posts from each source.
-external_sources: [] # TODO: Ryan, add external blog sources (Medium, etc.) here if you publish externally
+external_sources: []
 
 # -----------------------------------------------------------------------------
 # Newsletter
@@ -167,9 +167,8 @@ kramdown:
       start_line: 1
 
 # Includes & excludes
-include: ["_pages", "_scripts", "admin"]
+include: ["_pages", "_scripts"]
 exclude:
-  - admin/SETUP.md
   - AGENTS.md
   - ANALYTICS.md
   - bin/
@@ -185,7 +184,6 @@ exclude:
   - INSTALL.md
   - LICENSE
   - lighthouse_results/
-  - oauth
   - package-lock.json
   - package.json
   - purgecss.config.js
@@ -277,7 +275,7 @@ display_categories: [] # categories shown on the blog front page (empty = none)
 
 scholar:
   last_name: [Kim]
-  first_name: [Ryan, R.]
+  first_name: [Alexander, A.]
 
   style: apa
   locale: en

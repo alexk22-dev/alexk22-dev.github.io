@@ -2,8 +2,8 @@
 permalink: /site.webmanifest
 ---
 {
-  "name": "Ryan Kim",
-  "short_name": "Ryan Kim",
+  "name": "Alexander Kim",
+  "short_name": "Alexander Kim",
   "description": "{{ site.description | strip_html | strip_newlines | strip }}",
   "start_url": "{{ site.baseurl | prepend: site.url }}/",
   "scope": "{{ site.baseurl | prepend: site.url }}/",
@@ -11,18 +11,5 @@ permalink: /site.webmanifest
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
   "lang": "{{ site.lang | default: 'en' }}",
-  "icons": [
-    {
-      "src": "{{ '/assets/img/ryk-favicon-v2.svg' | prepend: site.baseurl | prepend: site.url }}",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
-      "src": "{{ '/assets/img/prof_pic.jpg' | prepend: site.baseurl | prepend: site.url }}",
-      "sizes": "800x800",
-      "type": "image/jpeg",
-      "purpose": "any"
-    }
-  ]
+  "icons": []
 }
