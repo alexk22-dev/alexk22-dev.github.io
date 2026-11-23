@@ -135,19 +135,17 @@
               </li>
             {% endif %}
           {% endcomment %}
-          <!-- Link to the cool view at /: a small map of the heat grid it opens on -->
+          <!-- Link back to the gel homepage at /: a small gel, three lanes of bands -->
           <li class="toggle-container">
-            <a id="map-link" href="{{ '/' | relative_url }}" title="Map" aria-label="Map view">
+            <a id="map-link" href="{{ '/' | relative_url }}" title="Gel view" aria-label="Gel view">
               <svg viewBox="0 0 17 17" width="15" height="15" aria-hidden="true" focusable="false">
-                <rect class="map-h4" x="0" y="0" width="5" height="5" rx="1" />
-                <rect class="map-h1" x="6" y="0" width="5" height="5" rx="1" />
-                <rect class="map-h2" x="12" y="0" width="5" height="5" rx="1" />
-                <rect class="map-h1" x="0" y="6" width="5" height="5" rx="1" />
-                <rect class="map-h3" x="6" y="6" width="5" height="5" rx="1" />
-                <rect class="map-h1" x="12" y="6" width="5" height="5" rx="1" />
-                <rect class="map-h2" x="0" y="12" width="5" height="5" rx="1" />
-                <rect class="map-h1" x="6" y="12" width="5" height="5" rx="1" />
-                <rect class="map-h4" x="12" y="12" width="5" height="5" rx="1" />
+                <rect class="map-h1" x="0" y="0" width="17" height="17" rx="2" />
+                <rect class="map-h4" x="2" y="3" width="3.5" height="1.6" rx=".8" />
+                <rect class="map-h3" x="2" y="8" width="3.5" height="1.2" rx=".6" />
+                <rect class="map-h4" x="6.75" y="5" width="3.5" height="2" rx="1" />
+                <rect class="map-h3" x="6.75" y="11.5" width="3.5" height="1.2" rx=".6" />
+                <rect class="map-h3" x="11.5" y="4" width="3.5" height="1.2" rx=".6" />
+                <rect class="map-h4" x="11.5" y="9.5" width="3.5" height="2" rx="1" />
               </svg>
             </a>
           </li>

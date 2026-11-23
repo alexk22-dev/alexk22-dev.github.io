@@ -976,3 +976,84 @@ html[data-theme="dark"] .tech-item img {
     }
   }
 }
+
+/******************************************************************************
+ * Standard view (_pages/standard.md): CV-style rows and lists
+ ******************************************************************************/
+
+// Short dated lists (honors, certifications): name left, date right, hairlines between
+.cv-rows {
+  list-style: none;
+  margin: 1rem 0 0 0;
+  padding: 0;
+
+  li {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.55rem 0.25rem;
+    border-top: 1px solid var(--global-divider-color);
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+
+  li:last-child {
+    border-bottom: 1px solid var(--global-divider-color);
+  }
+}
+
+// A row with nothing to expand (same look, no chevron)
+.experience-static .experience-header {
+  cursor: default;
+}
+
+.experience-chevron-none {
+  visibility: hidden;
+}
+
+.cv-rows-date {
+  flex-shrink: 0;
+  color: var(--global-text-color-light);
+  font-size: 0.8rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.cv-subheading {
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--global-text-color-light);
+  margin: 1.75rem 0 0.75rem 0 !important;
+}
+
+.pub-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+// Logos with a separate dark-theme file
+.experience-icon.logo-dark {
+  display: none;
+}
+
+html[data-theme="dark"] {
+  .experience-icon.logo-light {
+    display: none;
+  }
+
+  .experience-icon.logo-dark {
+    display: inline-block;
+  }
+}
+
+@media (max-width: 576px) {
+  .cv-rows li {
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+}
