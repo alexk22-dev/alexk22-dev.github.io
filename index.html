@@ -2326,7 +2326,7 @@ document.addEventListener("visibilitychange", () => {
 /* ------------------------------------------------ boot */
 const introLikely = canIntro() && (location.hash === "#intro" || !store.get("ak-intro-seen") || Date.now() - (+store.get("ak-last") || 0) > AWAY);
 if (introLikely) root.classList.add("intro-full"); else root.classList.remove("intro-full");
-fetch("/assets/cool/data/work.json?v=70c0ec73eb").then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(data => {
+fetch("/assets/cool/data/work.json?v=971756757b").then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(data => {
   // work.json → the names this page uses: group → type, start → event.date, axes[k].W → weights
   ITEMS = data.items.map(it => ({ ...it, type: it.group, event: { date: it.start } }));
   AXES = data.axes; GROUPS = data.groups;
