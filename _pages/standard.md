@@ -202,6 +202,16 @@ Chemistry and Molecular & Cellular Biology (double major) at the University of I
 
 <div class="pub-list">
   <article class="pub-card">
+    <h3 class="pub-title">Structural constraints on non-monotonic dose response in targeted protein degradation networks</h3>
+    <p class="pub-authors"><strong>Alexander Kim*</strong>, Polly Y. Yu</p>
+    <div class="pub-venue">
+      <span class="pub-chip">BMES CMBE 2027</span>
+      <span class="pub-chip pub-chip-status">Jan 2027</span>
+    </div>
+    <p class="pub-venue-full">Poster presentation, Biomedical Engineering Society Cellular and Molecular Bioengineering (BMES CMBE 2027), San Diego, California.</p>
+  </article>
+
+  <article class="pub-card">
     <h3 class="pub-title">Analysis of Non-Monotonic Dose Response in Targeted Protein Degradation Systems</h3>
     <p class="pub-authors"><strong>Alexander Kim*</strong>, Polly Y. Yu</p>
     <div class="pub-venue">

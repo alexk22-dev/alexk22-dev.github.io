@@ -187,27 +187,27 @@
     },
     {
       "skill": "Reaction network theory",
-      "items": ["yu", "dose-response-manuscript", "crn-dose", "crnt-poster"],
+      "items": ["yu", "dose-response-manuscript", "crn-dose", "crnt-poster", "cmbe-poster"],
       "note": "CV, Yu Group: Originated and leads a project applying chemical reaction network theory and structural sensitivity analysis to steady-state dose response in targeted protein degradation systems. First author on the resulting manuscript, in preparation. | crn_dose_response_implementation.md: Generalizes the analysis ... from the degrader network to an arbitrary mass-action CRN | Owner, 2026-11-18 (answers to skills questions)."
     },
     {
       "skill": "Structural sensitivity analysis",
-      "items": ["yu", "dose-response-manuscript", "crn-dose", "crnt-poster"],
+      "items": ["yu", "dose-response-manuscript", "crn-dose", "crnt-poster", "cmbe-poster"],
       "note": "CV, Yu Group: Originated and leads a project applying chemical reaction network theory and structural sensitivity analysis to steady-state dose response in targeted protein degradation systems. First author on the resulting manuscript, in preparation. | crn_dose_response_implementation.md: Steady state: structural (symbolic) ... Sensitivity of output i | Owner, 2026-11-18 (answers to skills questions)."
     },
     {
       "skill": "Mathematica",
-      "items": ["yu", "crnt-poster", "dose-response-manuscript"],
+      "items": ["yu", "crnt-poster", "dose-response-manuscript", "cmbe-poster"],
       "note": "CV, Yu Group: Built symbolic and numerical tooling in Mathematica and Python (Tellurium) to validate analytical results against simulation. | Owner, 2026-11-18 (answers to skills questions)."
     },
     {
       "skill": "Python",
-      "items": ["yu", "bioaxis", "wilson", "msk", "crnt-poster", "dose-response-manuscript", "crn-dose"],
+      "items": ["yu", "bioaxis", "wilson", "msk", "crnt-poster", "dose-response-manuscript", "crn-dose", "cmbe-poster"],
       "note": "CV, Yu Group: Built symbolic and numerical tooling in Mathematica and Python (Tellurium) to validate analytical results against simulation. | PLAN.md: venv/ (Python 3.12, torch 2.15 on MPS, transformers 5.22) | Owner, 2026-11-18 (answers to skills questions)."
     },
     {
       "skill": "Tellurium",
-      "items": ["yu", "crnt-poster", "dose-response-manuscript", "crn-dose"],
+      "items": ["yu", "crnt-poster", "dose-response-manuscript", "crn-dose", "cmbe-poster"],
       "note": "CV, Yu Group: Built symbolic and numerical tooling in Mathematica and Python (Tellurium) to validate analytical results against simulation. | Owner, 2026-11-18 (answers to skills questions)."
     },
     {
@@ -257,12 +257,12 @@
     },
     {
       "skill": "Dynamical systems",
-      "items": ["yu", "crnt-poster", "dose-response-manuscript"],
+      "items": ["yu", "crnt-poster", "dose-response-manuscript", "cmbe-poster"],
       "note": "Owner, 2026-11-18: “Dynamical systems + differential equations goes with Yu group”. | Owner, 2026-11-18 (answers to skills questions)."
     },
     {
       "skill": "Differential equations",
-      "items": ["yu", "crnt-poster", "dose-response-manuscript"],
+      "items": ["yu", "crnt-poster", "dose-response-manuscript", "cmbe-poster"],
       "note": "Owner, 2026-11-18: “Dynamical systems + differential equations goes with Yu group”. | Owner, 2026-11-18 (answers to skills questions)."
     },
     {

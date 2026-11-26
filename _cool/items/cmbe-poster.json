@@ -1,0 +1,57 @@
+{
+  "id": "cmbe-poster",
+  "group": "publication",
+  "name": "BMES CMBE 2027",
+  "context": "Poster presentation",
+  "summary": "Structural constraints on non-monotonic dose response in targeted protein degradation",
+  "start": "2027-01",
+  "end": "2027-01",
+  "title": "Structural constraints on non-monotonic dose response in targeted protein degradation networks",
+  "org": "Biomedical Engineering Society Cellular and Molecular Bioengineering (BMES CMBE 2027), San Diego, California, January 2027",
+  "description": "Alexander Kim*, Polly Y. Yu. (* denotes presenting author)",
+  "bullets": [],
+  "links": [],
+  "notes": "CV (Nov 2026): Presentations. Late-breaking abstract, not expected to be published; same title as the manuscript with Polly Y. Yu.",
+  "topics": [
+    {
+      "entry": "Protein degradation",
+      "weight": 0.8,
+      "source": "Owner: same title as the manuscript (Structural constraints on non-monotonic dose response in targeted protein degradation networks)"
+    },
+    {
+      "entry": "Math modeling",
+      "weight": 1.0,
+      "source": "Owner: same title as the manuscript; same weights as dose-response-manuscript"
+    }
+  ],
+  "methods": [
+    {
+      "entry": "Chemical reaction network theory",
+      "weight": 0.8,
+      "source": "Owner: same work as the manuscript; same weight as dose-response-manuscript"
+    },
+    {
+      "entry": "Structural sensitivity analysis",
+      "weight": 0.8,
+      "source": "Owner: same work as the manuscript; same weight as dose-response-manuscript"
+    }
+  ],
+  "tools": [],
+  "output": [
+    {
+      "entry": "Poster",
+      "weight": 1.0,
+      "source": "CV: Poster presentation, Biomedical Engineering Society Cellular and Molecular Bioengineering (BMES CMBE 2027), San Diego, California"
+    },
+    {
+      "entry": "First author",
+      "weight": 1.0,
+      "source": "CV: Alexander Kim*, Polly Y. Yu"
+    },
+    {
+      "entry": "Presenting author",
+      "weight": 1.0,
+      "source": "CV: Alexander Kim* (* denotes presenting author)"
+    }
+  ]
+}
